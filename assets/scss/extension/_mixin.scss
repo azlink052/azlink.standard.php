@@ -1,0 +1,45 @@
+// main: ../global/import.scss
+@charset "utf-8";
+@use '../extension/variable' as var;
+@use 'sass:math';
+
+@mixin baseTransition(
+  $property: all,
+  $duration: 0.2s,
+  $function: ease-in-out,
+  $delay: 0s
+) {
+  transition: $property $duration $function $delay;
+}
+@mixin opacityFade() {
+  @include baseTransition(opacity);
+  &:hover {
+    opacity: 0.7;
+  }
+  @media only screen and (max-width: (var.$bp - 1)) {
+    transition: none;
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+@mixin verticalTxt() {
+  text-align: left;
+  -ms-writing-mode: tb-rl;
+  writing-mode: vertical-rl;
+  @media only screen and (max-width: (var.$bp - 1)) {
+    -ms-writing-mode: lr-tb;
+    writing-mode: horizontal-tb;
+  }
+}
+
+@mixin fadeBefore01() {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1.2s ease-in-out, transform 1.2s ease-in-out, visibility 1.2s ease-in-out;
+}
+
+@mixin fadeAfter01 {
+  visibility: visible;
+  opacity: 1;
+}

@@ -1,0 +1,33 @@
+// main: ../global/import.scss
+@charset "utf-8";
+/*
+ * =====================================================
+ *
+ * [variable]
+ *
+ * =====================================================
+ */
+// ブレークポイント
+$bp: 768px;
+
+// コンテンツ幅
+$contentWidth: 1000px;
+$minWidth: 1100px;
+
+// 色設定
+$textColor: #000;
+$errorTextColor: #b7282e;
+
+$baseColor: #000;
+$keyColor: #ccc;
+
+$bgColor: #fff;
+$borderColor: #000;
+
+$okColor: #e1efe3;
+$ngColor: #f9e2e0;
+
+// フォント設定
+$defaultFont: 'Noto Sans JP', sans-serif;
+$serifFont: 'Noto Serif JP', serif;
+$serifExFont: 'A1 Mincho', 'Noto Serif JP', serif;

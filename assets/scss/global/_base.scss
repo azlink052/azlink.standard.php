@@ -1,0 +1,701 @@
+// main: ../global/import.scss
+@charset "utf-8";
+@use '../extension/' as ext;
+/*
+ * =====================================================
+ *
+ * ベースレイアウトCSS
+ *
+ * =====================================================
+ */
+/**
+ * ---------------------------------------------------
+ * Web font setting
+ * ---------------------------------------------------
+ */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;500;700&display=swap');
+/**
+ * ---------------------------------------------------
+ * reset
+ * ---------------------------------------------------
+ */
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+li,
+dl,
+pre,
+form,
+blockquote,
+fieldset,
+input,
+address,
+figure,
+figcaption,
+main {
+  margin: 0;
+  padding: 0;
+}
+main,
+article,
+aside,
+details,
+figcaption,
+figure,
+picture,
+footer,
+header,
+hgroup,
+nav,
+section,
+summary {
+  display: block;
+}
+// img
+img {
+  vertical-align: middle;
+  border: none;
+  max-width: 100%;
+  // for Lite
+  width: initial;
+  height: initial;
+}
+img[src$='.svg'] {
+  width: 100%;
+  height: auto;
+}
+// default
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+caption {
+  font-weight: normal;
+  font-size: 100%;
+}
+a {
+  outline: none;
+}
+address {
+  font-style: normal;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+caption {
+  text-align: left;
+}
+figcaption {
+  font-size: 1.2rem;
+}
+fieldset {
+  border: none;
+}
+legend {
+  display: none;
+}
+input[type='radio'],
+input[type='checkbox'],
+select {
+  vertical-align: middle;
+}
+*,
+*::before,
+*::after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  box-sizing: border-box;
+}
+// link
+a {
+  color: ext.$textColor;
+  text-decoration: none;
+  &:link {
+    color: ext.$textColor;
+    text-decoration: none;
+  }
+  &:visited {
+    color: ext.$textColor;
+    text-decoration: none;
+  }
+  &:hover {
+    color: ext.$textColor;
+    text-decoration: underline;
+  }
+  &:active {
+    color: ext.$textColor;
+    text-decoration: underline;
+  }
+}
+::selection {
+  background: ext.$keyColor;
+}
+::-moz-selection {
+  background: ext.$keyColor;
+}
+/**
+ * ---------------------------------------------------
+ * html
+ * ---------------------------------------------------
+ */
+html {
+  font-size: 62.5%;
+}
+/**
+ * ---------------------------------------------------
+ * body
+ * ---------------------------------------------------
+ */
+body {
+  color: ext.$textColor;
+  font-size: 1.8rem;
+  font-family: ext.$serifFont;
+  font-weight: 500;
+  font-feature-settings: 'palt';
+  letter-spacing: 0.05em;
+  line-height: 1.8;
+  width: 100%;
+  min-width: ext.$minWidth;
+  background: ext.$bgColor;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  &.is-pOpen {
+    overflow: hidden;
+  }
+}
+.companyLogoWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 140px;
+  position: absolute;
+  z-index: 3;
+  width: 100%;
+  height: 60px;
+  background: rgba(255, 255, 255, 1);
+  top: 0;
+  left: 0;
+  .companyLogo {
+    // position: absolute;
+    width: 220px;
+    // right: 130px;
+    // top: 10px;
+    line-height: 1;
+    a {
+      text-decoration: none;
+    }
+  }
+}
+/**
+ * ---------------------------------------------------
+ * wrapper
+ * ---------------------------------------------------
+ */
+#wrapper {
+  width: 100%;
+  position: relative;
+  // opacity: 0;
+  // overflow: hidden;
+}
+/**
+ * ---------------------------------------------------
+ * siteLogo
+ * ---------------------------------------------------
+ */
+.siteLogo {
+  // @include ext.verticalTxt();
+  // font-weight: 500;
+  // line-height: 1.8;
+  width: 118px;
+  a {
+    @include ext.opacityFade();
+    text-decoration: none;
+  }
+  span {
+    display: block;
+    white-space: nowrap;
+    &.sub {
+      font-size: 1.8rem;
+      margin-left: 10px;
+    }
+    &.main {
+      font-size: 2.8rem;
+    }
+  }
+}
+/**
+ * ---------------------------------------------------
+ * snsList
+ * ---------------------------------------------------
+ */
+.snsList {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  li {
+    a {
+      @include ext.opacityFade();
+    }
+  }
+}
+/**
+ * ---------------------------------------------------
+ * header
+ * ---------------------------------------------------
+ */
+#siteHeader {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  max-width: 100vw;
+}
+#gNavWrapper {
+  padding: 50px;
+  background: #fff;
+  border: 1px solid ext.$borderColor;
+  position: fixed;
+  top: 60px;
+  right: 40px;
+  z-index: 10;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s, visibility 0.25s;
+  .gNavInner {
+    display: flex;
+    justify-content: center;
+  }
+  #gNav {
+    @include ext.verticalTxt();
+    margin-left: 20px;
+    order: 2;
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      li {
+        margin-left: 5px;
+        a {
+          display: block;
+          color: ext.$textColor;
+          font-size: 2.1rem;
+          text-decoration: none;
+          padding: 5px;
+          position: relative;
+          &::before {
+            display: block;
+            content: '';
+            width: 100%;
+            height: 0;
+            background: #f5f5f5;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.5s, height 0.3s;
+          }
+          &:hover {
+            &::before {
+              height: 100%;
+              opacity: 1;
+            }
+          }
+        }
+      }
+    }
+  }
+  .snsList {
+    padding-top: 10px;
+    order: 1;
+    li {
+      width: 36px;
+      margin: 0 auto 10px auto;
+    }
+  }
+}
+body.is-navOpen {
+  #gNavWrapper {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+#gNavOpener {
+  display: block;
+  width: 60px;
+  height: 60px;
+  position: absolute;
+  top: 0;
+  right: 40px;
+  z-index: 11;
+  background-color: rgba(255, 255, 255, 0.5);
+  span {
+    width: 36px;
+    height: 2px;
+    background: ext.$baseColor;
+    margin-left: -18px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transition: 0.4s;
+    transform: rotate(0deg);
+    &:nth-child(1) {
+      transform: translateY(-10px);
+    }
+    &:nth-child(3) {
+      transform: translateY(10px);
+    }
+  }
+  &.is-navOpen {
+    span {
+      &:nth-child(2) {
+        opacity: 0;
+        transform: translateX(50%);
+      }
+      &:nth-child(1) {
+        transform: rotate(-45deg);
+      }
+      &:nth-child(3) {
+        transform: rotate(45deg);
+      }
+    }
+  }
+}
+/**
+ * ---------------------------------------------------
+ * pageTitle
+ * ---------------------------------------------------
+ */
+#pageTitle {
+  font-size: 2.5rem;
+  letter-spacing: 0.1em;
+  text-align: center;
+  width: ext.$contentWidth;
+  padding: 100px 0;
+  margin-left: auto;
+  margin-right: auto;
+  border-bottom: 2px solid ext.$borderColor;
+}
+/**
+ * ---------------------------------------------------
+ * main
+ * ---------------------------------------------------
+ */
+#container {
+  background: #fff;
+  position: relative;
+  z-index: 3;
+}
+#main {
+  padding-bottom: 1px;
+}
+/**
+ * ---------------------------------------------------
+ * footer
+ * ---------------------------------------------------
+ */
+#siteFooter {
+  // padding-bottom: 50px;
+  padding-bottom: 170px;
+  background: #fff;
+  position: relative;
+  z-index: 3;
+  .inner {
+    width: ext.$contentWidth;
+    padding-top: 90px;
+    margin: 0 auto;
+    border-top: 2px solid ext.$borderColor;
+    position: relative;
+    .siteLogo {
+      margin: 0 auto 55px auto;
+    }
+    .outline {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.6rem;
+      line-height: 1.6;
+      letter-spacing: normal;
+      p {
+        &:not(:last-child) {
+          margin-bottom: 1.5em;
+        }
+      }
+      .office {
+        a {
+          text-decoration: underline;
+          &:hover {
+            text-decoration: none;
+          }
+        }
+      }
+    }
+    .snsList {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      li {
+        width: 44px;
+        margin-left: 5px;
+      }
+    }
+    .logo {
+      width: 255px;
+      margin: 25px auto 5px;
+      a {
+        text-decoration: none;
+      }
+    }
+  }
+}
+#fNav {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0 0 0 30px;
+  }
+}
+#copyright {
+  display: block;
+  letter-spacing: normal;
+  text-align: center;
+}
+
+/**
+ * ---------------------------------------------------
+ * 修復・お申込みはこちらからボタン
+ * ---------------------------------------------------
+ */
+.applicationFixBtn {
+  position: fixed;
+  right: 45px;
+  bottom: 35px;
+  z-index: 9;
+  a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    line-height: 1.3;
+    text-decoration: none;
+    width: 11em;
+    height: 68px;
+    background: #fff;
+    border: 1px solid #000;
+    .btnTitle {
+      font-size: 3.2rem;
+    }
+    .btnTxt {
+      font-size: 1.4rem;
+      margin-left: 10px;
+    }
+  }
+}
+
+/**
+ ****************************************************
+ *
+ * screens smaller than 768
+ *
+ ****************************************************
+ */
+@media only screen and (max-width: (ext.$bp - 1)) {
+  /**
+   * ---------------------------------------------------
+   * body
+   * ---------------------------------------------------
+   */
+  body {
+    font-size: 1.4rem;
+    font-weight: 400;
+    min-width: inherit;
+    &.is-navOpen {
+      position: fixed;
+    }
+  }
+  .companyLogoWrapper {
+    padding-right: 70px;
+    .companyLogo {
+      width: 33vw;
+      // right: 75px;
+      // top: 15px;
+    }
+  }
+  /**
+   * ---------------------------------------------------
+   * siteLogo
+   * ---------------------------------------------------
+   */
+  .siteLogo {
+    text-align: left;
+    -ms-writing-mode: tb-rl;
+    writing-mode: vertical-rl;
+    span {
+      &.sub {
+        font-size: 1.3rem;
+      }
+      &.main {
+        font-size: 2.3rem;
+      }
+    }
+  }
+  /**
+   * ---------------------------------------------------
+   * header
+   * ---------------------------------------------------
+   */
+  #gNavWrapper {
+    width: 100%;
+    height: 100vh;
+    padding: 80px 50px 50px 50px;
+    border: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    overflow-y: auto;
+    .gNavInner {
+      display: block;
+    }
+    #gNav {
+      margin-left: 0;
+      margin-bottom: 30px;
+      ul {
+        li {
+          margin-left: 5px;
+          a {
+            font-size: 1.8rem;
+            font-weight: 500;
+            text-align: center;
+            &::before {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+    .snsList {
+      display: flex;
+      justify-content: center;
+      padding-top: 0;
+      li {
+        margin: 0 10px;
+      }
+    }
+  }
+  #gNavOpener {
+    right: 0;
+  }
+  /**
+   * ---------------------------------------------------
+   * pageTitle
+   * ---------------------------------------------------
+   */
+  #pageTitle {
+    font-size: 2rem;
+    width: auto;
+    padding: 50px 0;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  /**
+   * ---------------------------------------------------
+   * main
+   * ---------------------------------------------------
+   */
+  /**
+   * ---------------------------------------------------
+   * footer
+   * ---------------------------------------------------
+   */
+  #siteFooter {
+    // padding: 0 20px 30px 20px;
+    padding: 0 20px 150px 20px;
+    font-weight: 500;
+    .inner {
+      width: auto;
+      padding-top: 30px;
+      .siteLogo {
+        width: 90px;
+        margin: 0 auto 55px auto;
+      }
+      .outline {
+        display: block;
+        font-size: 1.3rem;
+        margin-bottom: 20px;
+        p {
+          &:not(:last-child) {
+            margin-bottom: 0.5em;
+          }
+        }
+        .office {
+          margin-bottom: 20px;
+        }
+        .contact {
+          margin-bottom: 20px;
+        }
+      }
+      .snsList {
+        li {
+          width: 30px;
+        }
+      }
+      .logo {
+        margin-top: 1em;
+        margin-bottom: 15px;
+        width: 175px;
+        margin: 25px auto 5px 0;
+      }
+    }
+  }
+  #fNav {
+    ul {
+      font-size: 1.2rem;
+      width: 48%;
+      margin: 0;
+      li {
+      }
+    }
+  }
+  #copyright {
+    font-size: 1rem;
+    text-align: left;
+  }
+  /**
+   * ---------------------------------------------------
+   * 修復・お申込みはこちらからボタン
+   * ---------------------------------------------------
+   */
+  .applicationFixBtn {
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    a {
+      line-height: 1.2;
+      width: 135px;
+      height: 50px;
+      .btnTitle {
+        font-size: 2.1rem;
+      }
+      .btnTxt {
+        font-size: 1rem;
+        margin-left: 5px;
+      }
+    }
+  }
+} /* END @media smaller than $bp */

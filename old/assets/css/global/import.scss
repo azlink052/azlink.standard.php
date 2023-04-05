@@ -1,0 +1,18 @@
+@charset "utf-8";
+/*
+ * =====================================================
+ *
+ * [Standard css]
+ *
+ * - base.css 		: ベースレイアウト
+ * - common.css 	: 要素用
+ * - clear.css 		: clearfix用css
+ *
+ * =====================================================
+ */
+@import '../extension/variable';
+@import '../extension/mixin';
+@import "_base";
+@import "_common";
+@import "_clear";
+@import "../content/_content";

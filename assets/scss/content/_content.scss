@@ -1,0 +1,1011 @@
+// main: ../global/import.scss
+@charset "utf-8";
+@use '../extension/' as ext;
+/*
+ * =====================================================
+ *
+ * [content]
+ *
+ * =====================================================
+ */
+/**
+ * ---------------------------------------------------
+ * 幅指定
+ * ---------------------------------------------------
+ */
+.w33p {
+  width: 33%;
+}
+.w48p {
+  width: 48%;
+}
+.w49p {
+  width: 49%;
+}
+.w50p {
+  width: 50%;
+}
+.w90p {
+  width: 90%;
+}
+$width: 50;
+@while $width <= 500 {
+  .w#{$width} {
+    width: $width + px;
+  }
+  $width: $width + 10;
+}
+@for $i from 1 through 20 {
+  .w#{$i}em {
+    width: #{$i}em;
+  }
+}
+.contentWidth {
+  width: ext.$contentWidth;
+  margin-left: auto;
+  margin-right: auto;
+}
+/**
+ * ---------------------------------------------------
+ * レイアウト
+ * ---------------------------------------------------
+ */
+.mL1hem {
+  margin-left: 1.5em;
+}
+.mL2em {
+  margin-left: 2em;
+}
+.mL2hem {
+  margin-left: 2.5em;
+}
+.mL3em {
+  margin-left: 3em;
+}
+.mL3hem {
+  margin-left: 3.5em;
+}
+.mL4em {
+  margin-left: 4em;
+}
+.mL4hem {
+  margin-left: 4.5em;
+}
+.mL5em {
+  margin-left: 5em;
+}
+.mL6em {
+  margin-left: 6em;
+}
+.mL7em {
+  margin-left: 7em;
+}
+.mL8em {
+  margin-left: 8em;
+}
+.mB60 {
+  margin-bottom: 60px;
+}
+.mB70 {
+  margin-bottom: 70px;
+}
+.mB80 {
+  margin-bottom: 80px;
+}
+/**
+ * ---------------------------------------------------
+ * 文字サイズ
+ * ---------------------------------------------------
+ */
+.s0-8r {
+  font-size: 0.8rem;
+}
+.s1-0r {
+  font-size: 1rem;
+}
+.s1-1r {
+  font-size: 1.1rem;
+}
+.s1-2r {
+  font-size: 1.2rem;
+}
+.s1-3r {
+  font-size: 1.3rem;
+}
+.s1-4r {
+  font-size: 1.4rem;
+}
+.s1-5r {
+  font-size: 1.5rem;
+}
+.s1-6r {
+  font-size: 1.6rem;
+}
+.s1-7r {
+  font-size: 1.7rem;
+}
+.s1-8r {
+  font-size: 1.8rem;
+}
+.s1-9r {
+  font-size: 1.9rem;
+}
+.s2-0r {
+  font-size: 2rem;
+}
+.s2-1r {
+  font-size: 2.1rem;
+}
+.s2-2r {
+  font-size: 2.2rem;
+}
+.s2-3r {
+  font-size: 2.3rem;
+}
+.s2-4r {
+  font-size: 2.4rem;
+}
+.s2-5r {
+  font-size: 2.5rem;
+}
+.s2-6r {
+  font-size: 2.6rem;
+}
+.s2-8r {
+  font-size: 2.8rem;
+}
+.s2-9r {
+  font-size: 2.9rem;
+}
+.s3-0r {
+  font-size: 3rem;
+}
+.s3-4r {
+  font-size: 3.4rem;
+}
+.s3-5r {
+  font-size: 3.5rem;
+}
+.s3-8r {
+  font-size: 3.8rem;
+}
+.s4-0r {
+  font-size: 4rem;
+}
+.s5-0r {
+  font-size: 5rem;
+}
+/**
+ * ---------------------------------------------------
+ * 見出し
+ * ---------------------------------------------------
+ */
+.headStyle01 {
+  font-size: 3.4rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+}
+.headStyle02 {
+  font-size: 1.6rem;
+  font-weight: 500;
+  margin-bottom: 15px;
+}
+.headStyle03 {
+  font-size: 1.8rem;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+/**
+ * ---------------------------------------------------
+ * テーブル
+ * ---------------------------------------------------
+ */
+.tableStyle01 {
+}
+/**
+ * ---------------------------------------------------
+ * リスト
+ * ---------------------------------------------------
+ */
+.listStyle01 {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+.listStyle02 {
+  list-style-type: disc;
+  padding: 0 0 0 20px;
+  margin: 0;
+}
+.listStyle03 {
+  list-style-type: decimal;
+  padding: 0 0 0 2em;
+  margin: 0;
+}
+/**
+ * ---------------------------------------------------
+ * ボタン
+ * ---------------------------------------------------
+ */
+.btnStyle01 {
+  text-align: center;
+  a {
+    @include ext.opacityFade();
+    display: inline-block;
+    color: ext.$textColor;
+    font-size: 1.8rem;
+    font-weight: 500;
+    line-height: 1.3;
+    text-decoration: none;
+    text-align: center;
+    min-width: 450px;
+    padding: 12px 20px;
+    background: ext.$keyColor;
+  }
+  &.medium {
+    a {
+      min-width: 315px;
+    }
+  }
+}
+/**
+ * ---------------------------------------------------
+ * 汎用ボックス
+ * ---------------------------------------------------
+ */
+.sectionVox {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  width: ext.$contentWidth;
+  // padding-right: 30px;
+  padding-top: 180px;
+  margin: 0 auto 180px auto;
+  // border-top: 2px solid ext.$borderColor;
+  header {
+    @include ext.verticalTxt();
+    order: 2;
+  }
+  .inner {
+    order: 1;
+  }
+  footer {
+    width: 100%;
+    margin-top: 90px;
+    order: 3;
+  }
+  &.center {
+    justify-content: center;
+  }
+  &.between {
+    justify-content: space-between;
+  }
+  &.block {
+    display: block;
+  }
+}
+.contVox {
+  &:not(:last-child) {
+    margin-bottom: 40px;
+  }
+}
+
+/**
+ * ---------------------------------------------------
+ * ページング
+ * ---------------------------------------------------
+ */
+.navigationWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
+  .page-numbers {
+    display: block;
+    text-decoration: none;
+    text-align: center;
+    padding: 10px;
+    margin: 0 5px;
+    position: relative;
+    transition: color 0.2s;
+    &.next,
+    &.prev {
+      text-align: left;
+      text-indent: -9999px;
+      width: 36px;
+      padding: 0;
+      margin: 0 20px;
+      position: relative;
+      &::after {
+        display: block;
+        width: 10px;
+        height: 10px;
+        border-top: 1px solid #000;
+        border-right: 1px solid #000;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transition: opacity 0.2s;
+      }
+    }
+    &.next {
+      &::after {
+        content: '';
+        transform: translate(-50%, -50%) rotate(45deg);
+      }
+    }
+    &.prev {
+      &::after {
+        content: '';
+        transform: translate(-50%, -50%) rotate(-135deg);
+      }
+    }
+    &:hover,
+    &.current {
+      border-bottom: 1px solid #000;
+      &.next,
+      &.prev {
+        border-bottom: none;
+        &::after {
+          opacity: 0.6;
+        }
+      }
+    }
+  }
+  .nav-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+}
+/**
+ * ---------------------------------------------------
+ * モジュールセット
+ * ---------------------------------------------------
+ */
+.moduleSet {
+  h1 {
+    font-size: 3.5rem;
+    font-weight: bold;
+    margin-top: 0;
+    &:not(:last-child) {
+      margin-bottom: 30px;
+    }
+  }
+  h2 {
+    font-size: 2.8rem;
+    font-weight: bold;
+    margin-top: 0;
+    &:not(:last-child) {
+      margin-bottom: 30px;
+    }
+  }
+  h3 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-top: 0;
+    &:not(:last-child) {
+      margin-bottom: 30px;
+    }
+  }
+  h4 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-top: 0;
+    &:not(:last-child) {
+      margin-bottom: 20px;
+    }
+  }
+  h5 {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-top: 0;
+    &:not(:last-child) {
+      margin-bottom: 10px;
+    }
+  }
+  h6 {
+    font-size: 1.6rem;
+    font-weight: bold;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  td,
+  li,
+  figure {
+    h1:last-child,
+    h2:last-child,
+    h3:last-child,
+    h4:last-child,
+    h5:last-child {
+      margin-bottom: 0;
+    }
+  }
+  p {
+    margin-top: 0;
+    &:not(:last-child) {
+      margin-bottom: 1.5rem;
+    }
+  }
+  ul {
+    list-style-type: disc;
+    padding: 0 0 0 20px;
+    margin: 0;
+    &:not(:last-child) {
+      margin-bottom: 1.5rem;
+    }
+  }
+  ol {
+    list-style-type: decimal;
+    padding: 0 0 0 2em;
+    margin: 0;
+    &:not(:last-child) {
+      margin-bottom: 1.5rem;
+    }
+  }
+  .wp-block-table {
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0;
+      &:not(:last-child) {
+        margin-bottom: 1.5rem;
+      }
+      thead {
+        border-bottom: none;
+      }
+    }
+    &:not(.is-style-stripes) {
+      table {
+        th,
+        td {
+          font-weight: normal;
+          padding: 10px;
+          border: 1px solid ext.$textColor;
+          background: #fff;
+        }
+        tbody {
+          .th,
+          th {
+            text-align: left;
+            background: #e7e7e7;
+          }
+        }
+        thead {
+          border: none;
+          th {
+            text-align: center;
+            background: #e7e7e7;
+          }
+        }
+      }
+    }
+  }
+  figure.wp-block-table {
+    display: block;
+  }
+  figure {
+    &:not(:last-child) {
+      margin-bottom: 30px;
+    }
+    img {
+      height: auto !important;
+    }
+    table {
+      margin: 0;
+    }
+  }
+  .wp-block-buttons {
+    margin: 20px 0;
+    .wp-block-button {
+      @extend .btnStyle01;
+      margin-right: 20px;
+      .wp-block-button__link,
+      a {
+        text-decoration: none;
+        padding-right: 35px;
+        border-radius: 0;
+        background: #fff;
+        position: relative;
+        &::after {
+          display: block;
+          content: '';
+          width: 5px;
+          height: 5px;
+          border-top: 1px solid ext.$textColor;
+          border-right: 1px solid ext.$textColor;
+          position: absolute;
+          top: 50%;
+          right: 20px;
+          transform: translateY(-50%) rotate(45deg);
+          transition: border-color 0.2s;
+        }
+        &:hover {
+          &::after {
+            border-top-color: #fff;
+            border-right-color: #fff;
+          }
+        }
+      }
+    }
+  }
+  .wp-block-columns {
+    &:not(:last-child) {
+      margin-bottom: 50px;
+    }
+  }
+  .wp-embed-aspect-16-9 {
+    width: 75%;
+    margin: 0 auto;
+    &:not(:last-child) {
+      margin-bottom: 50px;
+    }
+    .wp-block-embed__wrapper {
+      position: relative;
+      width: 100%;
+      height: 0;
+      padding-top: 56.25%;
+      iframe {
+        width: 100% !important;
+        height: 100% !important;
+        position: absolute;
+        top: 0;
+        right: 0;
+      }
+    }
+  }
+}
+/**
+ * ---------------------------------------------------
+ * スクロールボックス
+ * ---------------------------------------------------
+ */
+.scrollVox {
+  padding-bottom: 10px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  overflow-scrolling: touch;
+  &::-webkit-scrollbar {
+    height: 10px;
+  }
+  &::-webkit-scrollbar-track {
+    background: #fff;
+    border-radius: 10px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #666;
+    border-radius: 10px;
+  }
+  table {
+    width: 600px !important;
+  }
+}
+/**
+ * ---------------------------------------------------
+ * popup
+ * ---------------------------------------------------
+ */
+#alphaBg {
+  display: none;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 200;
+  background: rgba(ext.$baseColor, 0.2);
+  opacity: 0;
+}
+.popupWrapper {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  margin: 0;
+  width: 800px;
+  margin-left: -400px;
+  z-index: 2100;
+  /*visibility: hidden;*/
+  .closeVox {
+    height: 50px;
+    position: absolute;
+    top: -50px;
+    right: 0;
+  }
+  .popupCloseBt {
+    display: block;
+    width: 50px;
+    height: 50px;
+    span {
+      width: 50px;
+      height: 1px;
+      background: ext.$borderColor;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      margin: -0.5px 0 0 -25px;
+      &:nth-child(1) {
+        transform: rotate(-45deg);
+      }
+      &:nth-child(2) {
+        transform: rotate(45deg);
+      }
+    }
+  }
+  .contentWrapper {
+  }
+}
+#popupContents {
+  display: none;
+}
+/**
+ * transition series
+ */
+.trOp01 {
+  transition: opacity 0.2s linear;
+  &:hover,
+  &.active {
+    opacity: 0.6;
+  }
+}
+.trScl01 {
+  transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+  &:hover,
+  &.active {
+    transform: scale(1.1);
+    z-index: 1;
+  }
+}
+/**
+ * フォーム
+ */
+.formErrVox {
+  display: none;
+  border: 10px solid #ffdada;
+  padding: 10px;
+  color: #c00000 !important;
+}
+body.error .formErrVox {
+  display: block;
+}
+.caution {
+  margin-top: 5px;
+  color: #c00000;
+}
+// for Lite
+body:not(.ie) {
+  .js-lazyBg,
+  .js-lazyBg * {
+    background-image: none !important;
+  }
+}
+/**
+ ****************************************************
+ *
+ * screens larger than $bp
+ *
+ ****************************************************
+ */
+@media only screen and (min-width: ext.$bp) {
+  .pcDspNone {
+    display: none;
+  }
+} /*  @media END */
+/**
+ ****************************************************
+ *
+ * screens smaller than $bp
+ *
+ ****************************************************
+ */
+@media only screen and (max-width: (ext.$bp - 1)) {
+  .spDspNone {
+    display: none;
+  }
+  .fitImg {
+    max-width: 100%;
+  }
+  .s0-8r {
+    font-size: 0.6rem;
+  }
+  .s1-0r {
+    font-size: 1rem;
+  }
+  .s1-1r {
+    font-size: 1.1rem;
+  }
+  .s1-2r {
+    font-size: 1.1rem;
+  }
+  .s1-3r {
+    font-size: 1.1rem;
+  }
+  .s1-4r {
+    font-size: 1.2rem;
+  }
+  .s1-5r {
+    font-size: 1.2rem;
+  }
+  .s1-6r {
+    font-size: 1.2rem;
+  }
+  .s1-7r {
+    font-size: 1.3rem;
+  }
+  .s1-8r {
+    font-size: 1.3rem;
+  }
+  .s1-9r {
+    font-size: 1.3rem;
+  }
+  .s2-0r {
+    font-size: 1.4rem;
+  }
+  .s2-1r {
+    font-size: 1.4rem;
+  }
+  .s2-2r {
+    font-size: 1.4rem;
+  }
+  .s2-3r {
+    font-size: 1.5rem;
+  }
+  .s2-4r {
+    font-size: 1.5rem;
+  }
+  .s2-5r {
+    font-size: 1.5rem;
+  }
+  .s2-6r {
+    font-size: 1.6rem;
+  }
+  .s2-8r {
+    font-size: 1.6rem;
+  }
+  .s2-9r {
+    font-size: 1.6rem;
+  }
+  .s3-0r {
+    font-size: 1.7rem;
+  }
+  .s3-4r {
+    font-size: 1.7rem;
+  }
+  .s3-5r {
+    font-size: 1.7rem;
+  }
+  .s3-8r {
+    font-size: 1.8rem;
+  }
+  .s4-0r {
+    font-size: 3rem;
+  }
+  .s5-0r {
+    font-size: 3.5rem;
+  }
+  .contentWidth {
+    width: auto;
+  }
+  /**
+   * ---------------------------------------------------
+   * 見出し
+   * ---------------------------------------------------
+   */
+  .headStyle01 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+  }
+  .headStyle02 {
+    font-size: 1.6rem;
+    font-weight: 500;
+    margin-bottom: 15px;
+  }
+  .headStyle03 {
+    font-size: 1.6rem;
+  }
+  /**
+   * ---------------------------------------------------
+   * テーブル
+   * ---------------------------------------------------
+   */
+  .tableA colgroup col {
+    width: auto;
+  }
+  table.vertical:not(.spDspNone),
+  table.vertical > caption:not(.spDspNone),
+  table.vertical > thead:not(.spDspNone),
+  table.vertical > tbody:not(.spDspNone),
+  table.vertical > thead > tr:not(.spDspNone),
+  table.vertical > tbody > tr:not(.spDspNone),
+  table.vertical > tr:not(.spDspNone),
+  table.vertical > thead > tr > th:not(.spDspNone),
+  table.vertical > tbody > tr > th:not(.spDspNone),
+  table.vertical > tr > th:not(.spDspNone),
+  table.vertical > thead > tr > td:not(.spDspNone),
+  table.vertical > tbody > tr > td:not(.spDspNone),
+  table.vertical > tr > td:not(.spDspNone) {
+    display: block;
+    width: 100%;
+  }
+  .tableStyle01 {
+  }
+  /**
+   * ---------------------------------------------------
+   * ボタン
+   * ---------------------------------------------------
+   */
+  .btnStyle01 {
+    a {
+      display: block;
+      font-size: 1.6rem;
+      min-width: inherit;
+      padding: 12px 10px;
+    }
+    &.medium {
+      a {
+        min-width: inherit;
+      }
+    }
+  }
+  /**
+   * ---------------------------------------------------
+   * 汎用ボックス
+   * ---------------------------------------------------
+   */
+  .sectionVox {
+    display: block;
+    width: auto;
+    padding: 60px 20px 0 20px;
+    margin-bottom: 60px;
+    header {
+      margin-bottom: 30px;
+    }
+    footer {
+      margin-top: 40px;
+    }
+  }
+  // モジュールセット
+  .moduleSet {
+    font-size: 1.4rem;
+    h1 {
+      font-size: 3rem;
+      &:not(:last-child) {
+        margin-bottom: 20px;
+      }
+    }
+    h2 {
+      font-size: 2.2rem;
+      font-weight: bold;
+      &:not(:last-child) {
+        margin-bottom: 20px;
+      }
+    }
+    h3 {
+      font-size: 2rem;
+      &:not(:last-child) {
+        margin-bottom: 20px;
+      }
+    }
+    h4 {
+      font-size: 1.8rem;
+      &:not(:last-child) {
+        margin-bottom: 15px;
+      }
+    }
+    h5 {
+      font-size: 1.6rem;
+    }
+    h6 {
+      font-size: 1.4rem;
+    }
+    figure {
+      &:not(:last-child) {
+        margin-bottom: 20px;
+      }
+    }
+    .wp-block-buttons {
+      margin: 10px 0;
+      .wp-block-button {
+        margin-right: 15px;
+        .wp-block-button__link,
+        a {
+          padding-right: 25px;
+          &::after {
+            right: 10px;
+          }
+        }
+      }
+    }
+    .wp-block-columns {
+      .wp-block-column {
+        margin-bottom: 30px;
+      }
+      &:not(:last-child) {
+        margin-bottom: 20px;
+      }
+    }
+    .wp-block-media-text {
+      &:not(:last-child) {
+        margin-bottom: 30px;
+      }
+      .wp-block-media-text__content {
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+    .wp-block-embed-youtube {
+      width: 100%;
+      &:not(:last-child) {
+        margin-bottom: 30px;
+      }
+    }
+  }
+  /**
+   * ---------------------------------------------------
+   * ページング
+   * ---------------------------------------------------
+   */
+  .navigationWrapper {
+    margin-top: 50px;
+  }
+  /**
+   * ---------------------------------------------------
+   * iOSボタンデザインのリセット
+   * ---------------------------------------------------
+   */
+  input[type='submit'],
+  input[type='button'] {
+    cursor: pointer;
+    -webkit-box-sizing: content-box;
+    -webkit-appearance: button;
+    appearance: button;
+    border: none;
+    border-radius: 0;
+  }
+  input[type='submit']::-webkit-search-decoration,
+  input[type='button']::-webkit-search-decoration {
+    display: none;
+  }
+  input[type='submit']:focus,
+  input[type='button']:focus {
+    outline-offset: -2px;
+  }
+  /**
+   * ---------------------------------------------------
+   * popup
+   * ---------------------------------------------------
+   */
+  .popupWrapper {
+    left: 5%;
+    width: 90%;
+    margin-left: 0;
+    .closeVox {
+      height: 40px;
+      top: -40px;
+    }
+    .popupCloseBt {
+      width: 40px;
+      height: 40px;
+      span {
+        width: 40px;
+        margin: -0.5px 0 0 -20px;
+      }
+    }
+  }
+  /**
+   * transition series
+   */
+  .trOp01 {
+    transition: none;
+    &:hover {
+      opacity: 1;
+    }
+  }
+  .trScl01 {
+    transition: none;
+    &:hover {
+      transform: scale(1);
+    }
+  }
+} /*  @media END */

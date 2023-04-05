@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<link rel="stylesheet" type="text/css" media="all" href="assets/css/global/import.min.css">
+</head>
+
+<body class="popup">
+	<div id="wrapper">
+		<header id="siteHeader">
+			<h1>Document</h1>
+		</header>
+		<div id="container">
+			<main>
+				メインコンテンツ
+				<p>
+					<a href="javascript:void(0)" class="popupBtItem" data-popup="popupWrapper01">popup</a>
+				</p>
+			</main>
+		</div>
+		<footer id="siteFooter">
+			<small>&copy; テストページ</small>
+		</footer>
+	</div>
+	<div id="popupContents">
+		<div class="content">
+			<p style="color: #fff">ポップアップです。</p>
+		</div>
+	</div>
+</body>
+<script src="assets/js/global/global.min.js"></script>
+<script>
+	$.main = {}
+	$.params = {}
+</script>
+<script src="assets/js/global/main.js"></script>
+
+<script src="assets/js/content/content.js"></script>
+</html>

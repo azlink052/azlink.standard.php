@@ -1,0 +1,12 @@
+*/*.bak
+*/*.BAK
+*/Thumbs.db
+*/dwsync.xml
+.project
+*/*.prefs
+*/*.buildpath
+*/*.settings
+.sass-cache/
+.svn
+node_modules
+.DS_Store
