@@ -5,30 +5,26 @@
  * WPクラス
  *
  * @category  Application of AZLINK.CMS
- * @final     2020.10.22
+ * @final     2023.04.13
  * @author    Nori Murata <nori@azlink.jp>
  * @copyright   2010- AZLINK. <https://azlink.jp>
- *
  * ==============================================================
  */
 namespace azlink\workspace\classes;
 if (class_exists('azlink\workspace\classes\MyWP')) return;
 
-use azlink\workspace as az;
+use azlink\workspace as azlib;
 
 // require_once __DIR__ . '/../config/config.php';
 // require_once config\FRONT_PATH . 'content/wp-config.php';
 
 class MyWP {
-	/**
-	 * 各種パラメータ
-	 * @param uploads [String] uploadsディレクトリの場所
-	 */
-	public $uploads = '';
+	public string $uploads = ''; // uploadsディレクトリの場所
 	/**
 	 * PHP5 コンストラクタ
+	 * @param string wp-config.php のパス
 	 */
-	function __construct($configPath = az\config\FRONT_PATH . 'content/wp-config.php') {
+	function __construct(string $configPath = azlib\config\FRONT_PATH . 'content/wp-config.php') {
 		require_once $configPath;
 
 		global $wp;
@@ -40,8 +36,9 @@ class MyWP {
 	}
 	/**
 	 * ページネーション
+	 * @param array ページネーション用オプション
 	 */
-	public function outputPagination($args = array()) {
+	public function outputPagination(array $args = []) {
 		$navigation = '';
 
 		// Don't print empty markup if there's only one page.
@@ -79,21 +76,21 @@ class MyWP {
 	}
 	/**
 	 * WP利用時にWP設定を考慮した現在時間を返す
-	 * @param フォーマット
-	 * @return 文字列
+	 * @param string フォーマット
+	 * @return string 文字列
 	 */
-	static public function getNow($format = 'Y-m-d H:i:s') {
+	static public function getNow(string $format = 'Y-m-d H:i:s') {
 		$time = new \DateTime('', new \DateTimeZone(get_option('timezone_string')));
-		return $time->format($format);
+		return (string) $time->format($format);
 	}
 	/**
 	 * ACFフィールドのセット
 	 * ※FALSEを返したい場合は使用しない
 	 * @param string ACFフィールド名
-	 * @param string|int 取得のためのIDもしくはIDを付加したキー名
-	 * @return string|int 値が NULLではない 空ではない セットされている場合に値を返し、それ以外は空文字を返す
+	 * @param 取得のためのIDもしくはIDを付加したキー名
+	 * @return 値が NULLではない 空ではない セットされている場合に値を返し、それ以外は空文字を返す
 	 */
-	static function setACFValue(string $field, string|int $id = ''): string {
+	static function setACFValue(string $field, $id = ''): string {
 		if (!function_exists('get_field')) return FALSE;
 		$field = $id ? get_field($field, $id) : get_field($field);
 		return isset($field) && $field !== NULL && $field !== '' && $field ? $field : '';

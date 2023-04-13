@@ -5,23 +5,22 @@
  * autoloadクラス
  *
  * @category 	Application of AZLINK.CMS
- * @final 		2021.03.18
+ * @final 		2023.04.13
  * @author 		Norio Murata <nori@azlink.jp>
  * @copyright 	2010- AZLINK. <https://azlink.jp>
- *
  * ==============================================================
  */
 namespace azlink\workspace\classes;
 if (class_exists('azlink\workspace\classes\Autoload')) return;
 
 require_once __DIR__ . '/../config/config.php';
-use azlink\workspace as az;
+use azlink\workspace as azlib;
 
 class Autoload {
-  public $dirs = array(
-    az\config\INC_PATH . 'classes',
-    az\config\INC_PATH . 'classes/common'
-  );
+  public array $dirs = [
+    azlib\config\INC_PATH . 'classes',
+    azlib\config\INC_PATH . 'classes/common'
+  ];
   /**
 	 * PHP5 コンストラクタ
 	 */
@@ -30,9 +29,9 @@ class Autoload {
   }
   /**
 	 * クラスの読み込み
-   * @param String クラス名
+   * @param string クラス名
 	 */
-  private function autoload($classname) {
+  private function autoload(string $classname) {
     foreach($this->dirs as $dir){
       $array = explode('\\', $classname);
       $file = $dir . '/' . end($array) . '.php';

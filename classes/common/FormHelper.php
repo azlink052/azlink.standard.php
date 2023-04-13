@@ -5,10 +5,9 @@
  * フォームヘルパークラス
  *
  * @category 	Application of AZLINK.CMS
- * @build 		2010.07.16
+ * @build 		2023.04.13
  * @author 		Norio Murata <nori@azlink.jp>
  * @copyright 	2010- AZLINK. <https://azlink.jp>
- *
  * ==============================================================
  */
 namespace azlink\workspace\classes\common;
@@ -20,6 +19,7 @@ class FormHelper {
  * 対象のチェックボックスにチェックを入れる。
  * @param チェックする値
  * @param 現在セットされている変数
+ * @return string チェック処理のためのhtml
  */
 	static function checkRC($val, $input) {
 		if (!is_array($input)) {
@@ -41,6 +41,7 @@ class FormHelper {
  * 対象のリスト値を選択状態にする。
  * @param チェックする値
  * @param 現在セットされている変数
+ * @return string チェック処理のためのhtml
  */
 	static function checkSelect($val, $input) {
 		if ($input !== 'empty' && !empty($input)) {

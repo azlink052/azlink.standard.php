@@ -5,16 +5,15 @@
  * フォームエラー処理クラス
  *
  * @category 	Application of AZLINK.CMS
- * @final 		2017.03.11
+ * @final 		2023.04.13
  * @author 		Norio Murata <nori@azlink.jp>
  * @copyright 	2010- AZLINK. <https://azlink.jp>
- *
  * ==============================================================
  */
 namespace azlink\workspace\classes;
 if (class_exists('azlink\workspace\classes\FormError')) return;
 
-use azlink\workspace as az;
+use azlink\workspace as azlib;
 
 // require_once __DIR__ . '/../config/config.php';
 
@@ -22,119 +21,55 @@ class FormError {
 	/**
 	 * エラー内容プロパティ
 	 */
-	public $errorArgs;
-	private $errorResult;
-	public $errorMessage;
+	public array $errorArgs;
+	private array $errorResult;
+	public string $errorMessage;
 	/**
 	 * PHP5 コンストラクタ
+	 * @param array エラーチェックの結果配列
+	 * @param string エラー内容に対応した配列を指定するキー
 	 */
-	function __construct($error, $menu) {
+	function __construct(array $error, string $menu) {
 		/**
 		 * プロパティのセット
 		 */
 		switch ($menu) {
 			case 'contact':
 				$this->errorArgs = [
-					'nameEmpty' 		=> az\config\ERR_NAME_EMPTY,
-					'kanaEmpty' 		=> az\config\ERR_KANA_EMPTY,
-					'kanaTrue' 			=> az\config\ERR_KANA_TRUE,
-					'kanaTrue' 			=> az\config\ERR_KANA_TRUE,
-					'zipEmpty' 			=> az\config\ERR_ZIP_EMPTY,
-					'zipTrue' 			=> az\config\ERR_ZIP_TRUE,
-					'addrEmpty' 		=> az\config\ERR_ADDR_EMPTY,
-					'phoneEmpty' 		=> az\config\ERR_PHONE_EMPTY,
-					'phoneTrue' 		=> az\config\ERR_PHONE_TRUE,
-					'mailEmpty' 		=> az\config\ERR_MAIL_EMPTY,
-					'mailTrue' 			=> az\config\ERR_MAIL_TRUE,
-					'mailCheck' 		=> az\config\ERR_MAIL_CHECK,
-					'noteEmpty' 		=> az\config\ERR_NOTE_EMPTY,
-					'noteLength' 		=> az\config\ERR_NOTE_LENGTH
-				];
-				break;
-			case 'data':
-				$this->errorArgs = [
-					'nameEmpty' 		=> az\config\ERR_NAME_EMPTY,
-					'kanaEmpty' 		=> az\config\ERR_KANA_EMPTY,
-					'kanaTrue' 			=> az\config\ERR_KANA_TRUE,
-					'kanaTrue' 			=> az\config\ERR_KANA_TRUE,
-					'zipEmpty' 			=> az\config\ERR_ZIP_EMPTY,
-					'zipTrue' 			=> az\config\ERR_ZIP_TRUE,
-					'addrEmpty' 		=> az\config\ERR_ADDR_EMPTY,
-					'phoneEmpty' 		=> az\config\ERR_PHONE_EMPTY,
-					'phoneTrue' 		=> az\config\ERR_PHONE_TRUE,
-					'mailEmpty' 		=> az\config\ERR_MAIL_EMPTY,
-					'mailTrue' 			=> az\config\ERR_MAIL_TRUE,
-					'mailCheck' 		=> az\config\ERR_MAIL_CHECK,
-					'noteEmpty' 		=> az\config\ERR_NOTE_EMPTY,
-					'noteLength' 		=> az\config\ERR_NOTE_LENGTH,
-					'sexEmpty' 			=> az\config\ERR_SEX_EMPTY,
-					'classEmpty' 		=> az\config\ERR_CLASS_EMPTY,
-					'courseEmpty' 	=> az\config\ERR_COURSE_EMPTY
-				];
-				break;
-			case 'consultation-visit':
-				$this->errorArgs = [
-					'nameEmpty' 				=> az\config\ERR_NAME_EMPTY,
-					'kanaEmpty' 				=> az\config\ERR_KANA_EMPTY,
-					'kanaTrue' 					=> az\config\ERR_KANA_TRUE,
-					'kanaTrue' 					=> az\config\ERR_KANA_TRUE,
-					'zipEmpty' 					=> az\config\ERR_ZIP_EMPTY,
-					'zipTrue' 					=> az\config\ERR_ZIP_TRUE,
-					'addrEmpty' 				=> az\config\ERR_ADDR_EMPTY,
-					'phoneEmpty' 				=> az\config\ERR_PHONE_EMPTY,
-					'phoneTrue' 				=> az\config\ERR_PHONE_TRUE,
-					'mailEmpty' 				=> az\config\ERR_MAIL_EMPTY,
-					'mailTrue' 					=> az\config\ERR_MAIL_TRUE,
-					'mailCheck' 				=> az\config\ERR_MAIL_CHECK,
-					'noteEmpty' 				=> az\config\ERR_NOTE_EMPTY,
-					'noteLength' 				=> az\config\ERR_NOTE_LENGTH,
-					'consulEmpty' 			=> az\config\ERR_CONSUL_EMPTY,
-					'consulDate1Empty' 	=> az\config\ERR_CONSULD_EMPTY,
-					'consulDate2Empty' 	=> az\config\ERR_CONSULD_EMPTY,
-					'consulDate3Empty' 	=> az\config\ERR_CONSULD_EMPTY,
-					'consulTypeEmpty' 	=> az\config\ERR_CONSULT_EMPTY,
-					'docEmpty' 					=> az\config\ERR_DOC_EMPTY
-				];
-				break;
-			case 'advance_reservation':
-				$this->errorArgs = [
-					'nameEmpty' 		=> az\config\ERR_NAME_EMPTY,
-					'kanaEmpty' 		=> az\config\ERR_KANA_EMPTY,
-					'kanaTrue' 			=> az\config\ERR_KANA_TRUE,
-					'kanaTrue' 			=> az\config\ERR_KANA_TRUE,
-					'zipEmpty' 			=> az\config\ERR_ZIP_EMPTY,
-					'zipTrue' 			=> az\config\ERR_ZIP_TRUE,
-					'addrEmpty' 		=> az\config\ERR_ADDR_EMPTY,
-					'phoneEmpty' 		=> az\config\ERR_PHONE_EMPTY,
-					'phoneTrue' 		=> az\config\ERR_PHONE_TRUE,
-					'mailEmpty' 		=> az\config\ERR_MAIL_EMPTY,
-					'mailTrue' 			=> az\config\ERR_MAIL_TRUE,
-					'mailCheck' 		=> az\config\ERR_MAIL_CHECK,
-					'noteEmpty' 		=> az\config\ERR_NOTE_EMPTY,
-					'noteLength' 		=> az\config\ERR_NOTE_LENGTH,
-					'sexEmpty' 			=> az\config\ERR_SEX_EMPTY,
-					'schoolEmpty' 	=> az\config\ERR_SCHOOL_EMPTY,
-					'classEmpty' 		=> az\config\ERR_CLASS_EMPTY,
-					'courseEmpty' 	=> az\config\ERR_COURSE_EMPTY,
-					'docEmpty' 			=> az\config\ERR_DOC_EMPTY,
-					'openDayEmpty' 	=> az\config\ERR_OPEND_EMPTY,
-					'openCompEmpty' => az\config\ERR_OPENC_EMPTY,
-					'openRelEmpty' 	=> az\config\ERR_OPENR_EMPTY
+					'nameEmpty' 	=> azlib\config\ERR_NAME_EMPTY,
+					'kanaEmpty' 	=> azlib\config\ERR_KANA_EMPTY,
+					'kanaTrue' 		=> azlib\config\ERR_KANA_TRUE,
+					'zipEmpty' 		=> azlib\config\ERR_ZIP_EMPTY,
+					'zipTrue' 		=> azlib\config\ERR_ZIP_TRUE,
+					'addrEmpty' 	=> azlib\config\ERR_ADDR_EMPTY,
+					'phoneEmpty' 	=> azlib\config\ERR_PHONE_EMPTY,
+					'phoneTrue' 	=> azlib\config\ERR_PHONE_TRUE,
+					'mailEmpty' 	=> azlib\config\ERR_MAIL_EMPTY,
+					'mailTrue' 		=> azlib\config\ERR_MAIL_TRUE,
+					'mailCheck' 	=> azlib\config\ERR_MAIL_CHECK,
+					'noteEmpty' 	=> azlib\config\ERR_NOTE_EMPTY,
+					'noteLength' 	=> azlib\config\ERR_NOTE_LENGTH
 				];
 				break;
 		}
 
 		$this->errorResult = $error;
 	}
-
+	/**
+	 * ページ上部などに表示するエラーメッセージの出力
+	 */
 	public function outputErrorMessage() {
 		return $this->errorMessage;
 	}
-
-	public function outputError($check) {
+	/**
+	 * フォーム内各パーツに表示するエラーメッセージの出力
+	 * @param string エラー配列のキー
+	 * @return string エラーメッセージ、もしくは空文字
+	 */
+	public function outputError(string $check) {
 		if (isset($this->errorResult[$check]) && $this->errorResult[$check]) {
 			return '<span class="dspBlock caution icoCaution">' . $this->errorArgs[$check] . '</span>';
 		}
-		else return NULL;
+		else return '';
 	}
 }

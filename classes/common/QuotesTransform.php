@@ -8,7 +8,12 @@
  * @build 		2010.07.16
  * @author 		Norio Murata <nori@azlink.jp>
  * @copyright 	2010- AZLINK. <https://azlink.jp>
+ * 
+ * ******************* CAUTION ****************************
  *
+ * 今後は使用する必要なし
+ *
+ * ********************************************************
  * ==============================================================
  */
 namespace azlink\workspace\classes\common;

@@ -14,6 +14,7 @@ const ERR_NAME_LENGTH       = 'お名前は全角5文字以内で入力してく
 const ERR_NAME_ZEN          = 'お名前は全角で入力してください';
 const ERR_NAME_KANA         = 'お名前はひらがなで入力してください';
 const ERR_KANA_EMPTY        = 'ふりがなを入力してください';
+const ERR_KANA_TRUE         = 'ふりがなを正しく入力してください';
 const ERR_COMP_EMPTY        = '会社名・団体名を入力してください';
 const ERR_COMP_LENGTH       = '会社名・団体名は全角30文字以内で入力してください';
 const ERR_COMP_ZEN          = '会社名・団体名は全角で入力してください';
@@ -54,12 +55,12 @@ const ERR_NOTE_LENGTH       = 'お問い合わせ内容は2000文字以内でお
 /**
  * サイト固有のエラーメッセージ
  */
-// const ERR_NAME_SEI_EMPTY    = 'お名前(姓)を入力してください';
-// const ERR_NAME_MEI_EMPTY    = 'お名前(名)を入力してください';
-// const ERR_ITEM_EMPTY        = 'お問い合わせ品名を入力してください';
-// const ERR_FILE_LENGTH       = '登録可能画像数は3点までです';
-// const ERR_FILE_SIZE         = '登録可能画像サイズは合計10MBまでです';
-// const ERR_INPUT_ANY         = '入力内容に誤りがあります';
+const ERR_NAME_SEI_EMPTY    = 'お名前(姓)を入力してください';
+const ERR_NAME_MEI_EMPTY    = 'お名前(名)を入力してください';
+const ERR_ITEM_EMPTY        = 'お問い合わせ品名を入力してください';
+const ERR_FILE_LENGTH       = '登録可能画像数は3点までです';
+const ERR_FILE_SIZE         = '登録可能画像サイズは合計10MBまでです';
+const ERR_INPUT_ANY         = '入力内容に誤りがあります';
 /**
  * ログイン
  */

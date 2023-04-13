@@ -6,10 +6,9 @@
  * Role 不使用
  *
  * @category  Application of AZLINK.CMS
- * @final     2021.12.02
+ * @final     2023.04.13
  * @author    Nori Murata <nori@azlink.jp>
  * @copyright   2010- AZLINK. <https://azlink.jp>
- *
  * ==============================================================
  */
 namespace azlink\workspace\classes;
@@ -18,39 +17,39 @@ if (class_exists('azlink\workspace\classes\Theme')) return;
 class Theme {
   /**
    * 各種パラメータ
-   * @param menu [String] メニュー名(英から始まる英数)
-   * @param menuName [String] メニュー名(自由文字列)
-   * @param title [String] タイトル(titleタグ用)
-   * @param pageTitle [String] タイトル(パンくずなど)
-   * @param keywords [String] キーワード
-   * @param description [String] descrition
-   * @param css [Array] cssファイル
+   * @param menu メニュー名(英から始まる英数)
+   * @param menuName メニュー名(自由文字列)
+   * @param title タイトル(titleタグ用)
+   * @param pageTitle タイトル(パンくずなど)
+   * @param keywords キーワード
+   * @param description descrition
+   * @param css cssファイル
    * @param isCssInline [Boolean] cssファイルをインライン記述するか
-   * @param js [Array] jsファイル
-   * @param bodyClass [Array] bodyに追加したいクラス名
-   * @param bodyID [String] bodyのIDを指定
-   * @param customHeader [String] headの最後(gaの直前)に挿入される
-   * @param customFooter [String] bodyの最後に挿入される
-   * @param canonical [String] カノニカル
-   * @param ogpImg [String] OGP画像url
+   * @param js jsファイル
+   * @param bodyClass bodyに追加したいクラス名
+   * @param bodyID bodyのIDを指定
+   * @param customHeader headの最後(gaの直前)に挿入される
+   * @param customFooter bodyの最後に挿入される
+   * @param canonical カノニカル
+   * @param ogpImg OGP画像url
    */
-  public $menu = '';
-  public $menuName = '';
-  public $title = '';
-  public $pageTitle = '';
-  public $keywords = '';
-  public $description = '';
-  public $css = array();
-  public $isCssInline = FALSE;
-  public $js = array();
-  public $bodyClass = array();
-  public $bodyID = '';
-  public $customHeader = '';
-  public $customFooter = '';
-  public $canonical = '';
-  public $ogpImg = '';
+  public string $menu = '';
+  public string $menuName = '';
+  public string $title = '';
+  public string $pageTitle = '';
+  public string $keywords = '';
+  public string $description = '';
+  public array $css = [];
+  public bool $isCssInline = FALSE;
+  public array $js = [];
+  public array $bodyClass = [];
+  public string $bodyID = '';
+  public string $customHeader = '';
+  public string $customFooter = '';
+  public string $canonical = '';
+  public string $ogpImg = '';
 
-  private $absPath = '';
+  private string $absPath = '';
   /**
    * PHP5 コンストラクタ
    */

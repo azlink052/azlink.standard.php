@@ -5,7 +5,7 @@
  * レコードに対する汎用処理クラス
  *
  * @category 	Application of AZLINK.CMS
- * @final 		2016.12.20
+ * @final 		2023.04.13
  * @author 		Norio Murata <nori@azlink.jp>
  * @copyright 	2010- AZLINK. <https://azlink.jp>
  *
@@ -29,11 +29,11 @@ class EntryHelper {
 	/**
 	 * ステータス切り替え用に現在のstatusごとに反対の状態を表示
 	 * statusの値1が「公開」のものに限る
-	 * @param status
-	 * @param 対象がユーザであればTRUE
-	 * @return ステータス状態を示す文字列
+	 * @param string ステータス
+	 * @param bool 対象がユーザであればTRUE
+	 * @return string ステータス状態を示す文字列
 	 */
-	static function getStatusOutput($status, $isUser = FALSE) {
+	static function getStatusOutput(string $status, bool $isUser = FALSE) {
 		if (!$isUser) {
 			$close 	= '非公開';
 			$open 	= '公開';
@@ -47,11 +47,12 @@ class EntryHelper {
 	}
 	/**
 	 * 登録キーの発行
-	 * @param テーブル
-	 * @param 生成する桁数(デフォルト5桁)
-	 * @return ユニークな登録キー
+	 * @param string テーブル
+	 * @param int 生成する桁数(デフォルト5桁)
+	 * @param string ユニークをチェックするフィールド(カラム)名
+	 * @return string ユニークな登録キー
 	 */
-	static function getRegKeyTable($table, $len = 5, $fieled = 'registered_key') {
+	static function getRegKeyTable(string $table, int $len = 5, string $fieled = 'registered_key') {
 		$database = new common\Database;
 
 		$sameNameChk = TRUE;
@@ -83,25 +84,25 @@ class EntryHelper {
 			}
 		}
 
-		return $regKey;
+		return (string) $regKey;
 	}
 	/**
 	 * ファイル名から拡張子を取得、対応した文字列を返す
 	 * 文字列判定であり、mimetypeの確認は行わない
-	 * @param file名
-	 * @return 拡張子を示す文字列
+	 * @param string file名
+	 * @return string 拡張子を示す文字列
 	 */
-	static function getExtOutput($file) {
+	static function getExtOutput(string $file) {
 		if (!$file) return FALSE;
 
-		return substr($file, strrpos($file, '.') + 1);
+		return (string) substr($file, strrpos($file, '.') + 1);
 	}
 	/**
 	 * 拡張子に対応したico出力クラスを返す
-	 * @param 拡張子
-	 * @return クラス名文字列 (みつからなかったらFALSE)
+	 * @param string 拡張子
+	 * @return string|bool クラス名文字列 (みつからなかったらFALSE)
 	 */
-	static function getIcoExtOutput($ext) {
+	static function getIcoExtOutput(string $ext) {
 		if (!$ext) return FALSE;
 
 		switch ($ext) {
@@ -140,15 +141,16 @@ class EntryHelper {
 	/**
 	 * 開始日・終了日　表示設定
 	 *
-	 * @param 開始日
-	 * @param 終了日
-	 * @return 結合文字列
+	 * @param string 開始日
+	 * @param string 終了日
+	 * @param string タイムゾーン
+	 * @return string 結合文字列
 	 */
-	static function getShowPeriodDate($start, $end) {
+	static function getShowPeriodDate(string $start, string $end, string $tz = 'Asia/Tokyo') {
 	  $week = array('日', '月', '火', '水', '木', '金', '土');
 
-	  $sDate = new DateTime($start, new DateTimeZone('Asia/Tokyo'));
-	  $eDate = new DateTime($end, new DateTimeZone('Asia/Tokyo'));
+	  $sDate = new \DateTime($start, new \DateTimeZone($tz));
+	  $eDate = new \DateTime($end, new \DateTimeZone($tz));
 	  $sw = (int) $sDate->format('w');
 	  $ew = (int) $eDate->format('w');
 

@@ -6,7 +6,7 @@
  * 添付ファイルにも対応
  *
  * @category 	Application of AZLINK.CMS
- * @final 		2022.03.09
+ * @final 		2023.04.13
  * @author 		Norio Murata <nori@azlink.jp>
  * @copyright 	2010- AZLINK. <https://azlink.jp>
  *
@@ -15,42 +15,42 @@
 namespace azlink\workspace\classes\common;
 if (class_exists('azlink\workspace\classes\common\SendMail')) return;
 
-use azlink\workspace as az;
+use azlink\workspace as azlib;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 class SendMail {
-	public $mimeContentTypes;
-	public $mailTo;
-	public $mailFrom;
-	public $mailFromName;
-	public $mailSubject;
-	public $mailMessage;
-	public $mailReplyTo = az\config\FROM_MAIL_ADDRESS;
-	public $mailReplyToMessage = 'Reply to email';
-	public $mailReturnPath = az\config\FROM_MAIL_ADDRESS;
-	public $mailWordWrap = NULL;
-	public $mailCC = FALSE;
-	public $mailBCC = FALSE;
-	public $files;
-	public $filename;
-	public $boundary;
-	public $smtpUse 	= FALSE;
-	public $smtpSecure 	= 'tls';
-	public $smtpHost;
-	public $smtpPort 	= 587;
-	public $smtpAuth 	= TRUE;
-	public $smtpUser;
-	public $smtpPass;
-	public $mailCharset = 'iso-2022-jp';
-	public $mailEncording = '7bit';
-	public $attachfiles = array();
-	public $language = array(
+	public array $mimeContentTypes; // 添付ファイルのmimetype配列
+	public string|array $mailTo; // 送信先
+	public string $mailFrom; // 送信元
+	public string $mailFromName; // 送信元名前
+	public string $mailSubject; // 件名
+	public string $mailMessage; // 本文
+	public string $mailReplyTo = azlib\config\FROM_MAIL_ADDRESS; // 返信先
+	public string $mailReplyToMessage = 'Reply to email'; // 返信用メッセージ
+	public string $mailReturnPath = azlib\config\FROM_MAIL_ADDRESS; // 返送先
+	public int $mailWordWrap = NULL; // wordwrapサイズ
+	public string|array $mailCC = FALSE; // CC
+	public string|array $mailBCC = FALSE; // BCC
+	public $files; // 添付ファイル
+	public $filename; // 添付ファイル名
+	public $boundary; // 添付ファイル用区切り文字
+	public bool $smtpUse = FALSE; // SMTP送信フラグ
+	public string $smtpSecure = 'tls'; // SMTP送信時のセキュア指定
+	public string $smtpHost; // SMTP送信時のホスト
+	public int $smtpPort = 587; // SMTP送信時のポート
+	public bool $smtpAuth = TRUE;  // SMTP送信時の認証
+	public string $smtpUser; // SMTP送信時のユーザ名
+	public string $smtpPass; // SMTP送信時のパスワード
+	public string $mailCharset = 'iso-2022-jp'; // charset
+	public string $mailEncording = '7bit'; // エンコーディング
+	public array $attachfiles = []; // 添付ファイル
+	public array $language = [
 		'ja',
 		__DIR__ . '/../lib/PHPMailer/language/'
-	);
+	]; // 言語指定
 	/**
 	 * コンストラクタ
 	 */
@@ -61,27 +61,27 @@ class SendMail {
 	 * PHP5 コンストラクタ
 	 */
 	function __construct() {
-		$this->mimeContentTypes = array(
+		$this->mimeContentTypes = [
 			'gif' 	=> 'image/gif',
 			'jpg' 	=> 'image/jpeg',
 			'png' 	=> 'image/png'
-		);
+		];
   }
 	/**
 	 * メール送信
 	 */
 	public function sendAttachMail() {
 		mb_language("japanese");
-		mb_internal_encoding(az\config\PROG_ENCTYPE);
+		mb_internal_encoding(azlib\config\PROG_ENCTYPE);
 
 		if (empty($this->files)) {
-			$this->boundary = null;
+			$this->boundary = NULL;
 		} else {
-			$this->boundary = md5(uniqid(rand(), true));
+			$this->boundary = md5(uniqid(rand(), TRUE));
 		}
 
-		$this->mailSubject = mb_convert_encoding($this->mailSubject, 'JIS', az\config\PROG_ENCTYPE);
-		$this->mailMessage = mb_convert_encoding($this->mailMessage, 'JIS', az\config\PROG_ENCTYPE);
+		$this->mailSubject = mb_convert_encoding($this->mailSubject, 'JIS', azlib\config\PROG_ENCTYPE);
+		$this->mailMessage = mb_convert_encoding($this->mailMessage, 'JIS', azlib\config\PROG_ENCTYPE);
 
 		$this->mailSubject = '=?iso-2022-jp?B?' . base64_encode($this->mailSubject) . '?=';
 
@@ -149,7 +149,7 @@ class SendMail {
 			require __DIR__ . '/../lib/PHPMailer/src/SMTP.php';
 		}
 
-		mb_internal_encoding(az\config\PROG_ENCTYPE);
+		mb_internal_encoding(azlib\config\PROG_ENCTYPE);
 
 		$mail = new PHPMailer();
 
@@ -203,11 +203,11 @@ class SendMail {
 		}
 
 		$mail->From 	= $this->mailFrom;
-		$mail->FromName = mb_encode_mimeheader($this->mailFromName, $mail->CharSet, az\config\PROG_ENCTYPE);
+		$mail->FromName = mb_encode_mimeheader($this->mailFromName, $mail->CharSet, azlib\config\PROG_ENCTYPE);
 		// $mail->Subject 	= mb_encode_mimeheader(mb_convert_encoding($this->mailSubject, 'iso-2022-jp', PROG_ENCTYPE));
 		// $mail->Subject 	= mb_encode_mimeheader($this->mailSubject, $mail->CharSet); // 件名文字化け対策
 		$mail->Subject 	= $this->mailSubject;
-		$mail->Body 	= mb_convert_encoding($this->mailMessage, $mail->CharSet, az\config\PROG_ENCTYPE);
+		$mail->Body 	= mb_convert_encoding($this->mailMessage, $mail->CharSet, azlib\config\PROG_ENCTYPE);
 		$mail->AddReplyTo($this->mailReplyTo, $this->mailReplyToMessage);
 		$mail->AddCustomHeader('Return-path: ' . $this->mailReturnPath);
 		$mail->Sender = $mail->From;

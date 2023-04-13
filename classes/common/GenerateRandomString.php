@@ -5,7 +5,7 @@
  * ランダムな文字列を作成するクラス
  *
  * @category 	Application of AZLINK.CMS
- * @build 		2010.07.16
+ * @build 		2023.04.13
  * @author 		Norio Murata <nori@azlink.jp>
  * @copyright 	2010- AZLINK. <https://azlink.jp>
  *
@@ -17,8 +17,8 @@ if (class_exists('azlink\workspace\classes\common\GenerateRandomString')) return
 class GenerateRandomString {
 	/**
 	 * ランダムな文字列を生成する
-	 * 引数は
-	 * $length : 作成する文字列の長さ
+	 * @param int 作成する文字列の長さ
+	 * @return string 生成した文字列
 	 */
 	static function generate($length) {
 		if ($length <= 0) {

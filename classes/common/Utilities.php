@@ -5,16 +5,15 @@
  * 各種ユーティリティクラス
  *
  * @category 	Application of AZLINK.CMS
- * @final 		2021.03.18
+ * @final 		2023.04.13
  * @author 		Norio Murata <nori@azlink.jp>
  * @copyright 	2010- AZLINK. <https://azlink.jp>
- *
  * ==============================================================
  */
 namespace azlink\workspace\classes\common;
 if (class_exists('azlink\workspace\classes\common\Utilities')) return;
 
-use azlink\workspace as az;
+use azlink\workspace as azlib;
 
 // require_once __DIR__ . '/../../config/config.php';
 
@@ -22,28 +21,11 @@ class Utilities {
 	const HASH_ALGO = 'sha256';
 	/**
 	 * 指定ディレクトリのサイズを求める
-	 * @param ディレクトリ、またはファイルの絶対パスを指定
-	 * @return ディレクトリサイズ
+	 * @param string ディレクトリ、またはファイルの絶対パスを指定
+	 * @return int ディレクトリサイズ
 	 */
-	static function getDirSize($path) {
-		$total_size = 0;
-
-		// if (!function_exists(scandir)) { //PHP4の場合、scandir関数がないので実装する
-		// 	function scandir($dirName, $order = '') {
-		// 		$dh = opendir($dirName);
-
-		// 		while (($filename = readdir($dh)) !== FALSE) {
-		// 			$fileList[] = $filename;
-		// 		}
-
-		// 		if ($order) {
-		// 			rsort($fileList);
-		// 		} else {
-		// 			sort($fileList);
-		// 		}
-		// 		return $fileList;
-		// 	}
-		// }
+	static function getDirSize(string $path) {
+		$totalSize = 0;
 
 		if (is_file($path)) { //指定したのがファイルだった場合はサイズを返して終了
 			return filesize($path);
@@ -67,10 +49,10 @@ class Utilities {
 	}
 	/**
 	 * 指定ディレクトリを空にする
-	 * @param ディレクトリ絶対パスを指定
-	 * @return 正常に処理完了でTRUE / 失敗の場合はエラーコード
+	 * @param string ディレクトリ絶対パスを指定
+	 * @return bool|string 正常に処理完了でTRUE / 失敗の場合はエラーコード
 	 */
-	static function emptyDir($path) {
+	static function emptyDir(string $path) {
 		if (is_dir($path)) {
 			$strDir = opendir($path);
 
@@ -87,10 +69,10 @@ class Utilities {
 			return TRUE;
 		} else {
 			switch ($path) {
-				case az\config\TEMP_DIR:
+				case azlib\config\TEMP_DIR:
 					$err = 'E015';
 					break;
-				case az\config\UPLOADS_DIR:
+				case azlib\config\UPLOADS_DIR:
 					$err = 'E011';
 					break;
 				default:
@@ -103,10 +85,10 @@ class Utilities {
 	}
 	/**
 	 * 指定ディレクトリ内の更新時刻が指定時間を超えているものを削除する
-	 * @param ディレクトリ絶対パスを指定
-	 * @return 正常に処理完了でTRUE / 失敗の場合はエラーコード
+	 * @param string ディレクトリ絶対パスを指定
+	 * @return bool|string 正常に処理完了でTRUE / 失敗の場合はエラーコード
 	 */
-	static function checkDirFile($path){
+	static function checkDirFile(string $path){
 		if (is_dir($path)) {
 			$strDir = opendir($path);
 
@@ -115,7 +97,7 @@ class Utilities {
 					$time = filemtime($path . $strFile);
 					//echo $time."<br />";
 					//echo (time() - 1440)."<br />";
-					if ($time <= (time() - az\config\TEMP_FILE_LIVETIME)) {
+					if ($time <= (time() - azlib\config\TEMP_FILE_LIVETIME)) {
 						unlink($path . '/' . $strFile);
 					}
 				}
@@ -123,10 +105,10 @@ class Utilities {
 			return TRUE;
 		} else {
 			switch ($path) {
-				case az\config\TEMP_DIR:
+				case azlib\config\TEMP_DIR:
 					$err = 'E015';
 					break;
-				case az\config\UPLOADS_DIR:
+				case azlib\config\UPLOADS_DIR:
 					$err = 'E011';
 					break;
 				default:
@@ -139,11 +121,11 @@ class Utilities {
 	}
 	/**
 	 * ファイルの拡張子を取得する
-	 * @param ファイルパス
-	 * @param (オプション)比較する拡張子(配列)
-	 * @return 拡張子(オプションを指定した場合は、指定配列が含まれていたらTRUE)
+	 * @param string ファイルパス
+	 * @param array (オプション)比較する拡張子(配列)
+	 * @return string|bool 拡張子(オプションを指定した場合は、指定配列が含まれていたらTRUE)
 	 */
-	static function getFileType($file, $type = array()) {
+	static function getFileType(string $file, array $type = []) {
 		if (!empty($type)) {
 
 			$fileType = substr($file, strrpos($file, '.') + 1);
@@ -155,7 +137,7 @@ class Utilities {
 	}
 	/**
 	 * ブラウザがie6かどうか確認する
-	 * @return ie6であればTRUE
+	 * @return bool ie6であればTRUE
 	 */
 	static function isBrowserIE6() {
 		if (isset($_SERVER['HTTP_USER_AGENT'])) {
@@ -166,7 +148,7 @@ class Utilities {
 	/**
 	 * スマートフォン判定
 	 * iPhone / Android = スマフォ
-	 * @return スマートフォンであればTRUE
+	 * @return bool スマートフォンであればTRUE
 	 */
 	static function isSmartphone() {
 		$ua = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : NULL;
@@ -185,7 +167,7 @@ class Utilities {
 	/**
 	 * トークンの生成
 	 * ※session_start 必須
-	 * @return ハッシュ値
+	 * @return string ハッシュ値
 	 */
 	public static function generateToken() {
 		if (session_status() === PHP_SESSION_NONE) {
@@ -208,10 +190,10 @@ class Utilities {
 	}
 	/**
 	 * 指定日時チェック
-	 * 現在時刻が指定日時と同じもしくは未来ならTRUE
 	 * @param 指定日時 例：2012-01-04 00:00:00
+	 * @return bool 現在時刻が指定日時と同じもしくは未来ならTRUE
 	 */
-	static function isCampaignPeriod($start) {
+	static function isCampaignPeriod(string $start) {
 		// $thisTime 	= time() + 32400; // UTC+9
 		$thisTime 	= time();
 		$date = new \DateTime($start, new \DateTimeZone('Asia/Tokyo'));

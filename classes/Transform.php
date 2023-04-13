@@ -6,22 +6,23 @@
  * ※エンコード指定を行っているので設定ファイルを読ますこと
  *
  * @category 	Application of AZLINK.CMS
- * @final 		2023.03.17
+ * @final 		2023.04.13
  * @author 		Norio Murata <nori@azlink.jp>
  * @copyright 	2010- AZLINK. <https://azlink.jp>
- *
  * ==============================================================
  */
 namespace azlink\workspace\classes;
 if (class_exists('azlink\workspace\classes\Transform')) return;
 
-use azlink\workspace as az;
+use azlink\workspace as azlib;
 
 // require_once __DIR__ . '/common/ArrayHelper.php';
 
 class Transform {
 	/**
 	 * 指定した値をサニタイズした値を返す
+	 * @param 変換対象
+	 * @return 変換内容
 	 */
 	static function sanitizer($val) {
 		if (!$val) return;
@@ -38,6 +39,8 @@ class Transform {
 	}
 	/**
 	 * 指定した値のサニタイズを変換して返す
+	 * @param 変換対象
+	 * @return 変換内容
 	 */
 	static function unSanitizer($val) {
 		if (!$val) return;
@@ -54,9 +57,8 @@ class Transform {
 	}
 	/**
 	 * 対象を指定文字形式変換する
-	 * 引数は
 	 * @param 変換対象
-	 * @param 変換内容
+	 * @return 変換内容
 	 */
 	static function convert($val, $change) {
 		if (!$val) return;
@@ -66,15 +68,15 @@ class Transform {
 				$val[$key] = Transform::convert($value, $change);
 			}
 		} else {
-			$val = mb_convert_kana($val, $change, az\config\PROG_ENCTYPE);
+			$val = mb_convert_kana($val, $change, azlib\config\PROG_ENCTYPE);
 		}
 
 		return $val;
 	}
 	/**
 	 * 電話番号を-(ハイフン)付に変換する
-	 * 引数は
 	 * @param 変換対象
+	 * @return 変換内容
 	 */
 	static function parseTel($tel) {
 		if (!$tel) return;
@@ -179,6 +181,7 @@ class Transform {
 	/**
 	 * 文章中のurlを自動リンク
 	 * @param 変換対象
+	 * @return 変換内容
 	 */
 	static function replaceAutoLink($val) {
 		if (!$val) return;
@@ -194,7 +197,8 @@ class Transform {
 	 * 対象が配列であればシリアライズ
 	 * そうでなければそのまま返す
 	 * 空の配列であるかもチェックする
-	 * @param 対象
+	 * @param 変換対象
+	 * @return 変換内容
 	 */
 	static function serialize($val) {
 		if (!$val) return;
@@ -212,8 +216,9 @@ class Transform {
 	}
 	/**
 	 * 受け取ったdatetimeをオプション形式に変換
-	 * @param 対象
-	 * @param 変換形式
+	 * @param 変換対象
+	 * @param string 変換形式
+	 * @param string 変換内容
 	 */
 	static function convertDateTime($val, $option) {
 		if (!$val) return;
@@ -231,25 +236,28 @@ class Transform {
 			case 'YmdHis_s':
 				$val = date('Y/m/d H:i:s', strtotime($val));
 				break;
+			default:
+			case 'YmdHis_h':
+				$val = date('Y-m-d H:i:s', strtotime($val));
+				break;
 		}
 
 		return $val;
 	}
 	/**
 	 * CSV用の指定形式に変換
-	 * @param 対象
-	 * @return 変換した文字列
+	 * @param 変換対象
+	 * @return 変換内容
 	 */
 	static function decodeCSV($val) {
 		if (!$val) return;
 
-		return mb_convert_encoding($val, az\config\CSV_ENCTYPE, az\config\DB_ENCTYPE);
-
+		return mb_convert_encoding($val, azlib\config\CSV_ENCTYPE, azlib\config\DB_ENCTYPE);
 	}
 	/**
 	 * csv出力用にダブルクォートをエスケープする
-	 * @param 対象
-	 * @return 変換した文字列
+	 * @param 変換対象
+	 * @return 変換内容
 	 */
 	static function escapeQuotCSV($val) {
 		if (!$val) return;
@@ -260,11 +268,11 @@ class Transform {
 	}
 	/**
 	 * 指定文字数を超える行に対して強制的に折り返しを挿入する
-	 * @param 対象
-	 * @param 一行あたりの制限文字数 (初期値 78 / 2 = 39)
-	 * @return 変化した文字列
+	 * @param 変換対象
+	 * @param int 一行あたりの制限文字数 (初期値 78 / 2 = 39)
+	 * @return string 変化した文字列
 	 */
-	static function breakLine($val, $limit = 39) {
+	static function breakLine($val, int $limit = 39) {
 		if (!$val) return;
 
 		$bodyLine 	= mb_split("\n", $val);
@@ -301,10 +309,10 @@ class Transform {
 	}
 	/**
 	 * 対象文字列の改行タグをスペースに変換する
-	 * @param 対象
-	 * @return 変換した文字列
+	 * @param 変換対象
+	 * @return 変換内容
 	 */
-	static function replaceBRtoSpc($val) {
+	static function replaceBRtoSpc(string $val) {
 		if (!$val) return;
 		if (!is_string($val)) return $val;
 
@@ -317,8 +325,8 @@ class Transform {
 	}
 	/**
 	 * NULLバイト攻撃対策
-	 * @param 対象
-	 * @return 変換した文字列
+	 * @param 変換対象
+	 * @return 変換内容
 	 */
 	static function sanitizeNullBiteAtack($val) {
 		if (!$val) return;
