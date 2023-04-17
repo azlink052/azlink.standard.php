@@ -8,12 +8,12 @@
  * @copyright 	2012- AZLINK. <https://azlink.jp>
  * =====================================================================
  */
-use azlink\workspace as az;
+use azlink\workspace as azlib;
 // timezone設定
 // date_default_timezone_set('Asia/Tokyo');
 if (!isset($_SESSION)) {
 	// session_set_cookie_params(315360000, '/', $_SERVER['HTTP_HOST'], (empty($_SERVER['HTTPS']) ? FALSE : TRUE), FALSE);
-	session_name(az\config\SITE_SESSION_NAME);
+	session_name(azlib\config\SITE_SESSION_NAME);
 	session_start();
 	session_regenerate_id();
 	// if (!isset($_SESSION['expires'])) {
@@ -31,8 +31,7 @@ if (!isset($_SESSION)) {
 $thisURL = (empty($_SERVER['HTTPS']) ? 'http://' : 'https://') . (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '') . (isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '');
 // テストサイト判定
 $sites = array(
-	'karte.suzuki-ningyo.localhost',
-	'karte.suzuki-ningyo.azlink.biz',
+	'azlink.standard.localhost',
 	'test.azlink.biz'
 );
 $isDevelopSite = FALSE;

@@ -173,29 +173,6 @@ body {
     overflow: hidden;
   }
 }
-.companyLogoWrapper {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding-right: 140px;
-  position: absolute;
-  z-index: 3;
-  width: 100%;
-  height: 60px;
-  background: rgba(255, 255, 255, 1);
-  top: 0;
-  left: 0;
-  .companyLogo {
-    // position: absolute;
-    width: 220px;
-    // right: 130px;
-    // top: 10px;
-    line-height: 1;
-    a {
-      text-decoration: none;
-    }
-  }
-}
 /**
  * ---------------------------------------------------
  * wrapper
@@ -260,6 +237,7 @@ body {
   left: 0;
   z-index: 10;
   max-width: 100vw;
+  height: 60px;
 }
 #gNavWrapper {
   padding: 50px;
@@ -314,14 +292,6 @@ body {
           }
         }
       }
-    }
-  }
-  .snsList {
-    padding-top: 10px;
-    order: 1;
-    li {
-      width: 36px;
-      margin: 0 auto 10px auto;
     }
   }
 }
@@ -420,92 +390,12 @@ body.is-navOpen {
     .siteLogo {
       margin: 0 auto 55px auto;
     }
-    .outline {
-      display: flex;
-      justify-content: space-between;
-      font-size: 1.6rem;
-      line-height: 1.6;
-      letter-spacing: normal;
-      p {
-        &:not(:last-child) {
-          margin-bottom: 1.5em;
-        }
-      }
-      .office {
-        a {
-          text-decoration: underline;
-          &:hover {
-            text-decoration: none;
-          }
-        }
-      }
-    }
-    .snsList {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      li {
-        width: 44px;
-        margin-left: 5px;
-      }
-    }
-    .logo {
-      width: 255px;
-      margin: 25px auto 5px;
-      a {
-        text-decoration: none;
-      }
-    }
-  }
-}
-#fNav {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0 0 0 30px;
   }
 }
 #copyright {
   display: block;
   letter-spacing: normal;
   text-align: center;
-}
-
-/**
- * ---------------------------------------------------
- * 修復・お申込みはこちらからボタン
- * ---------------------------------------------------
- */
-.applicationFixBtn {
-  position: fixed;
-  right: 45px;
-  bottom: 35px;
-  z-index: 9;
-  a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 500;
-    line-height: 1.3;
-    text-decoration: none;
-    width: 11em;
-    height: 68px;
-    background: #fff;
-    border: 1px solid #000;
-    .btnTitle {
-      font-size: 3.2rem;
-    }
-    .btnTxt {
-      font-size: 1.4rem;
-      margin-left: 10px;
-    }
-  }
 }
 
 /**
@@ -527,14 +417,6 @@ body.is-navOpen {
     min-width: inherit;
     &.is-navOpen {
       position: fixed;
-    }
-  }
-  .companyLogoWrapper {
-    padding-right: 70px;
-    .companyLogo {
-      width: 33vw;
-      // right: 75px;
-      // top: 15px;
     }
   }
   /**
@@ -634,68 +516,10 @@ body.is-navOpen {
         width: 90px;
         margin: 0 auto 55px auto;
       }
-      .outline {
-        display: block;
-        font-size: 1.3rem;
-        margin-bottom: 20px;
-        p {
-          &:not(:last-child) {
-            margin-bottom: 0.5em;
-          }
-        }
-        .office {
-          margin-bottom: 20px;
-        }
-        .contact {
-          margin-bottom: 20px;
-        }
-      }
-      .snsList {
-        li {
-          width: 30px;
-        }
-      }
-      .logo {
-        margin-top: 1em;
-        margin-bottom: 15px;
-        width: 175px;
-        margin: 25px auto 5px 0;
-      }
-    }
-  }
-  #fNav {
-    ul {
-      font-size: 1.2rem;
-      width: 48%;
-      margin: 0;
-      li {
-      }
     }
   }
   #copyright {
     font-size: 1rem;
     text-align: left;
-  }
-  /**
-   * ---------------------------------------------------
-   * 修復・お申込みはこちらからボタン
-   * ---------------------------------------------------
-   */
-  .applicationFixBtn {
-    position: fixed;
-    right: 10px;
-    bottom: 10px;
-    a {
-      line-height: 1.2;
-      width: 135px;
-      height: 50px;
-      .btnTitle {
-        font-size: 2.1rem;
-      }
-      .btnTxt {
-        font-size: 1rem;
-        margin-left: 5px;
-      }
-    }
   }
 } /* END @media smaller than $bp */

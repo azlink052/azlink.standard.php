@@ -6,12 +6,12 @@
  *
  * ==============================================================
  */
-use azlink\workspace as az;
+use azlink\workspace as azlib;
 require_once __DIR__ . '/default/default.php';
 /**
  * オブジェクト作成
  */
-$theme = new az\classes\Theme;
+$theme = new azlib\classes\Theme;
 /**
  * テーマをセット
  */
@@ -21,8 +21,8 @@ $theme->pageTitle = '' . $theme->menuName;
 $theme->title = $theme->pageTitle;
 $theme->css = [];
 $theme->js = [];
-$theme->description = az\config\SITE_DESCRIPTION;
-$theme->keywords = az\config\SITE_KEYWORDS;
+$theme->description = azlib\config\SITE_DESCRIPTION;
+$theme->keywords = azlib\config\SITE_KEYWORDS;
 $theme->bodyID = $theme->menu;
 $theme->bodyClass = [];
 $theme->customHeader = '
@@ -36,8 +36,8 @@ $theme->customHeader = '
           "@type": "ListItem",
           "position": 1,
           "item": {
-            "@id": "' . az\config\HOME . '",
-            "name": "' . az\config\SITE_NAME . '"
+            "@id": "' . azlib\config\HOME . '",
+            "name": "' . azlib\config\SITE_NAME . '"
           }
         }
       ]
@@ -52,18 +52,20 @@ $theme->customFooter = '';
  */
 ?>
 
-<?php include az\config\FRONT_PATH . 'elements/common/header.php'; ?>
+<?php include azlib\config\FRONT_PATH . 'elements/common/header.php'; ?>
 
 <div id="container">
   <main id="main">
     <div id="content">
-      <h1><?php echo az\config\SITE_NAME; ?></h1>
-      <p>
-        azlink.standard(PHP版)
-      </p>
+      <h1><?php echo azlib\config\SITE_NAME; ?></h1>
+      <h2>モデルソース</h2>
+      <ul>
+        <li>お問合せフォーム</li>
+        <li>お知らせ</li>
+      </ul>
     </div>
   </main>
 </div>
 <!-- /container -->
 
-<?php include az\config\FRONT_PATH . 'elements/common/footer.php'; ?>
+<?php include azlib\config\FRONT_PATH . 'elements/common/footer.php'; ?>

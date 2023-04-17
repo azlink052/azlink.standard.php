@@ -7,8 +7,8 @@
  *
  * ==============================================================
  */
-use azlink\workspace as az;
+use azlink\workspace as azlib;
 require_once __DIR__ . '/../config/config.php';
-require_once az\config\INC_PATH . 'classes/Autoload.php';
-$autoload = new az\classes\Autoload;
+require_once azlib\config\INC_PATH . 'classes/Autoload.php';
+$autoload = new azlib\classes\Autoload;
 require_once __DIR__ . '/defaultSite.php';
