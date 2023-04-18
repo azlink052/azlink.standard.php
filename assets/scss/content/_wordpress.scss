@@ -1,0 +1,179 @@
+@charset "utf-8";
+@use '../extension/' as ext;
+@use '../content/content' as content;
+/*
+ * =====================================================
+ *
+ * [wordpress]
+ *
+ * =====================================================
+ */
+body.wordpress {
+  time {
+    color: rgba(ext.$baseColor, 0.6);
+    font-weight: normal;
+    text-align: center;
+    width: 120px;
+  }
+  .category {
+    display: block;
+    color: #fff;
+    font-size: 1.4rem;
+    line-height: 1.3;
+    text-align: center;
+    width: 120px;
+    padding: 5px 10px;
+    margin: 3px 0;
+    background-color: rgba(ext.$baseColor, 0.6);
+    border-radius: 10em;
+  }
+  // 記事一覧
+  .entryListVox {
+    .entry {
+      &:not(:last-of-type) {
+        margin-bottom: 20px;
+      }
+      a {
+        display: flex;
+        align-items: start;
+        gap: 0 20px;
+        text-decoration: none;
+        padding: 10px 60px 10px 20px;
+        background-color: #fff;
+        border: 1px solid #fff;
+        border-radius: 10px;
+        position: relative;
+        transition: border-color 0.2s;
+        &::after {
+          display: block;
+          content: '';
+          width: 13px;
+          height: 10px;
+          background: url('../../images/content/content/ico_arrow.svg') no-repeat center / cover;
+          position: absolute;
+          top: 50%;
+          right: 25px;
+          transform: translateY(-50%);
+          transition: right 0.2s;
+        }
+        .entryTtl {
+          width: calc(100% - 240px);
+        }
+        &:hover {
+          border-color: ext.$baseColor;
+          &::after {
+            right: 20px;
+          }
+        }
+      }
+    }
+  }
+  // ページング
+  .navigation {
+    &:not(:first-child) {
+      margin-top: 50px;
+    }
+    &:not(:last-child) {
+      margin-bottom: 50px;
+    }
+    .backBtn {
+      margin-top: 80px;
+    }
+    .nav-links {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      .page-numbers:not(.prev):not(.next) {
+        display: block;
+        text-decoration: none;
+        padding: 5px;
+        position: relative;
+        &::after {
+          display: block;
+          content: '';
+          width: 100%;
+          height: 3px;
+          background-color: ext.$baseColor;
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          opacity: 0;
+          transition: opacity 0.2s;
+        }
+        &.current,
+        &:hover {
+          font-weight: bold;
+          &::after {
+            opacity: 1;
+          }
+        }
+      }
+      .prev,
+      .next {
+        @include ext.opacityFade();
+        color: #fff;
+        font-size: 1.4rem;
+        line-height: 1.3;
+        text-decoration: none;
+        padding: 5px 20px;
+        background-color: ext.$baseColor;
+        border-radius: 10em;
+      }
+    }
+  }
+  // 詳細画面
+  .entryDetailVox {
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 50px;
+      .entryTtl {
+        width: calc(100% - 280px);
+      }
+      .entryStatus {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        width: 260px;
+        .category {
+          &:not(:last-of-type) {
+            margin-bottom: 5px;
+          }
+        }
+      }
+    }
+    .inner {
+      p,
+      figure {
+        &:not(:last-child) {
+          margin-bottom: 2em;
+        }
+      }
+    }
+  }
+} /*  END body */
+/**
+ ****************************************************
+ *
+ * screens larger than $bp
+ *
+ ****************************************************
+ */
+@media only screen and (min-width: ext.$bp) {
+} /*  @media END */
+/**
+ ****************************************************
+ *
+ * screens smaller than $bp
+ *
+ ****************************************************
+ */
+@media only screen and (max-width: (ext.$bp - 1)) {
+  body.wordpress {
+  } /*  END body */
+} /*  @media END */

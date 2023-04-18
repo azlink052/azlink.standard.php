@@ -31,9 +31,7 @@ class ContentJS {
   }
   init() {
     this.isSkip = document.body.classList.contains('is-skip') ? true : false;
-    this.isFlowAnime = document.body.classList.contains('is-flowAnime')
-      ? true
-      : false;
+    this.isFlowAnime = document.body.classList.contains('is-flowAnime') ? true : false;
     this.isPopup = document.body.classList.contains('is-popup') ? true : false;
     this.isAcc = document.body.classList.contains('is-acc') ? true : false;
 
@@ -43,16 +41,14 @@ class ContentJS {
         const hash = location.hash.replace('#', '');
         const target = document.getElementById(hash);
         const offset = -Number(this.hHeight);
-        const targetPos =
-          target.getBoundingClientRect().top + window.pageYOffset + offset;
+        const targetPos = target.getBoundingClientRect().top + window.pageYOffset + offset;
         const anime = new azlib.anime({
           targets: 'html, body',
           scrollTop: targetPos,
           duration: 10,
           easing: 'easeInQuad',
           update: () => {
-            const newTargetPos =
-              target.getBoundingClientRect().top + window.pageYOffset + offset;
+            const newTargetPos = target.getBoundingClientRect().top + window.pageYOffset + offset;
             if (targetPos !== newTargetPos) {
               anime.set('html, body', {
                 scrollTop: () => {
@@ -129,9 +125,7 @@ class ContentJS {
       }
     });
 
-    this.hHeightOrg = document.getElementById('siteHeader')
-      ? document.getElementById('siteHeader').clientHeight
-      : 0;
+    this.hHeightOrg = document.getElementById('siteHeader') ? document.getElementById('siteHeader').clientHeight : 0;
 
     const rplSPImg01 = new azlib.ReplaceImageSP('.rplSPImg', {
       spBreakPoint: util.spBreakPoint,
@@ -161,29 +155,17 @@ class ContentJS {
   }
   async adjust() {
     this.hHeight = document.getElementById('siteHeader').clientHeight;
-    this.adminMargin = parseInt(
-      getComputedStyle(document.getElementsByTagName('html')[0]).marginTop
-    );
-    util.sScroll(
-      -(Number(this.adminMargin) + Number(this.hHeight)),
-      500,
-      'easeInQuad'
-    );
+    this.adminMargin = parseInt(getComputedStyle(document.getElementsByTagName('html')[0]).marginTop);
+    util.sScroll(-(Number(this.adminMargin) + Number(this.hHeight)), 500, 'easeInQuad');
 
     if (util.isRespMode) {
-      if (document.getElementById('gNavWrapper'))
-        document.getElementById(
-          'gNavWrapper'
-        ).style.height = `${util.wHeight}px`;
+      if (document.getElementById('gNavWrapper')) document.getElementById('gNavWrapper').style.height = `${util.wHeight}px`;
     } else {
-      if (document.getElementById('gNavWrapper'))
-        document.getElementById('gNavWrapper').style.height = 'auto';
+      if (document.getElementById('gNavWrapper')) document.getElementById('gNavWrapper').style.height = 'auto';
     }
 
     if (document.getElementById('siteTitleVox')) {
-      document.getElementById(
-        'siteTitleVox'
-      ).style.height = `${util.wHeight}px`;
+      document.getElementById('siteTitleVox').style.height = `${util.wHeight}px`;
     }
 
     this.adjustHeader();
@@ -294,12 +276,7 @@ class HomeJS {
         res.forEach((v, i) => {
           const dateObj = (() => {
             const t = new Date(v.date);
-            return [
-              `${t.getFullYear()}-${
-                t.getMonth() + 1
-              }-${t.getDate()} ${t.getHours()}:${t.getMinutes()}:${t.getSeconds()}`,
-              `${t.getFullYear()}.${t.getMonth() + 1}.${t.getDate()}`,
-            ];
+            return [`${t.getFullYear()}-${t.getMonth() + 1}-${t.getDate()} ${t.getHours()}:${t.getMinutes()}:${t.getSeconds()}`, `${t.getFullYear()}.${t.getMonth() + 1}.${t.getDate()}`];
           })();
           const src = `
             <article>
@@ -311,18 +288,13 @@ class HomeJS {
               </a>
             </article>
           `;
-          document
-            .getElementById('js-newsSlider')
-            .insertAdjacentHTML('beforeend', src);
+          document.getElementById('js-newsSlider').insertAdjacentHTML('beforeend', src);
         });
         if (res.length > 1) {
           document.getElementById('js-newsSlider').classList.add('is-slide');
           if (res.length === 2) {
             // 二件しかない場合は先頭の記事を複製
-            const elem = document
-              .getElementById('js-newsSlider')
-              .querySelector('article')
-              .cloneNode(true);
+            const elem = document.getElementById('js-newsSlider').querySelector('article').cloneNode(true);
             document.getElementById('js-newsSlider').append(elem);
           }
           const newsSlider = new azlib.FadeSlider('#js-newsSlider', {
@@ -330,10 +302,7 @@ class HomeJS {
             pause: 5000,
             isChangeOpacity: false,
             onSliderLoad: () => {
-              document
-                .getElementById('js-newsSlider')
-                .querySelectorAll('article')[0]
-                .classList.add('slide-active');
+              document.getElementById('js-newsSlider').querySelectorAll('article')[0].classList.add('slide-active');
             },
             onSlideBefore: (oldIndex, newIndex) => {
               // console.log(oldIndex, newIndex);
@@ -357,9 +326,7 @@ class HomeJS {
       // console.log(res);
       if (res.count > 0) {
         res.posts.forEach((v, i) => {
-          const date2 = v.date2
-            ? `<br class="spDspNone">〜<time datetime="${v.datetime2}">${v.date2}</time>`
-            : '';
+          const date2 = v.date2 ? `<br class="spDspNone">〜<time datetime="${v.datetime2}">${v.date2}</time>` : '';
           const src = `
             <article>
               <div class="time">
@@ -372,17 +339,10 @@ class HomeJS {
               </div>
             </article>
           `;
-          document
-            .getElementById('js-eventContentVox')
-            .insertAdjacentHTML('beforeend', src);
+          document.getElementById('js-eventContentVox').insertAdjacentHTML('beforeend', src);
         });
       } else {
-        document
-          .getElementById('js-eventContentVox')
-          .insertAdjacentHTML(
-            'beforeend',
-            '<p>しばらくイベントの予定はありません。</p>'
-          );
+        document.getElementById('js-eventContentVox').insertAdjacentHTML('beforeend', '<p>しばらくイベントの予定はありません。</p>');
       }
     })();
     // rellax
@@ -423,6 +383,49 @@ class HomeJS {
   }
 }
 /**
+ * Request用JSクラス
+ */
+class RequestJS {
+  constructor() {
+    this.rTimer = false;
+    this.isFirst = true;
+    this.errBgColor = 'rgb(249, 205, 209)';
+  }
+  init() {
+    if (document.body.classList.contains('form')) {
+      document.querySelectorAll('.submitItem').forEach((v, i) => {
+        v.addEventListener('submit', (e) => {
+          v.querySelector('button').disabled = true;
+        });
+      });
+      if (document.body.classList.contains('checked')) {
+        document.forms.contactForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          return false;
+          // document.forms[
+          //   'contactForm'
+          // ].action = `${HOME_DIR}request/contact/thanks#contactForm'`;
+        });
+        document.getElementById('js-submit').addEventListener('click', (e) => {
+          const dir = e.currentTarget.getAttribute('data-dir');
+          document.forms['contactForm'].action = `${HOME_DIR}request/${dir}/thanks#mainArt'`;
+          document.forms['contactForm'].submit();
+        });
+        document.getElementById('js-back').addEventListener('click', () => {
+          document.forms['contactForm'].entryPg.value = '';
+          document.forms['contactForm'].submit();
+        });
+      }
+    }
+    // エラー
+    if (document.body.classList.contains('error')) {
+      document.querySelectorAll('.caution').forEach((v, i) => {
+        v.closest('.formItem').style.backgroundColor = this.errBgColor;
+      });
+    }
+  }
+}
+/**
  * インスタンス化
  */
 const util = new azlib.Utilities({
@@ -430,6 +433,7 @@ const util = new azlib.Utilities({
 });
 const contentJS = new ContentJS();
 const homeJS = new HomeJS();
+const contactJS = new ContactJS();
 /**
  * 実行
  */
@@ -438,6 +442,9 @@ window.addEventListener('DOMContentLoaded', () => {
   contentJS.init();
   if (document.body.classList.contains('home')) {
     homeJS.init();
+  }
+  if (document.body.classList.contains('contact')) {
+    contactJS.init();
   }
   const lazyBg = new azlib.LazyLoadBg('.js-lazyBg');
 });

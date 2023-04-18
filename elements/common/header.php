@@ -80,18 +80,17 @@ use azlink\workspace as azlib;
       <header id="siteHeader">
         <div class="inner">
           <?php if ($theme->menu === 'home') : ?>
-            <h1><a href="<?php echo \azlink\workspace\config\HOME; ?>"><?php echo azlib\config\SITE_NAME; ?></a></h1>
+            <h1 id="siteLogo"><a href="<?php echo \azlink\workspace\config\HOME; ?>"><?php echo azlib\config\SITE_NAME; ?></a></h1>
           <?php else : ?>
-            <span><a href="<?php echo \azlink\workspace\config\HOME; ?>"><?php echo azlib\config\SITE_NAME; ?></a></span>
+            <span id="siteLogo"><a href="<?php echo \azlink\workspace\config\HOME; ?>"><?php echo azlib\config\SITE_NAME; ?></a></span>
           <?php endif; ?>
           <div id="gNavWrapper">
             <div class="gNavInner">
               <nav id="gNav">
                 <ul>
-                  <li><a href="<?php echo azlib\config\HOME; ?>">トップ</a></li>
-                  <li><a href="<?php echo azlib\config\HOME; ?>aboutus">お問い合わせ</a></li>
-                  <li><a href="<?php echo azlib\config\HOME; ?>news/">お知らせ</a></li>
-                  <li><a href="<?php echo azlib\config\HOME; ?>contact">お問い合わせ</a></li>
+                  <li class="home"><a href="<?php echo azlib\config\HOME; ?>">目次</a></li>
+                  <li><a href="<?php echo azlib\config\HOME; ?>form/">フォーム</a></li>
+                  <li><a href="<?php echo azlib\config\HOME; ?>wordpress/">Wordpress</a></li>
                 </ul>
               </nav>
               <!-- /gNav -->
@@ -99,11 +98,13 @@ use azlink\workspace as azlib;
           </div>
           <!-- /gNavWrapper -->
 
+          <?php  /*
           <a href="javascript:void(0)" id="gNavOpener" class="gNavOpener">
             <span><!-- --></span>
             <span><!-- --></span>
             <span><!-- --></span>
           </a><!-- /gNavOpener -->
+          */ ?>
         </div>
       </header>
       <!-- /siteHeader -->

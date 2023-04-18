@@ -13,6 +13,9 @@
  * 幅指定
  * ---------------------------------------------------
  */
+.wAuto {
+  width: auto !important;
+}
 .w33p {
   width: 33%;
 }
@@ -28,8 +31,8 @@
 .w90p {
   width: 90%;
 }
-$width: 50;
-@while $width <= 500 {
+$width: 110;
+@while $width <= 680 {
   .w#{$width} {
     width: $width + px;
   }
@@ -38,6 +41,11 @@ $width: 50;
 @for $i from 1 through 20 {
   .w#{$i}em {
     width: #{$i}em;
+  }
+}
+@for $i from 1 through 20 {
+  .w#{$i}hem {
+    width: #{($i + 0.5)}em;
   }
 }
 .contentWidth {
@@ -50,47 +58,20 @@ $width: 50;
  * レイアウト
  * ---------------------------------------------------
  */
-.mL1hem {
-  margin-left: 1.5em;
+@for $i from 1 through 8 {
+  .mL#{$i}em {
+    margin-left: #{$i}em;
+  }
 }
-.mL2em {
-  margin-left: 2em;
+@for $i from 1 through 8 {
+  .mL#{$i}hem {
+    margin-left: #{($i + 0.5)}em;
+  }
 }
-.mL2hem {
-  margin-left: 2.5em;
-}
-.mL3em {
-  margin-left: 3em;
-}
-.mL3hem {
-  margin-left: 3.5em;
-}
-.mL4em {
-  margin-left: 4em;
-}
-.mL4hem {
-  margin-left: 4.5em;
-}
-.mL5em {
-  margin-left: 5em;
-}
-.mL6em {
-  margin-left: 6em;
-}
-.mL7em {
-  margin-left: 7em;
-}
-.mL8em {
-  margin-left: 8em;
-}
-.mB60 {
-  margin-bottom: 60px;
-}
-.mB70 {
-  margin-bottom: 70px;
-}
-.mB80 {
-  margin-bottom: 80px;
+@for $i from 6 through 8 {
+  .mB#{$i}0 {
+    margin-bottom: #{$i}0px;
+  }
 }
 /**
  * ---------------------------------------------------
@@ -100,74 +81,20 @@ $width: 50;
 .s0-8r {
   font-size: 0.8rem;
 }
-.s1-0r {
-  font-size: 1rem;
+@for $i from 0 through 9 {
+  .s1-#{$i}r {
+    font-size: unquote('1.' +#{$i}rem);
+  }
 }
-.s1-1r {
-  font-size: 1.1rem;
+@for $i from 0 through 9 {
+  .s2-#{$i}r {
+    font-size: unquote('2.' +#{$i}rem);
+  }
 }
-.s1-2r {
-  font-size: 1.2rem;
-}
-.s1-3r {
-  font-size: 1.3rem;
-}
-.s1-4r {
-  font-size: 1.4rem;
-}
-.s1-5r {
-  font-size: 1.5rem;
-}
-.s1-6r {
-  font-size: 1.6rem;
-}
-.s1-7r {
-  font-size: 1.7rem;
-}
-.s1-8r {
-  font-size: 1.8rem;
-}
-.s1-9r {
-  font-size: 1.9rem;
-}
-.s2-0r {
-  font-size: 2rem;
-}
-.s2-1r {
-  font-size: 2.1rem;
-}
-.s2-2r {
-  font-size: 2.2rem;
-}
-.s2-3r {
-  font-size: 2.3rem;
-}
-.s2-4r {
-  font-size: 2.4rem;
-}
-.s2-5r {
-  font-size: 2.5rem;
-}
-.s2-6r {
-  font-size: 2.6rem;
-}
-.s2-8r {
-  font-size: 2.8rem;
-}
-.s2-9r {
-  font-size: 2.9rem;
-}
-.s3-0r {
-  font-size: 3rem;
-}
-.s3-4r {
-  font-size: 3.4rem;
-}
-.s3-5r {
-  font-size: 3.5rem;
-}
-.s3-8r {
-  font-size: 3.8rem;
+@for $i from 0 through 9 {
+  .s3-#{$i}r {
+    font-size: unquote('3.' +#{$i}rem);
+  }
 }
 .s4-0r {
   font-size: 4rem;
@@ -180,20 +107,27 @@ $width: 50;
  * 見出し
  * ---------------------------------------------------
  */
-.headStyle01 {
-  font-size: 3.4rem;
-  font-weight: 500;
-  letter-spacing: 0.15em;
-}
-.headStyle02 {
-  font-size: 1.6rem;
-  font-weight: 500;
-  margin-bottom: 15px;
-}
-.headStyle03 {
-  font-size: 1.8rem;
-  font-weight: 500;
-  margin-bottom: 5px;
+#content {
+  h2 {
+    font-size: 2.2rem;
+    font-weight: bold;
+    letter-spacing: 0.15em;
+    line-height: 1.5;
+    padding-left: 30px;
+    margin-bottom: 20px;
+    position: relative;
+    &::before {
+      display: block;
+      content: '';
+      width: 8px;
+      height: 100%;
+      background-color: rgba(ext.$baseColor, 0.5);
+      border-radius: 10px;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  }
 }
 /**
  * ---------------------------------------------------
@@ -229,23 +163,18 @@ $width: 50;
  */
 .btnStyle01 {
   text-align: center;
+  .in,
   a {
     @include ext.opacityFade();
     display: inline-block;
-    color: ext.$textColor;
-    font-size: 1.8rem;
-    font-weight: 500;
+    color: #fff;
     line-height: 1.3;
     text-decoration: none;
     text-align: center;
-    min-width: 450px;
-    padding: 12px 20px;
-    background: ext.$keyColor;
-  }
-  &.medium {
-    a {
-      min-width: 315px;
-    }
+    min-width: 350px;
+    padding: 15px 20px;
+    background: ext.$baseColor;
+    border-radius: 10em;
   }
 }
 /**
@@ -662,16 +591,42 @@ $width: 50;
  */
 .formErrVox {
   display: none;
-  border: 10px solid #ffdada;
-  padding: 10px;
-  color: #c00000 !important;
+  color: #fff !important;
+  font-weight: bold;
+  padding: 10px 30px 10px 70px;
+  margin-bottom: 50px;
+  background-color: ext.$errorTextColor;
+  border-radius: 10px;
+  position: relative;
+  &::before {
+    display: block;
+    content: '';
+    width: 25px;
+    height: 25px;
+    background: url('../../images/content/content/ico_caution.svg') no-repeat center / cover;
+    position: absolute;
+    top: 50%;
+    left: 30px;
+    transform: translateY(-50%);
+  }
+  &::after {
+    display: block;
+    content: '';
+    border: 10px solid transparent;
+    border-top: 10px solid ext.$errorTextColor;
+    position: absolute;
+    bottom: 0;
+    left: 100px;
+    transform: translateY(100%);
+  }
 }
 body.error .formErrVox {
   display: block;
 }
 .caution {
-  margin-top: 5px;
-  color: #c00000;
+  color: ext.$errorTextColor;
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 // for Lite
 body:not(.ie) {

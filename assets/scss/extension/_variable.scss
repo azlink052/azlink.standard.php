@@ -15,14 +15,14 @@ $contentWidth: 1000px;
 $minWidth: 1100px;
 
 // 色設定
-$textColor: #000;
-$errorTextColor: #b7282e;
+$textColor: #523c3c;
+$errorTextColor: #cd7072;
 
-$baseColor: #000;
+$baseColor: #523c3c;
 $keyColor: #ccc;
 
-$bgColor: #fff;
-$borderColor: #000;
+$bgColor: #f7f5f3;
+$borderColor: #e7e0da;
 
 $okColor: #e1efe3;
 $ngColor: #f9e2e0;
@@ -30,4 +30,4 @@ $ngColor: #f9e2e0;
 // フォント設定
 $defaultFont: 'Noto Sans JP', sans-serif;
 $serifFont: 'Noto Serif JP', serif;
-$serifExFont: 'A1 Mincho', 'Noto Serif JP', serif;
+$fontEn: 'Oswald', sans-serif;

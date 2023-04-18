@@ -3,14 +3,10 @@ use azlink\workspace as azlib;
 ?>
     <footer id="siteFooter">
       <div class="inner">
-        <div class="siteLogo" id="js-pageTop">
-          <a href="javascript:void(0)">
-            <?php echo \azlink\workspace\config\SITE_NAME_SHORT; ?>
-          </a>
+        <div class="pageTopVox" id="js-pageTop">
+          <a href="javascript:void(0)">PAGETOP</a>
         </div>
         <!-- /logo -->
-        </div>
-        <!-- /outline -->
         <small id="copyright">Copyright &copy; AZLINK. Co., Ltd All Righrs Reserved.</small>
       </div>
     </footer>

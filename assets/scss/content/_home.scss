@@ -9,6 +9,40 @@
  * =====================================================
  */
 body.home {
+  .btns {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    > li {
+      width: 48%;
+      a {
+        @include ext.opacityFade();
+        display: block;
+        color: #fff;
+        font-weight: bold;
+        letter-spacing: 0.2em;
+        text-decoration: none;
+        padding: 15px 50px 15px 30px;
+        background-color: ext.$baseColor;
+        border-radius: 10em;
+        position: relative;
+        &::after {
+          display: block;
+          content: '';
+          width: 13px;
+          height: 10px;
+          background: url('../../images/content/content/ico_arrow_w.svg') no-repeat center / cover;
+          position: absolute;
+          top: 50%;
+          right: 20px;
+          transform: translateY(-50%);
+        }
+      }
+    }
+  }
 } /*  END body */
 /**
  ****************************************************
