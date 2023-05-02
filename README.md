@@ -49,21 +49,37 @@ AZLINK.standard (PHP 版)のファイルセットです。
 
 #### namespace 下での定数・クラス関数呼び出し
 
-例えば
+クラスや定数を使用する前にインポートしてから使用するか、最初に名前空間の一部をエイリアスでインポートし使用のたびにエイリアス名をつけるか、どちらかの方法で使用します。
 
-config/siteConfig.php
+##### インポートしてから使用する場合
 
-に書かれた SITE_NAME を呼び出す場合、
+使用するクラスや定数をファイルの先頭でインポートします。
 
-`azlink\workspace\config\SITE_NAME`
+[クラスの場合]
 
-と記述することで呼び出すことができます。
-ただこれでは長いのでショートカットを作成することができます。
+`use azlink\workspace\classes\Theme`
+
+[定数の場合]
+
+`use const azlink\workspace\config\HOME_URL`
+
+その後はコード中に普通に使用できます。
+
+```
+echo HOME;
+echo Trnsform::sanitizer($a);
+```
+
+※ /test.php を参照
+
+##### 使用するたびエイリアス名をつける場合 
+
 呼び出したいファイルの先頭で
 
 `use azlink\workspace as azlib;`
 
-とすることで、azlink\workspace を「azlib」に短縮できます。
+とすることで、インポートした azlink\workspace を「azlib」に短縮できます。
+その後はエイリアス名をつけて使用します。
 
 [定数の場合の例]
 
@@ -134,6 +150,21 @@ switch ($menu) {
 
 `$formError = new FormError($requiredCheckResult, 'recruit');`
 
+これは FromError.php のswitch文内、「recruit」のエラー定義を使用することを意味します。
+
 ### GlobalError
 
 エラー時特定のログを記録したりページ遷移させるなどの挙動を制御するクラス。主にアプリケーションで使用。
+
+### MyWP
+
+WordPressを導入するサイトで使用するクラスです。コンストラクタを実行することでWPが読み込まれます。
+コンストラクタの引数に wp-config.php のパスを渡すことができます。(デフォルト値あり)
+
+#### outputPagination
+
+WPのページネーションを出力します。基本的な使い方は参考ソースを参照。
+
+#### getNow
+
+WPのタイムゾーン設定に合わせた現在時間を返します。返り値のフォーマットを指定できます。

@@ -22,10 +22,10 @@ use azlink\workspace as azlib;
 class FileUpload {
 	public string $dir;
 	public int $sizeLimit = azlib\config\UPLOAD_IMGSIZELIMIT;
-	public int $imgWidth = NULL;
-	public int $imgHeight = NULL;
-	public int $thmWidth = NULL;
-	public int $thmHeight = NULL;
+	public int $imgWidth = 0;
+	public int $imgHeight = 0;
+	public int $thmWidth = 0;
+	public int $thmHeight = 0;
 	public bool $mkThumb = azlib\config\MAKE_THUMB;
 	public bool $resize = TRUE;
 	public array $thumbnails = [];
