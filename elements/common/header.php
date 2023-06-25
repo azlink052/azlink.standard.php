@@ -84,6 +84,11 @@ use azlink\workspace as azlib;
           <?php else : ?>
             <span id="siteLogo"><a href="<?php echo \azlink\workspace\config\HOME; ?>"><?php echo azlib\config\SITE_NAME; ?></a></span>
           <?php endif; ?>
+          <a href="javascript:void(0)" id="gNavOpener" class="gNavOpener">
+            <span><!-- --></span>
+            <span><!-- --></span>
+            <span><!-- --></span>
+          </a>
           <div id="gNavWrapper">
             <div class="gNavInner">
               <nav id="gNav">

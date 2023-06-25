@@ -428,5 +428,166 @@ body.form {
  */
 @media only screen and (max-width: (ext.$bp - 1)) {
   body.form {
+    .msgVox {
+      margin-bottom: 50px;
+    }
+    // 進捗
+    .pageFlowVox {
+      margin-bottom: 50px;
+      .item {
+        padding: 20px 10px 20px 10px;
+        position: relative;
+        .num {
+          font-size: 3rem;
+        }
+        .txt {
+          letter-spacing: 0.01em;
+          font-size: 1.2rem;
+        }
+      }
+    }
+    // フォーム
+    .formItemWrap {
+      margin-bottom: 30px;
+      .formItem {
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: column;
+
+        &:not(:last-of-type) {
+          margin-bottom: 20px;
+        }
+        dt {
+          width: 100%;
+          padding-left: 3.5em;
+          margin-bottom: 10px;
+          &::before {
+            font-size: 1.1rem;
+            width: 3em;
+            height: 25px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            top: 15px;
+          }
+        }
+        dd {
+          width: 100%;
+          input[type='text'],
+          input[type='number'],
+          input[type='tel'],
+          input[type='email'],
+          input[type='search'],
+          input[type='password'],
+          // input[type='file'],
+          input[type='date'],
+          input[type='datetime-local'],
+          input[type='time'],
+          input[type='month'],
+          input[type='week'],
+          textarea,
+          select {
+            padding: 10px;
+            font-size: 1.4rem;
+          }
+          .inputVox {
+            display: block;
+            &:not(:last-child) {
+              margin-bottom: 10px;
+            }
+            input[type='text'],
+            input[type='number'],
+            input[type='tel'],
+            input[type='email'],
+            input[type='search'],
+            input[type='password'],
+            // input[type='file'],
+            input[type='date'],
+            input[type='datetime-local'],
+            input[type='time'],
+            input[type='month'],
+            input[type='week'],
+            textarea,
+            select {
+              &:not(:last-child) {
+                margin-bottom: 10px;
+              }
+            }
+          }
+          // ファイルアップロード
+          .uploaderField {
+            padding: 10px;
+            .tmpFileVox {
+              .tmpFile {
+                margin-bottom: 20px;
+                figure {
+                  position: relative;
+                  .deleteTempFile {
+                    display: block;
+                    text-indent: -9999px;
+                    width: 30px;
+                    height: 30px;
+                    background-color: #fff;
+                    border: 2px solid ext.$baseColor;
+                    border-radius: 30px;
+                    box-shadow: 1px 1px 3px rgba(ext.$baseColor, 0.5);
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    z-index: 2;
+                    transform: translate(50%, -50%);
+                    transition: background-color 0.2s;
+                    &::before,
+                    &::after {
+                      display: block;
+                      content: '';
+                      width: 17px;
+                      height: 2px;
+                      background-color: ext.$baseColor;
+                      position: absolute;
+                      top: 50%;
+                      left: 50%;
+                      transition: background-color 0.2s;
+                    }
+                    &::before {
+                      transform: translate(-50%, -50%) rotate(-45deg);
+                    }
+                    &::after {
+                      transform: translate(-50%, -50%) rotate(45deg);
+                    }
+                    &:hover {
+                      background-color: ext.$baseColor;
+                      &::before,
+                      &::after {
+                        background-color: #fff;
+                      }
+                    }
+                  }
+                  img {
+                    @include ext.opacityFade();
+                  }
+                }
+              }
+            }
+            .uploadArea {
+              background-color: ext.$bgColor;
+              position: relative;
+              .directUploaderLabel {
+                height: 80px;
+                padding-top: 50px;
+                background: url(../../images/content/content/ico_uploads.svg) no-repeat center 15px / 40px;
+              }
+            }
+          }
+        }
+      }
+    }
+    .noteTxt {
+      font-size: 1.4rem;
+      &:not(:last-child) {
+        margin-bottom: 1em;
+      }
+    }
   } /*  END body */
 } /*  @media END */

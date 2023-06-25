@@ -19,6 +19,7 @@ class ContentJS {
     this.isAllowClose = false;
     this.isDefaultFirst = true;
     this.isScroll = true;
+    this.isNoCueOffset = false;
     this.hHeight = 0;
     this.hHeightOrg = 0;
     this.hWidth = 0;
@@ -34,26 +35,33 @@ class ContentJS {
     this.isFlowAnime = document.body.classList.contains('is-flowAnime') ? true : false;
     this.isPopup = document.body.classList.contains('is-popup') ? true : false;
     this.isAcc = document.body.classList.contains('is-acc') ? true : false;
+    this.isNoCueOffset = document.body.classList.contains('is-noCueOffset')
+      ? true
+      : false;
 
     // ロケーションハッシュ
     window.addEventListener('load', () => {
-      if (location.hash !== '') {
+      if (location.hash !== '' && !this.isNoCueOffset) {
         const hash = location.hash.replace('#', '');
         const target = document.getElementById(hash);
         const offset = -Number(this.hHeight);
-        const targetPos = target.getBoundingClientRect().top + window.pageYOffset + offset;
+        const targetPos =
+          target.getBoundingClientRect().top + window.pageYOffset + offset;
         const anime = new azlib.anime({
           targets: 'html, body',
           scrollTop: targetPos,
           duration: 10,
           easing: 'easeInQuad',
-          update: () => {
-            const newTargetPos = target.getBoundingClientRect().top + window.pageYOffset + offset;
+          complete: () => {
+            const newTargetPos =
+              target.getBoundingClientRect().top + window.pageYOffset + offset;
+            // console.log(targetPos, newTargetPos)
             if (targetPos !== newTargetPos) {
-              anime.set('html, body', {
-                scrollTop: () => {
-                  return newTargetPos;
-                },
+              new azlib.anime({
+                targets: 'html, body',
+                scrollTop: newTargetPos,
+                duration: 10,
+                easing: 'linear',
               });
             }
           },
@@ -78,15 +86,17 @@ class ContentJS {
       }, 500);
     });
 
-    if (document.getElementById('js-pageTop')) {
-      document.querySelector('#js-pageTop a').addEventListener('click', (e) => {
-        new azlib.anime({
-          targets: 'html, body',
-          scrollTop: 0,
-          duration: 500,
-          easing: 'easeInOutQuart',
+    if (document.getElementById('js-pageTopVox')) {
+      document
+        .querySelector('#js-pageTopVox button')
+        .addEventListener('click', (e) => {
+          new azlib.anime({
+            targets: 'html, body',
+            scrollTop: 0,
+            duration: 500,
+            easing: 'easeInOutQuart',
+          });
         });
-      });
     }
 
     if (document.getElementById('gNavOpener')) {
@@ -232,18 +242,6 @@ class HomeJS {
       }, 500);
     });
 
-    // MV
-    // document
-    //   .querySelectorAll('#js-mvSlider li')
-    //   .forEach((v: HTMLElement, i: number) => {
-    //     const SRC = v.querySelector('img').src;
-    //     // console.log(src)
-    //     if (SRC) {
-    //       v.style.backgroundImage = `url(${SRC})`;
-    //       v.querySelector('img').remove();
-    //     }
-    //   });
-
     const mvSlider = new azlib.FadeSlider('#js-mvSlider', {
       speed: 3000,
       pause: 4000,
@@ -251,18 +249,6 @@ class HomeJS {
 
     document.getElementById('js-newsSlider').innerHTML = '';
     document.getElementById('js-newsSlider').classList.add('is-loading');
-
-    // STORY スライダ
-    // const storySlider = new azlib.SimpleSlider('#js-storySlider', {
-    //   ctrl: true,
-    //   pager: true,
-    //   speed: 500,
-    //   pause: 3000,
-    //   isAuto: false,
-    //   isLoop: false,
-    //   // cloneCount: 10,
-    //   // isDebug: true
-    // });
 
     this.adjust().then(() => this.runIntro());
     // お知らせ
@@ -317,50 +303,6 @@ class HomeJS {
         document.getElementById('news').remove();
       }
     })();
-    // イベントの表示
-    (async () => {
-      const response = await fetch('/apps/get_events.php?number=5', {
-        cache: 'no-cache',
-      });
-      const res = await response.json();
-      // console.log(res);
-      if (res.count > 0) {
-        res.posts.forEach((v, i) => {
-          const date2 = v.date2 ? `<br class="spDspNone">〜<time datetime="${v.datetime2}">${v.date2}</time>` : '';
-          const src = `
-            <article>
-              <div class="time">
-                <time datetime="${v.datetime}">${v.date}</time>
-                ${date2}
-              </div>
-              <div class="txt">
-                <h4 class="eventTitle">${v.title}</h4>
-                ${v.content}
-              </div>
-            </article>
-          `;
-          document.getElementById('js-eventContentVox').insertAdjacentHTML('beforeend', src);
-        });
-      } else {
-        document.getElementById('js-eventContentVox').insertAdjacentHTML('beforeend', '<p>しばらくイベントの予定はありません。</p>');
-      }
-    })();
-    // rellax
-    if (document.body.classList.contains('is-rx')) {
-      window.addEventListener(
-        'load',
-        () => {
-          const rellax = new Rellax('.rellax', {
-            // speed: -2,
-            // center: true,
-            // breakpoints: [320, 768, 2500]
-          });
-        },
-        {
-          once: true,
-        }
-      );
-    }
   }
   async adjust() {
     document.getElementById('js-mvSlider').style.height = `${util.wHeight}px`;
@@ -383,9 +325,9 @@ class HomeJS {
   }
 }
 /**
- * Request用JSクラス
+ * Contact用JSクラス
  */
-class RequestJS {
+class ContactJS {
   constructor() {
     this.rTimer = false;
     this.isFirst = true;
@@ -408,7 +350,9 @@ class RequestJS {
         });
         document.getElementById('js-submit').addEventListener('click', (e) => {
           const dir = e.currentTarget.getAttribute('data-dir');
-          document.forms['contactForm'].action = `${HOME_DIR}request/${dir}/thanks#mainArt'`;
+          document.forms[
+            'contactForm'
+          ].action = `${HOME_DIR}request/${dir}/thanks#mainArt'`;
           document.forms['contactForm'].submit();
         });
         document.getElementById('js-back').addEventListener('click', () => {
