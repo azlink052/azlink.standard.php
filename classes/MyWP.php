@@ -19,7 +19,7 @@ use azlink\workspace as azlib;
 // require_once config\FRONT_PATH . 'content/wp-config.php';
 
 class MyWP {
-	public string $uploads = ''; // uploadsディレクトリの場所
+	public array $uploads = []; // uploadsディレクトリの場所
 	/**
 	 * PHP5 コンストラクタ
 	 * @param string wp-config.php のパス

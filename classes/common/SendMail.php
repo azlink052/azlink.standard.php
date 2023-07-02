@@ -31,9 +31,9 @@ class SendMail {
 	public string $mailReplyTo = azlib\config\FROM_MAIL_ADDRESS; // 返信先
 	public string $mailReplyToMessage = 'Reply to email'; // 返信用メッセージ
 	public string $mailReturnPath = azlib\config\FROM_MAIL_ADDRESS; // 返送先
-	public int $mailWordWrap = NULL; // wordwrapサイズ
-	public string|array $mailCC = FALSE; // CC
-	public string|array $mailBCC = FALSE; // BCC
+	public int $mailWordWrap = 0; // wordwrapサイズ
+	public string|array $mailCC = []; // CC
+	public string|array $mailBCC = []; // BCC
 	public $files; // 添付ファイル
 	public $filename; // 添付ファイル名
 	public $boundary; // 添付ファイル用区切り文字
