@@ -5,7 +5,7 @@
  * フォーム入力内容をチェックするクラス
  *
  * @category 	Application of AZLINK.CMS
- * @final 		2023.04.13
+ * @final 		2023.07.03
  * @author 		Norio Murata <nori@azlink.jp>
  * @copyright 	2010- AZLINK. <https://azlink.jp>
  * ==============================================================
@@ -223,10 +223,10 @@ class RequiredCheck {
 	}
 	/**
 	 * ひらがなのみかチェック
-	 * @param string チェックする文字列
+	 * @param チェックする文字列
 	 * @return int ひらがなのみでなければ1 そうでなければ0
 	 */
-	static function checkHiragana(string $val) {
+	static function checkHiragana($val) {
 		if (!$val) return 0;
 
 		$result = !preg_match('/^[ぁ-ん]+$/u', $val) ? 1 : 0;
@@ -236,10 +236,10 @@ class RequiredCheck {
 	}
 	/**
 	 * ひらがなとー(～)のみかチェック
-	 * @param string チェックする文字列
+	 * @param チェックする文字列
 	 * @return int ひらがなとー(～)のみでなければ1 そうでなければ0
 	 */
-	static function checkHiraganaHyphen(string $val) {
+	static function checkHiraganaHyphen($val) {
 		if (!$val) return 0;
 
 		$result = !preg_match('/^[ぁ-んー～〜]+$/u', $val) ? 1 : 0;
@@ -249,10 +249,10 @@ class RequiredCheck {
 	}
 	/**
 	 * カタカナのみかチェック
-	 * @param string チェックする文字列
+	 * @param チェックする文字列
 	 * @return int カタカナのみでなければ1 そうでなければ0
 	 */
-	static function checkKatakana(string $val) {
+	static function checkKatakana($val) {
 		if (!$val) return 0;
 
 		$result = !preg_match('/^[ァ-ヶー]+$/u', $val) ? 1 : 0;
@@ -262,10 +262,10 @@ class RequiredCheck {
 	}
 	/**
 	 * カタカナと全角スペース(　)のみかチェック
-	 * @param string チェックする文字列
+	 * @param チェックする文字列
 	 * @return int カタカナと全角スペース(　)のみでなければ1 そうでなければ0
 	 */
-	static function checkKatakanaSpc(string $val) {
+	static function checkKatakanaSpc($val) {
 		if (!$val) return 0;
 
 		$result = !preg_match('/^[ァ-ヶー　]+$/u', $val) ? 1 : 0;
@@ -275,11 +275,11 @@ class RequiredCheck {
 	}
 	/**
 	 * 全角のみかチェック
-	 * @param string チェックする文字列
+	 * @param チェックする文字列
 	 * @param $valの文字エンコーディングを指定 省略時は内部エンコーディング
 	 * @return int 全角のみでなければ1、そうでなければ0
 	 */
-	static function checkZenkakuOnly(string $val, $encoding = NULL) {
+	static function checkZenkakuOnly($val, $encoding = NULL) {
 		if (!$val) return 0;
 
 		if (is_null($encoding)) $encoding = mb_internal_encoding();
@@ -295,13 +295,13 @@ class RequiredCheck {
 	}
 	/**
 	 * 半角のみかチェック
-	 * @param string チェックする文字列
+	 * @param チェックする文字列
 	 * @param bool 半角カナを許可するか 初期値FALSE
 	 * @param bool 改行やタブを許可するか 初期値FALSE
 	 * @param $valの文字エンコーディングを指定 省略時は内部エンコーディング
 	 * @return bool 半角のみであればTRUE, そうでなければFALSE
 	 */
-	static function checkHankakuOnly(string $val, bool $includeKana = FALSE, bool $includeControls = FALSE, $encoding = NULL) {
+	static function checkHankakuOnly($val, bool $includeKana = FALSE, bool $includeControls = FALSE, $encoding = NULL) {
 		if (!$includeControls && !ctype_print($val)) return FALSE;
 
 		if (is_null($encoding)) $encoding = mb_internal_encoding();
@@ -322,12 +322,12 @@ class RequiredCheck {
 	}
 	/**
 	 * 月日のチェック
-	 * @param int チェックする数字(年)
-	 * @param int チェックする数字(月)
-	 * @param int チェックする数字(日)
+	 * @param チェックする数字(年)
+	 * @param チェックする数字(月)
+	 * @param チェックする数字(日)
 	 * @return int すべて数字でなかった場合は1、そうでなければ0
 	 */
-	static function checkDate(int $month, int $day, int $year) {
+	static function checkDate($month, $day, $year) {
 		if (!$month || !$day || !$year ||
 		self::checkNumeric($month) ||
 		self::checkNumeric($day) ||
@@ -344,13 +344,14 @@ class RequiredCheck {
 	}
 	/**
 	 * メールアドレスチェック
-	 * @param string メールアドレス
+	 * @param メールアドレス
 	 * @return int メールアドレスとして正しい形式でなければ1、そうでなければ0
 	 */
-	static function checkMail(string $val) {
+	static function checkMail($val) {
 		if (!$val) return 0;
 
 		$check = explode('@', $val);
+		if (!count($check)) return 0;
 
 		if (isset($check[1])) {
 			if (checkdnsrr($check[1], 'A') || checkdnsrr($check[1], 'MX') || checkdnsrr($check[1], 'AAAA')) {
@@ -365,10 +366,10 @@ class RequiredCheck {
 	}
 	/**
 	 * URLチェック
-	 * @param string URL
+	 * @param URL
 	 * @return int URLとして正しい形式でなければ1、そうでなければ0
 	 */
-	static function checkURL(string $val) {
+	static function checkURL($val) {
 		if (!$val) return 0;
 
 		$result = (!preg_match('/^(http|HTTP|ftp)(s|S)?:\/\/+[A-Za-z0-9]+\.[A-Za-z0-9]/', $val)) ? 1 : 0;
@@ -376,10 +377,10 @@ class RequiredCheck {
 	}
 	/**
 	 * 4バイト文字が混ざっていないかチェック
-	 * @param string チェックする文字列
+	 * @param チェックする文字列
 	 * @return int 4バイト文字が混ざっていれば1、そうでなければ0
 	 */
-	static function checkUTF8Length(string $val) {
+	static function checkUTF8Length($val) {
 
 		if (!$val) return 0;
 
