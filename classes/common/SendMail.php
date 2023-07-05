@@ -156,9 +156,10 @@ class SendMail {
 		$mail->CharSet 	= $this->mailCharset;
 		$mail->Encoding = $this->mailEncording;
 
-		if (isset($mail->language) && is_array($mail->language)) {
-			$mail->setLanguage($mail->language);
-		}
+		// if (isset($mail->language) && is_array($mail->language)) {
+		// 	$mail->setLanguage($mail->language);
+		// }
+		$mail->setLanguage(implode(', ', $this->language));
 
 		if ($this->smtpUse) {
 			$mail->IsSMTP();
