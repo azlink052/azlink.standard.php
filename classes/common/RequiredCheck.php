@@ -5,7 +5,7 @@
  * フォーム入力内容をチェックするクラス
  *
  * @category 	Application of AZLINK.CMS
- * @final 		2023.07.03
+ * @final 		2023.08.17
  * @author 		Norio Murata <nori@azlink.jp>
  * @copyright 	2010- AZLINK. <https://azlink.jp>
  * ==============================================================
@@ -13,7 +13,7 @@
 namespace azlink\workspace\classes\common;
 if (class_exists('azlink\workspace\classes\common\RequiredCheck')) return;
 
-use azlink\workspace as azlib;
+use const azlink\workspace\config\PROG_ENCTYPE;
 
 class RequiredCheck {
 	/**
@@ -95,7 +95,7 @@ class RequiredCheck {
 	static function checkLengthMBSame($val, int $len) {
 		if (!$val) return 0;
 
-		$result = mb_strlen($val, azlib\config\PROG_ENCTYPE) != $len ? 1 : 0;
+		$result = mb_strlen($val, PROG_ENCTYPE) != $len ? 1 : 0;
 
 		return $result;
 	}
@@ -109,7 +109,7 @@ class RequiredCheck {
 	static function checkLengthMB($val, int $len) {
 		if (!$val) return 0;
 
-		$result = mb_strlen($val, azlib\config\PROG_ENCTYPE) > $len ? 1 : 0;
+		$result = mb_strlen($val, PROG_ENCTYPE) > $len ? 1 : 0;
 
 		return $result;
 	}
@@ -299,7 +299,7 @@ class RequiredCheck {
 	 * @param bool 半角カナを許可するか 初期値FALSE
 	 * @param bool 改行やタブを許可するか 初期値FALSE
 	 * @param $valの文字エンコーディングを指定 省略時は内部エンコーディング
-	 * @return bool 半角のみであればTRUE, そうでなければFALSE
+	 * @return int 半角のみでなければ1, そうでなければ0
 	 */
 	static function checkHankakuOnly($val, bool $includeKana = FALSE, bool $includeControls = FALSE, $encoding = NULL) {
 		if (!$includeControls && !ctype_print($val)) return FALSE;
@@ -314,32 +314,35 @@ class RequiredCheck {
 
 		$val = mb_convert_encoding($val, $toEncoding, $encoding);
 
-		if (strlen($val) === mb_strlen($val, $toEncoding)) {
-			return TRUE;
-		} else {
-			return FALSE;
-		}
+		if (strlen($val) !== mb_strlen($val, $toEncoding)) return 1;
+		
+		return 0;
 	}
 	/**
-	 * 月日のチェック
+	 * Dateとしての整合性をチェックする
 	 * @param チェックする数字(年)
 	 * @param チェックする数字(月)
 	 * @param チェックする数字(日)
-	 * @return int すべて数字でなかった場合は1、そうでなければ0
+	 * @return int 整合性が正しければ1、そうでなければ0
 	 */
-	static function checkDate($month, $day, $year) {
-		if (!$month || !$day || !$year ||
-		self::checkNumeric($month) ||
-		self::checkNumeric($day) ||
-		self::checkNumeric($year)) return 0;
+	static function checkDate($year, $month, $day) {
+		if (!$year || !$month || !$day) return 1;
 
-		$month 	= (int) $month;
-		$day 	= (int) $day;
-		$year 	= (int) $year;
+		if (!new \DateTime($year . '-' . $month . '-' . $day, new \DateTimeZone('Asia/Tokyo'))) return 1;
 
-		$result = !checkdate($month, $day, $year) ? 1 : 0;
+		return 0;
 
-		return $result;
+		// if (self::checkNumeric($month) ||
+		// self::checkNumeric($day) ||
+		// self::checkNumeric($year)) return 0;
+
+		// $month 	= (int) $month;
+		// $day 		= (int) $day;
+		// $year 	= (int) $year;
+
+		// $result = !checkdate($month, $day, $year) ? 1 : 0;
+
+		// return $result;
 
 	}
 	/**

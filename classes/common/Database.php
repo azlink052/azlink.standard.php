@@ -5,7 +5,7 @@
  * データベースクラス
  *
  * @category 	Application of AZLINK.CMS
- * @final 		2023.04.13
+ * @final 		2023.08.17
  * @author 		Norio Murata <nori@azlink.jp>
  * @copyright 	2010- AZLINK. <https://azlink.jp>
  * ==============================================================
@@ -13,7 +13,19 @@
 namespace azlink\workspace\classes\common;
 if (class_exists('azlink\workspace\classes\common\Database')) return;
 
-use azlink\workspace as azlib;
+use azlink\workspace\classes\Transform;
+use const azlink\workspace\config\DB_TYPE;
+use const azlink\workspace\config\DB_NAME;
+use const azlink\workspace\config\DB_HOST;
+use const azlink\workspace\config\DB_PORT;
+use const azlink\workspace\config\DB_CHAR;
+use const azlink\workspace\config\DB_USER;
+use const azlink\workspace\config\DB_PASS;
+use const azlink\workspace\config\PROG_ENCTYPE;
+use const azlink\workspace\config\CSV_ENCTYPE;
+use const azlink\workspace\config\DB_ENCTYPE;
+use const azlink\workspace\config\E000_OUTPUT;
+use const azlink\workspace\config\E019_OUTPUT;
 
 // require_once __DIR__ . '/../../config/config.php';
 // require_once __DIR__ . '/../Transform.php';
@@ -26,7 +38,7 @@ class Database {
 	 * 必要に応じオプションを有効にする
 	 */
 	public function __construct() {
-		$dsn = azlib\config\DB_TYPE . ':dbname=' . azlib\config\DB_NAME . ';host=' . azlib\config\DB_HOST . ';port=' . azlib\config\DB_PORT . ';charset=' . azlib\config\DB_CHAR;
+		$dsn = DB_TYPE . ':dbname=' . DB_NAME . ';host=' . DB_HOST . ';port=' . DB_PORT . ';charset=' . DB_CHAR;
 
 		$option = [
 			\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
@@ -37,7 +49,7 @@ class Database {
 		];
 
 		try {
-			$this->dbh = new \PDO($dsn, azlib\config\DB_USER, azlib\config\DB_PASS, $option);
+			$this->dbh = new \PDO($dsn, DB_USER, DB_PASS, $option);
 			// $this->conn->query('SET NAMES UTF8');
 			// print('接続に成功しました。<br>');
 		} catch (\PDOException $e) {
@@ -45,8 +57,8 @@ class Database {
 			Log::general('DB処理エラー:' . $e->getMessage());
 			// TODO エラページの表示
 			// header('Location: ' . ERRORS_ADMIN_PAGE . '?err=E000');
-			header('Content-type: text/html; charset=' . azlib\config\PROG_ENCTYPE);
-			die(azlib\config\E000_OUTPUT);
+			header('Content-type: text/html; charset=' . PROG_ENCTYPE);
+			die(E000_OUTPUT);
 		}
 	}
 	/**
@@ -56,8 +68,8 @@ class Database {
 		Log::general('DB処理エラー:' . implode(', ', $this->dbh->errorInfo()));
 		// TODO エラページの表示
 		// header('Location: ' . ERRORS_ADMIN_PAGE . '?err=E019');
-		header('Content-type: text/html; charset=' . azlib\config\PROG_ENCTYPE);
-		die(azlib\config\E019_OUTPUT);
+		header('Content-type: text/html; charset=' . PROG_ENCTYPE);
+		die(E019_OUTPUT);
 
 	}
 	/**
@@ -66,7 +78,7 @@ class Database {
 	 * @return 変換された対象
 	 */
 	static function encode($val) {
-		return mb_convert_encoding($val, azlib\config\DB_ENCTYPE, azlib\config\PROG_ENCTYPE);
+		return mb_convert_encoding($val, DB_ENCTYPE, PROG_ENCTYPE);
 	}
 	/**
 	 * DBから取り出したものを指定形式に変換
@@ -76,9 +88,9 @@ class Database {
 	 */
 	static function decode($val, bool $sanitize = TRUE) {
 		if ($sanitize) {
-			return azlib\classes\Transform::sanitizer(mb_convert_encoding($val, azlib\config\PROG_ENCTYPE, azlib\config\DB_ENCTYPE));
+			return Transform::sanitizer(mb_convert_encoding($val, PROG_ENCTYPE, DB_ENCTYPE));
 		} else {
-			return mb_convert_encoding($val, azlib\config\PROG_ENCTYPE, azlib\config\DB_ENCTYPE);
+			return mb_convert_encoding($val, PROG_ENCTYPE, DB_ENCTYPE);
 		}
 	}
 	/**
@@ -87,6 +99,6 @@ class Database {
 	 * @return 変換された対象
 	 */
 	static function csvDecode($val) {
-		return mb_convert_encoding($val, azlib\config\CSV_ENCTYPE, azlib\config\DB_ENCTYPE);
+		return mb_convert_encoding($val, CSV_ENCTYPE, DB_ENCTYPE);
 	}
 }

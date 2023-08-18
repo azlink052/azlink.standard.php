@@ -5,7 +5,7 @@
  * 各種ユーティリティクラス
  *
  * @category 	Application of AZLINK.CMS
- * @final 		2023.04.13
+ * @final 		2023.08.17
  * @author 		Norio Murata <nori@azlink.jp>
  * @copyright 	2010- AZLINK. <https://azlink.jp>
  * ==============================================================
@@ -13,7 +13,9 @@
 namespace azlink\workspace\classes\common;
 if (class_exists('azlink\workspace\classes\common\Utilities')) return;
 
-use azlink\workspace as azlib;
+use const azlink\workspace\config\TEMP_DIR;
+use const azlink\workspace\config\UPLOADS_DIR;
+use const azlink\workspace\config\TEMP_FILE_LIVETIME;
 
 // require_once __DIR__ . '/../../config/config.php';
 
@@ -69,10 +71,10 @@ class Utilities {
 			return TRUE;
 		} else {
 			switch ($path) {
-				case azlib\config\TEMP_DIR:
+				case TEMP_DIR:
 					$err = 'E015';
 					break;
-				case azlib\config\UPLOADS_DIR:
+				case UPLOADS_DIR:
 					$err = 'E011';
 					break;
 				default:
@@ -97,7 +99,7 @@ class Utilities {
 					$time = filemtime($path . $strFile);
 					//echo $time."<br />";
 					//echo (time() - 1440)."<br />";
-					if ($time <= (time() - azlib\config\TEMP_FILE_LIVETIME)) {
+					if ($time <= (time() - TEMP_FILE_LIVETIME)) {
 						unlink($path . '/' . $strFile);
 					}
 				}
@@ -105,10 +107,10 @@ class Utilities {
 			return TRUE;
 		} else {
 			switch ($path) {
-				case azlib\config\TEMP_DIR:
+				case TEMP_DIR:
 					$err = 'E015';
 					break;
-				case azlib\config\UPLOADS_DIR:
+				case UPLOADS_DIR:
 					$err = 'E011';
 					break;
 				default:

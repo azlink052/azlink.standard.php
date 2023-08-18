@@ -5,7 +5,7 @@
  * autoloadクラス
  *
  * @category 	Application of AZLINK.CMS
- * @final 		2023.04.13
+ * @final 		2023.08.17
  * @author 		Norio Murata <nori@azlink.jp>
  * @copyright 	2010- AZLINK. <https://azlink.jp>
  * ==============================================================
@@ -14,17 +14,18 @@ namespace azlink\workspace\classes;
 if (class_exists('azlink\workspace\classes\Autoload')) return;
 
 require_once __DIR__ . '/../config/config.php';
-use azlink\workspace as azlib;
+
+use const azlink\workspace\config\INC_PATH;
 
 class Autoload {
   public array $dirs = [
-    azlib\config\INC_PATH . 'classes',
-    azlib\config\INC_PATH . 'classes/common'
+    INC_PATH . 'classes',
+    INC_PATH . 'classes/common'
   ];
   /**
 	 * PHP5 コンストラクタ
 	 */
-  function __construct() {
+  public function __construct() {
     spl_autoload_register(array($this, 'autoload'));
   }
   /**

@@ -5,7 +5,7 @@
  * ファイルアップロードクラス
  *
  * @category 	Application of AZLINK.CMS
- * @final 		2023.04.13
+ * @final 		2023.08.17
  * @author 		Norio Murata <nori@azlink.jp>
  * @copyright 	2010- AZLINK. <https://azlink.jp>
  * ==============================================================
@@ -13,7 +13,10 @@
 namespace azlink\workspace\classes;
 if (class_exists('azlink\workspace\classes\EntryHelper')) return;
 
-use azlink\workspace as azlib;
+use const azlink\workspace\config\UPLOADS_DIR;
+use const azlink\workspace\config\TEMP_DIR;
+use const azlink\workspace\config\UPLOAD_IMGSIZELIMIT;
+use const azlink\workspace\config\MAKE_THUMB;
 
 // require_once dirname(__FILE__) . '/../config/config.php';
 // require_once dirname(__FILE__) . '/common/GenerateRandomString.php';
@@ -21,12 +24,12 @@ use azlink\workspace as azlib;
 
 class FileUpload {
 	public string $dir;
-	public int $sizeLimit = azlib\config\UPLOAD_IMGSIZELIMIT;
+	public int $sizeLimit = UPLOAD_IMGSIZELIMIT;
 	public int $imgWidth = 0;
 	public int $imgHeight = 0;
 	public int $thmWidth = 0;
 	public int $thmHeight = 0;
-	public bool $mkThumb = azlib\config\MAKE_THUMB;
+	public bool $mkThumb = MAKE_THUMB;
 	public bool $resize = TRUE;
 	public array $thumbnails = [];
 	public string $fileGroup = 'image';
@@ -47,11 +50,11 @@ class FileUpload {
 	/**
 	 * PHP5 コンストラクタ
 	 */
-	function __construct() {
+	public function __construct() {
 		$this->dir = './';
 
-		if (!is_dir(azlib\config\UPLOADS_DIR . $this->dir) ||
-			substr(sprintf('%o', fileperms(azlib\config\UPLOADS_DIR . $this->dir)), -4) != '0777') {
+		if (!is_dir(UPLOADS_DIR . $this->dir) ||
+			substr(sprintf('%o', fileperms(UPLOADS_DIR . $this->dir)), -4) != '0777') {
 			GlobalError::redirect('E012');
 		}
 	}
@@ -157,7 +160,7 @@ class FileUpload {
 				// 既に同名のファイルがアップロード先ディレクトリにないか確認
 				$newFile = $date . $randName . $ext;
 
-				if (file_exists(azlib\config\UPLOADS_DIR . $this->dir . '/' . $newFile)) {
+				if (file_exists(UPLOADS_DIR . $this->dir . '/' . $newFile)) {
 					$sameNameChk = TRUE;
 				} else {
 					break;
@@ -213,7 +216,7 @@ class FileUpload {
 				if (is_array($this->thumbnails) && !empty($this->thumbnails)) {
 					foreach ($this->thumbnails as $thumbnail) {
 						$thmName 	= $thumbnail['prefix'] . $newFile;
-						$thmURL 	= azlib\config\TEMP_DIR . $thmName;
+						$thmURL 	= TEMP_DIR . $thmName;
 
 						copy($url, $thmURL);
 
@@ -351,14 +354,14 @@ class FileUpload {
 			if ($value != NULL) {
 
 				if (!is_array($value)) {
-					if (file_exists(azlib\config\TEMP_DIR . $value)) {
+					if (file_exists(TEMP_DIR . $value)) {
 						$this->copyTemp($value);
 					} else {
 						$files[$key] = NULL;
 					}
 				} else {
 					foreach ($value as $inKey => $inValue) {
-						if (!empty($inValue) && file_exists(azlib\config\TEMP_DIR . $inValue)) {
+						if (!empty($inValue) && file_exists(TEMP_DIR . $inValue)) {
 							$this->copyTemp($inValue);
 						} else {
 							$files[$key][$inKey] = NULL;
@@ -379,14 +382,14 @@ class FileUpload {
 			if ($value != NULL) {
 
 				if (!is_array($value)) {
-					if (file_exists(azlib\config\UPLOADS_DIR . $this->dir . '/' . $value)) {
+					if (file_exists(UPLOADS_DIR . $this->dir . '/' . $value)) {
 						$this->copyFileToTmp($value);
 					} else {
 						$files[$key] = NULL;
 					}
 				} else {
 					foreach ($value as $inKey => $inValue) {
-						if (!empty($inValue) && file_exists(azlib\config\UPLOADS_DIR . $this->dir . '/' . $inValue)) {
+						if (!empty($inValue) && file_exists(UPLOADS_DIR . $this->dir . '/' . $inValue)) {
 							$this->copyFileToTmp($inValue);
 						} else {
 							$files[$key][$inKey] = NULL;
@@ -453,9 +456,9 @@ class FileUpload {
 	 * tmpディレクトリの指定ファイルを削除する。
 	 */
 	public function deleteTemp($deleteFile) {
-		@unlink(azlib\config\TEMP_DIR . $deleteFile);
+		@unlink(TEMP_DIR . $deleteFile);
 		foreach ($this->thumbnails as $thumbnail) {
-			@unlink(azlib\config\TEMP_DIR . $thumbnail['prefix'] . $deleteFile);
+			@unlink(TEMP_DIR . $thumbnail['prefix'] . $deleteFile);
 		}
 		return TRUE;
 	}
@@ -464,9 +467,9 @@ class FileUpload {
 	 */
 	public function deleteFile($deleteFile) {
 		if (FileUpload::checkDir($this->dir)) {
-			@unlink(azlib\config\UPLOADS_DIR . $this->dir . '/' . $deleteFile);
+			@unlink(UPLOADS_DIR . $this->dir . '/' . $deleteFile);
 			foreach ($this->thumbnails as $thumbnail) {
-				@unlink(azlib\config\UPLOADS_DIR . $this->dir . '/' . $thumbnail['prefix'] . $deleteFile);
+				@unlink(UPLOADS_DIR . $this->dir . '/' . $thumbnail['prefix'] . $deleteFile);
 			}
 		}
 		return TRUE;
@@ -476,9 +479,9 @@ class FileUpload {
 	 */
 	public function copyTemp($copyFile) {
 		if (FileUpload::checkDir($this->dir)) {
-			@copy(azlib\config\TEMP_DIR . $copyFile, azlib\config\UPLOADS_DIR . $this->dir . '/' . $copyFile);
+			@copy(TEMP_DIR . $copyFile, UPLOADS_DIR . $this->dir . '/' . $copyFile);
 			foreach ($this->thumbnails as $thumbnail) {
-				@copy(azlib\config\TEMP_DIR . $thumbnail['prefix'] . $copyFile, azlib\config\UPLOADS_DIR . $this->dir . '/' . $thumbnail['prefix'] . $copyFile);
+				@copy(TEMP_DIR . $thumbnail['prefix'] . $copyFile, UPLOADS_DIR . $this->dir . '/' . $thumbnail['prefix'] . $copyFile);
 			}
 			$this->deleteTemp($copyFile);
 		}
@@ -507,7 +510,7 @@ class FileUpload {
 
 			if (FileUpload::checkDir($this->dir)) {
 
-				if (file_exists(azlib\config\UPLOADS_DIR . $this->dir . '/' . $newFile)) {
+				if (file_exists(UPLOADS_DIR . $this->dir . '/' . $newFile)) {
 					$sameNameChk = TRUE;
 				} else {
 					break;
@@ -516,11 +519,11 @@ class FileUpload {
 			}
 		}
 
-		@copy(azlib\config\UPLOADS_DIR . $this->dir . '/' . $copyFile,
-			azlib\config\UPLOADS_DIR . $this->dir . '/' . $newFile);
+		@copy(UPLOADS_DIR . $this->dir . '/' . $copyFile,
+			UPLOADS_DIR . $this->dir . '/' . $newFile);
 		foreach ($this->thumbnails as $thumbnail) {
-			@copy(azlib\config\UPLOADS_DIR . $this->dir . '/' . $thumbnail['prefix'] . $copyFile,
-				azlib\config\UPLOADS_DIR . $this->dir . '/' . $thumbnail['prefix'] . $newFile);
+			@copy(UPLOADS_DIR . $this->dir . '/' . $thumbnail['prefix'] . $copyFile,
+				UPLOADS_DIR . $this->dir . '/' . $thumbnail['prefix'] . $newFile);
 		}
 		return $newFile;
 	}
@@ -550,11 +553,11 @@ class FileUpload {
 	 */
 	public function copyFileToTmp($copyFile) {
 		if (FileUpload::checkDir($this->dir)) {
-			@copy(azlib\config\UPLOADS_DIR . $this->dir . '/' . $copyFile,
-				azlib\config\TEMP_DIR . $copyFile);
+			@copy(UPLOADS_DIR . $this->dir . '/' . $copyFile,
+				TEMP_DIR . $copyFile);
 			foreach ($this->thumbnails as $thumbnail) {
-				@copy(azlib\config\UPLOADS_DIR . $this->dir . '/' . $thumbnail['prefix'] . $copyFile,
-					azlib\config\TEMP_DIR . $thumbnail['prefix'] . $copyFile);
+				@copy(UPLOADS_DIR . $this->dir . '/' . $thumbnail['prefix'] . $copyFile,
+					TEMP_DIR . $thumbnail['prefix'] . $copyFile);
 			}
 		}
 	}
@@ -578,7 +581,7 @@ class FileUpload {
 	 * 存在すればTRUE しなければエラー出力(critical error)→強制終了
 	 */
 	private static function checkDir($dir) {
-		if (!is_dir(azlib\config\UPLOADS_DIR . $dir)) {
+		if (!is_dir(UPLOADS_DIR . $dir)) {
 			GlobalError::redirect('E005');
 			exit;
 		} else {

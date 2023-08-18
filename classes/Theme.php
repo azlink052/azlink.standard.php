@@ -53,7 +53,7 @@ class Theme {
   /**
    * PHP5 コンストラクタ
    */
-  function __construct() {}
+  public function __construct() {}
   /**
    * cssの出力
    */

@@ -5,7 +5,7 @@
  * WPクラス
  *
  * @category  Application of AZLINK.CMS
- * @final     2023.04.13
+ * @final     2023.08.17
  * @author    Nori Murata <nori@azlink.jp>
  * @copyright   2010- AZLINK. <https://azlink.jp>
  * ==============================================================
@@ -13,10 +13,10 @@
 namespace azlink\workspace\classes;
 if (class_exists('azlink\workspace\classes\MyWP')) return;
 
-use azlink\workspace as azlib;
+use const azlink\workspace\config\FRONT_PATH;
 
 // require_once __DIR__ . '/../config/config.php';
-// require_once config\FRONT_PATH . 'content/wp-config.php';
+// require_once FRONT_PATH . 'content/wp-config.php';
 
 class MyWP {
 	public array $uploads = []; // uploadsディレクトリの場所
@@ -24,7 +24,7 @@ class MyWP {
 	 * PHP5 コンストラクタ
 	 * @param string wp-config.php のパス
 	 */
-	function __construct(string $configPath = azlib\config\FRONT_PATH . 'content/wp-config.php') {
+	function __construct(string $configPath = FRONT_PATH . 'content/wp-config.php') {
 		require_once $configPath;
 
 		global $wp;

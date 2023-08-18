@@ -5,7 +5,7 @@
  * ランダムな文字列を作成するクラス
  *
  * @category 	Application of AZLINK.CMS
- * @build 		2023.04.13
+ * @build 		2023.07.17
  * @author 		Norio Murata <nori@azlink.jp>
  * @copyright 	2010- AZLINK. <https://azlink.jp>
  *
@@ -18,14 +18,15 @@ class GenerateRandomString {
 	/**
 	 * ランダムな文字列を生成する
 	 * @param int 作成する文字列の長さ
+	 * @param boolean 記号を含めないか
 	 * @return string 生成した文字列
 	 */
-	static function generate($length) {
+	static function generate(int $length, bool $isOption = FALSE) {
 		if ($length <= 0) {
 			return '';
 		}
 
-		$elem = 'abcdefghijklmnopqrstuvwxyz0123456789_/$#-'; // 作成する文字列に使用する文字
+		$elem = !$isOption ? 'abcdefghijklmnopqrstuvwxyz0123456789_/$#-' : 'abcdefghijklmnopqrstuvwxyz0123456789'; // 作成する文字列に使用する文字
 
 		$chars = preg_split('//', $elem, -1, PREG_SPLIT_NO_EMPTY);
 		$chars = array_unique($chars);

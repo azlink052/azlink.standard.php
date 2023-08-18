@@ -6,7 +6,7 @@
  * ※エンコード指定を行っているので設定ファイルを読ますこと
  *
  * @category 	Application of AZLINK.CMS
- * @final 		2023.04.13
+ * @final 		2023.08.17
  * @author 		Norio Murata <nori@azlink.jp>
  * @copyright 	2010- AZLINK. <https://azlink.jp>
  * ==============================================================
@@ -14,7 +14,9 @@
 namespace azlink\workspace\classes;
 if (class_exists('azlink\workspace\classes\Transform')) return;
 
-use azlink\workspace as azlib;
+use const azlink\workspace\config\PROG_ENCTYPE;
+use const azlink\workspace\config\CSV_ENCTYPE;
+use const azlink\workspace\config\DB_ENCTYPE;
 
 // require_once __DIR__ . '/common/ArrayHelper.php';
 
@@ -68,7 +70,7 @@ class Transform {
 				$val[$key] = Transform::convert($value, $change);
 			}
 		} else {
-			$val = mb_convert_kana($val, $change, azlib\config\PROG_ENCTYPE);
+			$val = mb_convert_kana($val, $change, PROG_ENCTYPE);
 		}
 
 		return $val;
@@ -252,7 +254,7 @@ class Transform {
 	static function decodeCSV($val) {
 		if (!$val) return;
 
-		return mb_convert_encoding($val, azlib\config\CSV_ENCTYPE, azlib\config\DB_ENCTYPE);
+		return mb_convert_encoding($val, CSV_ENCTYPE, DB_ENCTYPE);
 	}
 	/**
 	 * csv出力用にダブルクォートをエスケープする
@@ -340,5 +342,34 @@ class Transform {
 		}
 
 		return $val;
+	}
+	/**
+	 * 西暦→和暦変換
+	 * @param int 西暦
+	 * @return string 和暦
+	 */
+	static function convertWareki($year) {
+		$eras = [
+			['year' => 2018, 'name' => '令和'],
+			['year' => 1988, 'name' => '平成'],
+			['year' => 1925, 'name' => '昭和'],
+			['year' => 1911, 'name' => '大正'],
+			['year' => 1867, 'name' => '明治']
+		];
+
+		foreach($eras as $era) {
+			$base_year = $era['year'];
+			$era_name = $era['name'];
+
+			if ($year > $base_year) {
+				$era_year = $year - $base_year;
+
+				if ($era_year === 1) {
+					return $era_name . '元年';
+				}
+				return $era_name . $era_year . '年';
+			}
+		}
+		return NULL;
 	}
 }

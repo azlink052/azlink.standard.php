@@ -13,7 +13,7 @@
 namespace azlink\workspace\classes;
 if (class_exists('azlink\workspace\classes\FormError')) return;
 
-use azlink\workspace as azlib;
+use azlink\workspace\config as config;
 
 // require_once __DIR__ . '/../config/config.php';
 
@@ -34,21 +34,38 @@ class FormError {
 		 * プロパティのセット
 		 */
 		switch ($menu) {
-			case 'contact':
+			case 'entry':
 				$this->errorArgs = [
-					'nameEmpty' 	=> azlib\config\ERR_NAME_EMPTY,
-					'kanaEmpty' 	=> azlib\config\ERR_KANA_EMPTY,
-					'kanaTrue' 		=> azlib\config\ERR_KANA_TRUE,
-					'zipEmpty' 		=> azlib\config\ERR_ZIP_EMPTY,
-					'zipTrue' 		=> azlib\config\ERR_ZIP_TRUE,
-					'addrEmpty' 	=> azlib\config\ERR_ADDR_EMPTY,
-					'phoneEmpty' 	=> azlib\config\ERR_PHONE_EMPTY,
-					'phoneTrue' 	=> azlib\config\ERR_PHONE_TRUE,
-					'mailEmpty' 	=> azlib\config\ERR_MAIL_EMPTY,
-					'mailTrue' 		=> azlib\config\ERR_MAIL_TRUE,
-					'mailCheck' 	=> azlib\config\ERR_MAIL_CHECK,
-					'noteEmpty' 	=> azlib\config\ERR_NOTE_EMPTY,
-					'noteLength' 	=> azlib\config\ERR_NOTE_LENGTH
+					'kanaEmpty' 		=> config\ERR_KANA_EMPTY,
+					'nameEmpty' 		=> config\ERR_NAME_EMPTY,
+					'kanaTrue' 			=> config\ERR_KANA_TRUE,
+					'zipEmpty' 			=> config\ERR_ZIP_EMPTY,
+					'zipTrue' 			=> config\ERR_ZIP_TRUE,
+					'addrEmpty' 		=> config\ERR_ADDR_EMPTY,
+					'phoneEmpty' 		=> config\ERR_PHONE_EMPTY,
+					'phoneTrue' 		=> config\ERR_PHONE_TRUE,
+					'mailEmpty' 		=> config\ERR_MAIL_EMPTY,
+					'mailTrue' 			=> config\ERR_MAIL_TRUE,
+					'mailCheck' 		=> config\ERR_MAIL_CHECK,
+					'contactEmpty'	=> config\ERR_CONTACT_EMPTY,
+					'noteEmpty' 		=> config\ERR_NOTE_EMPTY,
+					'noteLength' 		=> config\ERR_NOTE_LENGTH,
+					'typeEmpty' 		=> config\ERR_TYPE_EMPTY,
+					'togetherEmpty' => config\ERR_TGTR_EMPTY,
+					'birthEmpty' 		=> config\ERR_BIRTH_EMPTY,
+					'sexEmpty' 			=> config\ERR_SEX_EMPTY,
+					'fac1Empty' 		=> config\ERR_FAC_EMPTY,
+					'date1Empty' 		=> config\ERR_DATE_EMPTY,
+					'date1True' 		=> config\ERR_DATE_TRUE,
+					'opts1Empty' 		=> config\ERR_OPTS_EMPTY,
+					'camera1Empty' 	=> config\ERR_CAMERA_EMPTY,
+					'optsEtc1Empty' => config\ERR_OPTS_ETC_EMPTY,
+					'fac2Empty' 		=> config\ERR_FAC_EMPTY,
+					'date2Empty' 		=> config\ERR_DATE_EMPTY,
+					'date2True' 		=> config\ERR_DATE_TRUE,
+					'opts2Empty' 		=> config\ERR_OPTS_EMPTY,
+					'camera2Empty' 	=> config\ERR_CAMERA_EMPTY,
+					'optsEtc2Empty' => config\ERR_OPTS_ETC_EMPTY,
 				];
 				break;
 		}
