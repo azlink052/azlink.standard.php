@@ -15,6 +15,8 @@ namespace League\Csv;
 
 use Generator;
 use SplFileObject;
+use Stringable;
+
 use function filter_var;
 use function get_class;
 use function mb_strlen;
@@ -24,86 +26,32 @@ use function str_replace;
 use function str_split;
 use function strcspn;
 use function strlen;
+
 use const FILTER_FLAG_STRIP_HIGH;
 use const FILTER_FLAG_STRIP_LOW;
-use const FILTER_SANITIZE_STRING;
+use const FILTER_UNSAFE_RAW;
 
 /**
  * An abstract class to enable CSV document loading.
  */
 abstract class AbstractCsv implements ByteSequence
 {
-    /**
-     * The stream filter mode (read or write).
-     *
-     * @var int
-     */
-    protected $stream_filter_mode;
+    protected const STREAM_FILTER_MODE = STREAM_FILTER_READ;
+
+    /** @var array<string, bool> collection of stream filters. */
+    protected array $stream_filters = [];
+    protected ?string $input_bom = null;
+    protected string $output_bom = '';
+    protected string $delimiter = ',';
+    protected string $enclosure = '"';
+    protected string $escape = '\\';
+    protected bool $is_input_bom_included = false;
 
     /**
-     * collection of stream filters.
-     *
-     * @var bool[]
+     * @final This method should not be overwritten in child classes
      */
-    protected $stream_filters = [];
-
-    /**
-     * The CSV document BOM sequence.
-     *
-     * @var string|null
-     */
-    protected $input_bom = null;
-
-    /**
-     * The Output file BOM character.
-     *
-     * @var string
-     */
-    protected $output_bom = '';
-
-    /**
-     * the field delimiter (one character only).
-     *
-     * @var string
-     */
-    protected $delimiter = ',';
-
-    /**
-     * the field enclosure character (one character only).
-     *
-     * @var string
-     */
-    protected $enclosure = '"';
-
-    /**
-     * the field escape character (one character only).
-     *
-     * @var string
-     */
-    protected $escape = '\\';
-
-    /**
-     * The CSV document.
-     *
-     * @var SplFileObject|Stream
-     */
-    protected $document;
-
-    /**
-     * Tells whether the Input BOM must be included or skipped.
-     *
-     * @var bool
-     */
-    protected $is_input_bom_included = false;
-
-    /**
-     * New instance.
-     *
-     * @param SplFileObject|Stream $document The CSV Object instance
-     */
-    protected function __construct($document)
+    protected function __construct(protected SplFileObject|Stream $document)
     {
-        $this->document = $document;
         [$this->delimiter, $this->enclosure, $this->escape] = $this->document->getCsvControl();
         $this->resetProperties();
     }
@@ -115,62 +63,53 @@ abstract class AbstractCsv implements ByteSequence
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __destruct()
     {
         unset($this->document);
     }
 
     /**
-     * {@inheritdoc}
+     * @throws UnavailableStream
      */
     public function __clone()
     {
-        throw new Exception(sprintf('An object of class %s cannot be cloned', static::class));
+        throw UnavailableStream::dueToForbiddenCloning(static::class);
     }
 
     /**
-     * Return a new instance from a SplFileObject.
-     *
-     * @return static
+     * Returns a new instance from a SplFileObject.
      */
-    public static function createFromFileObject(SplFileObject $file)
+    public static function createFromFileObject(SplFileObject $file): static
     {
         return new static($file);
     }
 
     /**
-     * Return a new instance from a PHP resource stream.
+     * Returns a new instance from a PHP resource stream.
      *
      * @param resource $stream
-     *
-     * @return static
      */
-    public static function createFromStream($stream)
+    public static function createFromStream($stream): static
     {
-        return new static(new Stream($stream));
+        return new static(Stream::createFromResource($stream));
     }
 
     /**
-     * Return a new instance from a string.
-     *
-     * @return static
+     * Returns a new instance from a string.
      */
-    public static function createFromString(string $content = '')
+    public static function createFromString(Stringable|string $content = ''): static
     {
-        return new static(Stream::createFromString($content));
+        return new static(Stream::createFromString((string) $content));
     }
 
     /**
-     * Return a new instance from a file path.
+     * Returns a new instance from a file path.
      *
      * @param resource|null $context the resource context
      *
-     * @return static
+     * @throws UnavailableStream
      */
-    public static function createFromPath(string $path, string $open_mode = 'r+', $context = null)
+    public static function createFromPath(string $path, string $open_mode = 'r+', $context = null): static
     {
         return new static(Stream::createFromPath($path, $open_mode, $context));
     }
@@ -226,20 +165,32 @@ abstract class AbstractCsv implements ByteSequence
 
         $this->document->setFlags(SplFileObject::READ_CSV);
         $this->document->rewind();
-        $this->input_bom = bom_match((string) $this->document->fread(4));
+        $this->input_bom = Info::fetchBOMSequence((string) $this->document->fread(4)) ?? '';
 
         return $this->input_bom;
     }
 
     /**
+     * DEPRECATION WARNING! This method will be removed in the next major point release.
+     *
+     * @deprecated since version 9.7.0
+     * @see AbstractCsv::supportsStreamFilterOnRead
+     * @see AbstractCsv::supportsStreamFilterOnWrite
+     *
      * Returns the stream filter mode.
      */
     public function getStreamFilterMode(): int
     {
-        return $this->stream_filter_mode;
+        return static::STREAM_FILTER_MODE;
     }
 
     /**
+     * DEPRECATION WARNING! This method will be removed in the next major point release.
+     *
+     * @deprecated since version 9.7.0
+     * @see AbstractCsv::supportsStreamFilterOnRead
+     * @see AbstractCsv::supportsStreamFilterOnWrite
+     *
      * Tells whether the stream filter capabilities can be used.
      */
     public function supportsStreamFilter(): bool
@@ -248,7 +199,25 @@ abstract class AbstractCsv implements ByteSequence
     }
 
     /**
-     * Tell whether the specify stream filter is attach to the current stream.
+     * Tells whether the stream filter read capabilities can be used.
+     */
+    public function supportsStreamFilterOnRead(): bool
+    {
+        return $this->document instanceof Stream
+            && (static::STREAM_FILTER_MODE & STREAM_FILTER_READ) === STREAM_FILTER_READ;
+    }
+
+    /**
+     * Tells whether the stream filter write capabilities can be used.
+     */
+    public function supportsStreamFilterOnWrite(): bool
+    {
+        return $this->document instanceof Stream
+            && (static::STREAM_FILTER_MODE & STREAM_FILTER_WRITE) === STREAM_FILTER_WRITE;
+    }
+
+    /**
+     * Tells whether the specified stream filter is attached to the current stream.
      */
     public function hasStreamFilter(string $filtername): bool
     {
@@ -264,27 +233,21 @@ abstract class AbstractCsv implements ByteSequence
     }
 
     /**
-     * Retuns the CSV document as a Generator of string chunk.
+     * Returns the CSV document as a Generator of string chunk.
      *
-     * @param int $length number of bytes read
-     *
-     * @throws Exception if the number of bytes is lesser than 1
+     * @throws Exception if the number of bytes is less than 1
      */
     public function chunk(int $length): Generator
     {
         if ($length < 1) {
-            throw new InvalidArgument(sprintf('%s() expects the length to be a positive integer %d given', __METHOD__, $length));
+            throw InvalidArgument::dueToInvalidChunkSize($length, __METHOD__);
         }
 
-        $input_bom = $this->getInputBOM();
         $this->document->rewind();
         $this->document->setFlags(0);
-        $this->document->fseek(strlen($input_bom));
-        /** @var  array<int, string> $chunks */
-        $chunks = str_split($this->output_bom.$this->document->fread($length), $length);
-        foreach ($chunks as $chunk) {
-            yield $chunk;
-        }
+        $this->document->fseek(strlen($this->getInputBOM()));
+
+        yield from str_split($this->output_bom.$this->document->fread($length), $length);
 
         while ($this->document->valid()) {
             yield $this->document->fread($length);
@@ -294,20 +257,35 @@ abstract class AbstractCsv implements ByteSequence
     /**
      * DEPRECATION WARNING! This method will be removed in the next major point release.
      *
-     * @deprecated deprecated since version 9.1.0
-     * @see AbstractCsv::getContent
+     * @deprecated since version 9.1.0
+     * @see AbstractCsv::toString
      *
      * Retrieves the CSV content
      */
     public function __toString(): string
     {
-        return $this->getContent();
+        return $this->toString();
     }
 
     /**
      * Retrieves the CSV content.
+     *
+     * DEPRECATION WARNING! This method will be removed in the next major point release
+     *
+     * @deprecated since version 9.7.0
+     * @see AbstractCsv::toString
      */
     public function getContent(): string
+    {
+        return $this->toString();
+    }
+
+    /**
+     * Retrieves the CSV content.
+     *
+     * @throws Exception If the string representation can not be returned
+     */
+    public function toString(): string
     {
         $raw = '';
         foreach ($this->chunk(8192) as $chunk) {
@@ -320,8 +298,9 @@ abstract class AbstractCsv implements ByteSequence
     /**
      * Outputs all data on the CSV file.
      *
-     * @return int Returns the number of characters read from the handle
-     *             and passed through to the output.
+     * Returns the number of characters read from the handle and passed through to the output.
+     *
+     * @throws Exception
      */
     public function output(string $filename = null): int
     {
@@ -336,7 +315,7 @@ abstract class AbstractCsv implements ByteSequence
 
         echo $this->output_bom;
 
-        return strlen($this->output_bom) + (int) $this->document->fpassthru();
+        return strlen($this->output_bom) + (int)$this->document->fpassthru();
     }
 
     /**
@@ -350,8 +329,8 @@ abstract class AbstractCsv implements ByteSequence
      */
     protected function sendHeaders(string $filename): void
     {
-        if (strlen($filename) != strcspn($filename, '\\/')) {
-            throw new InvalidArgument('The filename cannot contain the "/" and "\\" characters.');
+        if (strlen($filename) !== strcspn($filename, '\\/')) {
+            throw InvalidArgument::dueToInvalidHeaderFilename($filename);
         }
 
         $flag = FILTER_FLAG_STRIP_LOW;
@@ -360,7 +339,7 @@ abstract class AbstractCsv implements ByteSequence
         }
 
         /** @var string $filtered_name */
-        $filtered_name = filter_var($filename, FILTER_SANITIZE_STRING, $flag);
+        $filtered_name = filter_var($filename, FILTER_UNSAFE_RAW, $flag);
         $filename_fallback = str_replace('%', '', $filtered_name);
 
         $disposition = sprintf('attachment; filename="%s"', str_replace('"', '\\"', $filename_fallback));
@@ -377,78 +356,70 @@ abstract class AbstractCsv implements ByteSequence
     /**
      * Sets the field delimiter.
      *
-     * @throws Exception If the Csv control character is not one character only.
-     *
-     * @return static
+     * @throws InvalidArgument If the Csv control character is not one character only.
      */
-    public function setDelimiter(string $delimiter): self
+    public function setDelimiter(string $delimiter): static
     {
         if ($delimiter === $this->delimiter) {
             return $this;
         }
 
-        if (1 === strlen($delimiter)) {
-            $this->delimiter = $delimiter;
-            $this->resetProperties();
-
-            return $this;
+        if (1 !== strlen($delimiter)) {
+            throw InvalidArgument::dueToInvalidDelimiterCharacter($delimiter, __METHOD__);
         }
 
-        throw new InvalidArgument(sprintf('%s() expects delimiter to be a single character %s given', __METHOD__, $delimiter));
+        $this->delimiter = $delimiter;
+        $this->resetProperties();
+
+        return $this;
     }
 
     /**
      * Sets the field enclosure.
      *
-     * @throws Exception If the Csv control character is not one character only.
-     *
-     * @return static
+     * @throws InvalidArgument If the Csv control character is not one character only.
      */
-    public function setEnclosure(string $enclosure): self
+    public function setEnclosure(string $enclosure): static
     {
         if ($enclosure === $this->enclosure) {
             return $this;
         }
 
-        if (1 === strlen($enclosure)) {
-            $this->enclosure = $enclosure;
-            $this->resetProperties();
-
-            return $this;
+        if (1 !== strlen($enclosure)) {
+            throw InvalidArgument::dueToInvalidEnclosureCharacter($enclosure, __METHOD__);
         }
 
-        throw new InvalidArgument(sprintf('%s() expects enclosure to be a single character %s given', __METHOD__, $enclosure));
+        $this->enclosure = $enclosure;
+        $this->resetProperties();
+
+        return $this;
     }
 
     /**
      * Sets the field escape character.
      *
-     * @throws Exception If the Csv control character is not one character only.
-     *
-     * @return static
+     * @throws InvalidArgument If the Csv control character is not one character only.
      */
-    public function setEscape(string $escape): self
+    public function setEscape(string $escape): static
     {
         if ($escape === $this->escape) {
             return $this;
         }
 
-        if ('' === $escape || 1 === strlen($escape)) {
-            $this->escape = $escape;
-            $this->resetProperties();
-
-            return $this;
+        if ('' !== $escape && 1 !== strlen($escape)) {
+            throw InvalidArgument::dueToInvalidEscapeCharacter($escape, __METHOD__);
         }
 
-        throw new InvalidArgument(sprintf('%s() expects escape to be a single character or the empty string %s given', __METHOD__, $escape));
+        $this->escape = $escape;
+        $this->resetProperties();
+
+        return $this;
     }
 
     /**
      * Enables BOM Stripping.
-     *
-     * @return static
      */
-    public function skipInputBOM(): self
+    public function skipInputBOM(): static
     {
         $this->is_input_bom_included = false;
 
@@ -457,10 +428,8 @@ abstract class AbstractCsv implements ByteSequence
 
     /**
      * Disables skipping Input BOM.
-     *
-     * @return static
      */
-    public function includeInputBOM(): self
+    public function includeInputBOM(): static
     {
         $this->is_input_bom_included = true;
 
@@ -469,10 +438,8 @@ abstract class AbstractCsv implements ByteSequence
 
     /**
      * Sets the BOM sequence to prepend the CSV on output.
-     *
-     * @return static
      */
-    public function setOutputBOM(string $str): self
+    public function setOutputBOM(string $str): static
     {
         $this->output_bom = $str;
 
@@ -480,21 +447,18 @@ abstract class AbstractCsv implements ByteSequence
     }
 
     /**
-     * append a stream filter.
+     * Append a stream filter.
      *
-     * @param null|mixed $params
-     *
-     * @throws Exception If the stream filter API can not be used
-     *
-     * @return static
+     * @throws InvalidArgument If the stream filter API can not be appended
+     * @throws UnavailableFeature If the stream filter API can not be used
      */
-    public function addStreamFilter(string $filtername, $params = null): self
+    public function addStreamFilter(string $filtername, null|array $params = null): static
     {
         if (!$this->document instanceof Stream) {
-            throw new UnavailableFeature('The stream filter API can not be used with a '.get_class($this->document).' instance.');
+            throw UnavailableFeature::dueToUnsupportedStreamFilterApi(get_class($this->document));
         }
 
-        $this->document->appendFilter($filtername, $this->stream_filter_mode, $params);
+        $this->document->appendFilter($filtername, static::STREAM_FILTER_MODE, $params);
         $this->stream_filters[$filtername] = true;
         $this->resetProperties();
         $this->input_bom = null;

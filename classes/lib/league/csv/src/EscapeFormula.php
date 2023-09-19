@@ -14,15 +14,12 @@ declare(strict_types=1);
 namespace League\Csv;
 
 use InvalidArgumentException;
+use Stringable;
+
 use function array_fill_keys;
 use function array_keys;
 use function array_map;
-use function array_merge;
-use function array_unique;
-use function is_object;
 use function is_string;
-use function method_exists;
-use function sprintf;
 
 /**
  * A Formatter to tackle CSV Formula Injection.
@@ -31,58 +28,38 @@ use function sprintf;
  */
 class EscapeFormula
 {
-    /**
-     * Spreadsheet formula starting character.
-     */
-    const FORMULA_STARTING_CHARS = ['=', '-', '+', '@'];
+    /** Spreadsheet formula starting character. */
+    public const FORMULA_STARTING_CHARS = ['=', '-', '+', '@', "\t", "\r"];
+
+    /** Effective Spreadsheet formula starting characters. */
+    protected array $special_chars = [];
 
     /**
-     * Effective Spreadsheet formula starting characters.
-     *
-     * @var array
+     * @param string $escape escape character to escape each CSV formula field
+     * @param array<string> $special_chars additional spreadsheet formula starting characters
      */
-    protected $special_chars = [];
-
-    /**
-     * Escape character to escape each CSV formula field.
-     *
-     * @var string
-     */
-    protected $escape;
-
-    /**
-     * New instance.
-     *
-     * @param string   $escape        escape character to escape each CSV formula field
-     * @param string[] $special_chars additional spreadsheet formula starting characters
-     *
-     */
-    public function __construct(string $escape = "\t", array $special_chars = [])
-    {
-        $this->escape = $escape;
-        if ([] !== $special_chars) {
-            $special_chars = $this->filterSpecialCharacters(...$special_chars);
-        }
-
-        $chars = array_merge(self::FORMULA_STARTING_CHARS, $special_chars);
-        $chars = array_unique($chars);
-        $this->special_chars = array_fill_keys($chars, 1);
+    public function __construct(
+        protected string $escape = "'",
+        array $special_chars = []
+    ) {
+        $this->special_chars = array_fill_keys([
+            ...self::FORMULA_STARTING_CHARS,
+            ...$this->filterSpecialCharacters(...$special_chars),
+        ], 1);
     }
 
     /**
      * Filter submitted special characters.
      *
-     * @param string ...$characters
-     *
      * @throws InvalidArgumentException if the string is not a single character
      *
-     * @return string[]
+     * @return array<string>
      */
     protected function filterSpecialCharacters(string ...$characters): array
     {
         foreach ($characters as $str) {
-            if (1 != strlen($str)) {
-                throw new InvalidArgumentException(sprintf('The submitted string %s must be a single character', $str));
+            if (1 !== strlen($str)) {
+                throw new InvalidArgumentException('The submitted string '.$str.' must be a single character');
             }
         }
 
@@ -92,7 +69,7 @@ class EscapeFormula
     /**
      * Returns the list of character the instance will escape.
      *
-     * @return string[]
+     * @return array<string>
      */
     public function getSpecialCharacters(): array
     {
@@ -118,46 +95,63 @@ class EscapeFormula
     }
 
     /**
-     * Escape a CSV record.
+     * Escapes a CSV record.
      */
     public function escapeRecord(array $record): array
     {
-        return array_map([$this, 'escapeField'], $record);
+        return array_map($this->escapeField(...), $record);
     }
 
-    /**
-     * Escape a CSV cell if its content is stringable.
-     *
-     * @param mixed $cell the content of the cell
-     *
-     * @return mixed|string the escaped content
-     */
-    protected function escapeField($cell)
+    public function unescapeRecord(array $record): array
     {
-        if (!$this->isStringable($cell)) {
-            return $cell;
-        }
-
-        $str_cell = (string) $cell;
-        if (isset($str_cell[0], $this->special_chars[$str_cell[0]])) {
-            return $this->escape.$str_cell;
-        }
-
-        return $cell;
+        return array_map($this->unescapeField(...), $record);
     }
 
     /**
+     * Escapes a CSV cell if its content is stringable.
+     */
+    protected function escapeField(mixed $cell): mixed
+    {
+        $strOrNull = match (true) {
+            is_string($cell) => $cell,
+            $cell instanceof Stringable => (string) $cell,
+            default => null,
+        };
+
+        return match (true) {
+            null == $strOrNull,
+            !isset($strOrNull[0], $this->special_chars[$strOrNull[0]]) => $cell,
+            default => $this->escape.$strOrNull,
+        };
+    }
+
+    protected function unescapeField(mixed $cell): mixed
+    {
+        $strOrNull = match (true) {
+            is_string($cell) => $cell,
+            $cell instanceof Stringable => (string) $cell,
+            default => null,
+        };
+
+        return match (true) {
+            null === $strOrNull,
+            !isset($strOrNull[0], $strOrNull[1]),
+            $strOrNull[0] !== $this->escape,
+            !isset($this->special_chars[$strOrNull[1]]) => $cell,
+            default => substr($strOrNull, 1),
+        };
+    }
+
+    /**
+     * @deprecated since 9.7.2 will be removed in the next major release
+     * @codeCoverageIgnore
+     *
      * Tells whether the submitted value is stringable.
      *
      * @param mixed $value value to check if it is stringable
      */
-    protected function isStringable($value): bool
+    protected function isStringable(mixed $value): bool
     {
-        if (is_string($value)) {
-            return true;
-        }
-
-        return is_object($value)
-            && method_exists($value, '__toString');
+        return is_string($value) || $value instanceof Stringable;
     }
 }
