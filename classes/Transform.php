@@ -6,7 +6,7 @@
  * ※エンコード指定を行っているので設定ファイルを読ますこと
  *
  * @category 	Application of AZLINK.CMS
- * @final 		2023.08.17
+ * @final 		2023.09.16
  * @author 		Norio Murata <nori@azlink.jp>
  * @copyright 	2010- AZLINK. <https://azlink.jp>
  * ==============================================================
@@ -27,7 +27,7 @@ class Transform {
 	 * @return 変換内容
 	 */
 	static function sanitizer($val) {
-		if (!$val) return;
+		if (!$val && $val != '0') return;
 
 		if (is_array($val)) {
 			foreach ($val as $key => $value) {
@@ -63,7 +63,7 @@ class Transform {
 	 * @return 変換内容
 	 */
 	static function convert($val, $change) {
-		if (!$val) return;
+		if (!$val && $val != '0') return;
 
 		if (is_array($val)) {
 			foreach ($val as $key => $value) {
@@ -372,4 +372,15 @@ class Transform {
 		}
 		return NULL;
 	}
+  /**
+   * 日付を曜日付きの様式に変換
+   * @param string DATE Y/m/d or Y/n/j など new DateTime インスタンスを作成できるもの
+   * @return string Y/n/j(w)
+   */
+  static function getDateByWeekFormat(string $date) {
+    $w = ['日', '月', '火', '水', '木', '金', '土'];
+    $d = new \DateTime($date, new \DateTimeZone('Asia/Tokyo'));
+    $v = $d->format('Y/n/j');
+    return $v . '(' . $w[$d->format('w')] . ')';
+  }
 }
