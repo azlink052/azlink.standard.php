@@ -8,10 +8,11 @@
  */
 namespace azlink\workspace\config;
 
-const SMTP_USE  = FALSE;
-const SMTP_HOST = 'azlink-jp.sakura.ne.jp';
-const SMTP_PORT = 587;
+const SMTP_USE  = TRUE;
+const SMTP_HOST = 'mail.azlink.biz';
+const SMTP_PORT = 465;
 const SMTP_AUTH = TRUE;
 const SMTP_DBUG = FALSE;
-const SMTP_USER = '';
-const SMTP_PASS = '';
+const SMTP_SCRE = 'ssl';
+const SMTP_USER = 'mail-service';
+const SMTP_PASS = 'azlink.2630185';
