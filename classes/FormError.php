@@ -34,7 +34,7 @@ class FormError {
 		 * プロパティのセット
 		 */
 		switch ($menu) {
-			case 'entry':
+			case 'contact':
 				$this->errorArgs = [
 					'kanaEmpty' 		=> config\ERR_KANA_EMPTY,
 					'nameEmpty' 		=> config\ERR_NAME_EMPTY,
@@ -51,21 +51,7 @@ class FormError {
 					'noteEmpty' 		=> config\ERR_NOTE_EMPTY,
 					'noteLength' 		=> config\ERR_NOTE_LENGTH,
 					'typeEmpty' 		=> config\ERR_TYPE_EMPTY,
-					'togetherEmpty' => config\ERR_TGTR_EMPTY,
-					'birthEmpty' 		=> config\ERR_BIRTH_EMPTY,
-					'sexEmpty' 			=> config\ERR_SEX_EMPTY,
-					'fac1Empty' 		=> config\ERR_FAC_EMPTY,
-					'date1Empty' 		=> config\ERR_DATE_EMPTY,
-					'date1True' 		=> config\ERR_DATE_TRUE,
-					'opts1Empty' 		=> config\ERR_OPTS_EMPTY,
-					'camera1Empty' 	=> config\ERR_CAMERA_EMPTY,
-					'optsEtc1Empty' => config\ERR_OPTS_ETC_EMPTY,
-					'fac2Empty' 		=> config\ERR_FAC_EMPTY,
-					'date2Empty' 		=> config\ERR_DATE_EMPTY,
-					'date2True' 		=> config\ERR_DATE_TRUE,
-					'opts2Empty' 		=> config\ERR_OPTS_EMPTY,
-					'camera2Empty' 	=> config\ERR_CAMERA_EMPTY,
-					'optsEtc2Empty' => config\ERR_OPTS_ETC_EMPTY,
+					'sexEmpty' 			=> config\ERR_SEX_EMPTY
 				];
 				break;
 		}

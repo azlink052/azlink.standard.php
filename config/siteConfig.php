@@ -19,19 +19,23 @@ const SITE_KEYWORDS     = '';
  */
 const FRONT_PATH  = __DIR__ . '/../';
 const INC_PATH    = FRONT_PATH;
-const HOME_URL    = 'http://azlink.standard.localhost';
+const HOST        = 'azlink.standard.localhost';
+const HOME_URL    = 'http://' . HOST;
 const HOME        = HOME_URL . '/';
-const OTHER_URL   = 'http://azlink.standard.localhost';
-const HOME_OTHER  = OTHER_URL . '/';
-const HTTPS_URL   = 'http://azlink.standard.localhost';
-const HOME_HTTPS  = HTTPS_URL . '/'; // SSL領域
+const HOME_PATH   = __DIR__ . '/../';
 const ASSETS      = HOME . 'assets/';
 /**
  * エラー定義
  */
-const ERRORS              = HOME . 'errors';
+const ERRORS_URL          = HOME . 'errors';
+const ERRORS              = ERRORS_URL . '/';
+const ERRORS_PATH         = HOME_PATH . 'errors/';
 const ERRORS_ADMIN_PAGE   = ERRORS . '/error.php';
 const ERRORS_ADMIN_CLOSE  = ERRORS . '/errorClose.php';
+const ERRORS_SYSTEM_PAGE  = ERRORS . 'index.php';
+const ERRORS_SYSTEM       = ERRORS_PATH . 'index.php';
+const ERRORS_USER_PAGE    = ERRORS . 'index.php';
+const ERRORS_USER         = ERRORS_PATH . 'index.php';
 /**
  * ファイルアップロード定義
  */

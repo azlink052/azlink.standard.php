@@ -1,5 +1,5 @@
 <?php
-use azlink\workspace as azlib;
+use azlink\workspace\config as config;
 ?>
     <footer id="siteFooter">
       <div class="inner">
@@ -18,7 +18,7 @@ use azlink\workspace as azlib;
   <!-- content Header Object -->
   <!-- /content Header Object -->
   <?php if (isset($myWP)) :
-    wp_footer();
+    // wp_footer();
   endif; ?>
 </body>
 </html>

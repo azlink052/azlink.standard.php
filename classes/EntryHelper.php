@@ -5,7 +5,7 @@
  * レコードに対する汎用処理クラス
  *
  * @category 	Application of AZLINK.CMS
- * @final 		2023.04.13
+ * @final 		2024.09.23
  * @author 		Norio Murata <nori@azlink.jp>
  * @copyright 	2010- AZLINK. <https://azlink.jp>
  *
@@ -173,5 +173,23 @@ class EntryHelper {
 	      return $date . '-' . $eDate->format('j日') . '(' . $week[$ew] .')';
 	    }
 	  }
+	}
+	/**
+	 * 画像の形式のmimetypeか確認する
+	 * @param string $mimetype mimetype
+	 * @param array $array 画像形式とするmimetype
+	 * @return boolean 画像形式のmimetypeであればTRUE
+	 */
+	static function isMimetypeOfImages($mimetype, $array = array()) {
+		if (!$mimetype || !is_array($array)) return FALSE;
+		if (!$array) {
+			$array = array(
+				'image/gif',
+				'image/jpeg',
+				'image/png',
+				'image/webp'
+			);
+		}
+		return in_array($mimetype, $array, TRUE) ? TRUE : FALSE;
 	}
 }

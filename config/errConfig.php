@@ -55,8 +55,7 @@ const ERR_NOTE_LENGTH       = 'お問い合わせ内容は2000文字以内でお
 /**
  * サイト固有のエラーメッセージ
  */
-const ERR_NAME_SEI_EMPTY    = 'お名前(姓)を入力してください';
-const ERR_NAME_MEI_EMPTY    = 'お名前(名)を入力してください';
+const ERR_CONTACT_EMPTY     = 'ご希望の連絡方法を選択してください';
 const ERR_ITEM_EMPTY        = 'お問い合わせ品名を入力してください';
 const ERR_FILE_LENGTH       = '登録可能画像数は3点までです';
 const ERR_FILE_SIZE         = '登録可能画像サイズは合計10MBまでです';
@@ -100,3 +99,5 @@ const E016_OUTPUT = 'レコードが存在しません。';
 const E017_OUTPUT = 'このアカウントは現在停止中です。管理者にお問い合わせください。';
 const E018_OUTPUT = 'メールの送信に失敗しました。';
 const E019_OUTPUT = 'データベース操作に失敗しました。';
+// サイト固有
+const E020_OUTPUT = 'ファイルが送信されませんでした。'; // 何らかのファイルが送信されない

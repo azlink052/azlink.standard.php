@@ -5,7 +5,7 @@
  * ファイルアップロードクラス
  *
  * @category 	Application of AZLINK.CMS
- * @final 		2023.08.17
+ * @final 		2024.09.23
  * @author 		Norio Murata <nori@azlink.jp>
  * @copyright 	2010- AZLINK. <https://azlink.jp>
  * ==============================================================
@@ -25,10 +25,10 @@ use const azlink\workspace\config\MAKE_THUMB;
 class FileUpload {
 	public string $dir;
 	public int $sizeLimit = UPLOAD_IMGSIZELIMIT;
-	public int $imgWidth = 0;
-	public int $imgHeight = 0;
-	public int $thmWidth = 0;
-	public int $thmHeight = 0;
+	public int|null $imgWidth = 0;
+	public int|null $imgHeight = 0;
+	public int|null $thmWidth = 0;
+	public int|null $thmHeight = 0;
 	public bool $mkThumb = MAKE_THUMB;
 	public bool $resize = TRUE;
 	public array $thumbnails = [];
@@ -47,6 +47,14 @@ class FileUpload {
 		'application/x-zip-compressed',
 		'application/zip'
 	];
+	public $allowSimpleExts = array(
+		'gif', 'png', 'jpeg', 'jpg',
+		'xls', 'xlsx', 'csv',
+		'ppt', 'pptx',
+		'doc', 'docx',
+		'pdf',
+		'lzh', 'zip'
+	);
 	/**
 	 * PHP5 コンストラクタ
 	 */
@@ -139,6 +147,21 @@ class FileUpload {
 		}
 	}
 	/**
+	 * ファイルの拡張子を確認する
+	 * 拡張子が規定外の場合終了
+	 * mimetypeを無視し拡張子のみのチェック
+	 * @param String ファイル名
+	 * @return String 拡張子
+	 */
+	public function checkExtSimple($fileName) {
+		$ext = substr($fileName, strrpos($fileName, '.') + 1);
+		if (!in_array($ext, $this->allowSimpleExts)) {
+			return 1;
+		} else {
+			return $ext;
+		}
+	}
+	/**
 	 * ファイルを一時画像としてtmpフォルダにupする
 	 * 指定されたディレクトリが存在するか確認
 	 * @param 元ファイル
@@ -155,7 +178,7 @@ class FileUpload {
 
 			while ($sameNameChk) {
 				// ファイル名用に10桁のランダムの文字列を生成する
-				$randName = common\GenerateRandomString::generate(10);
+				$randName = common\GenerateRandomString::generate(10, TRUE);
 
 				// 既に同名のファイルがアップロード先ディレクトリにないか確認
 				$newFile = $date . $randName . $ext;
@@ -241,13 +264,13 @@ class FileUpload {
 			$fileType 	= $file['type'];
 			$fileError 	= $file['error'];
 
-			$this->dir = $files[$key]['path'];
-			$this->imgWidth = $files[$key]['width'];
-			$this->imgHeight = $files[$key]['height'];
+			if ($files[$key]['path']) $this->dir = $files[$key]['path'];
+			if ($files[$key]['width']) $this->imgWidth = $files[$key]['width'];
+			if ($files[$key]['height']) $this->imgHeight = $files[$key]['height'];
 
 			if (is_array($fileTmp)) {
 
-				$fileExt = array();
+				$fileExt = [];
 
 				foreach ($fileTmp as $inKey => $inValue) {
 
@@ -503,7 +526,7 @@ class FileUpload {
 
 		while ($sameNameChk) {
 			// ファイル名用に10桁のランダムの文字列を生成する
-			$randName = common\GenerateRandomString::generate(10);
+			$randName = common\GenerateRandomString::generate(10, TRUE);
 
 			// 既に同名のファイルがアップロード先ディレクトリにないか確認
 			$newFile = $date . $randName . '.' .$ext;

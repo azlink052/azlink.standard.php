@@ -60,7 +60,7 @@ $theme->customFooter = '';
       <h1><?php echo azlib\config\SITE_NAME; ?></h1>
       <h2>モデルソース</h2>
       <ul>
-        <li>お問合せフォーム</li>
+        <li><a href="form">お問合せフォーム</a></li>
         <li>お知らせ</li>
       </ul>
     </div>
