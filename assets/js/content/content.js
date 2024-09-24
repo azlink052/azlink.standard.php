@@ -330,6 +330,7 @@ class Form {
           if (window.confirm('削除しますか？')) {
             if (!this.isAllowChangeFile) return;
             this.isAllowChangeFile = false;
+            this.toggleLoading('on');
             const formData = new FormData();
             formData.append('deleteFile', e.target.dataset.file);
             const res = await this.deleteTempFile(formData);
@@ -337,8 +338,10 @@ class Form {
             this.entryFileField
               .querySelector(`input[value="${e.target.dataset.file}"]`)
               .remove();
-            this.isAllowChangeFile = this.getAllowChangeFile();
-            this.toggleFileField();
+            this.isAllowChangeFile = true;
+            this.resetFileField();
+            this.toggleUploader();
+            this.toggleLoading('off');
           }
         }
       },
@@ -357,10 +360,11 @@ class Form {
         event,
         (e) => {
           e.preventDefault();
-          // console.log(this.isAllowChangeFile);
+          console.log(this.isAddFile());
           if (!this.isAllowChangeFile) return;
+          if (!this.isAddFile()) return;
           this.isAllowChangeFile = false;
-
+          this.toggleLoading('on');
           const files =
             e.type === 'change' ? e.target.files : e.dataTransfer.files;
           if (files.length) {
@@ -369,13 +373,17 @@ class Form {
             let i = 0;
             (async () => {
               for (const file of files) {
+                // 指定件数超過
+                if (!this.isAddFile()) {
+                  this.toggleUploader();
+                  break;
+                }
                 if (file.size) {
                   // 容量制限
                   if (file.size > this.fileSizeLimit) {
                     alert(
                       `ファイルサイズが${this.fileSizeLimit}バイトを超えているものがあります`
                     );
-                    this.fileField.value = '';
                   } else {
                     const formData = new FormData();
                     formData.append('entryIndex', i);
@@ -404,9 +412,14 @@ class Form {
                   }
                 }
               }
-              this.isAllowChangeFile = this.getAllowChangeFile();
-              this.toggleFileField();
+              this.isAllowChangeFile = true;
+              this.resetFileField();
+              this.toggleUploader();
+              this.toggleLoading('off');
             })();
+          } else {
+            this.toggleUploader();
+            this.toggleLoading('off');
           }
         },
         false
@@ -423,13 +436,16 @@ class Form {
     const res = await response.json();
     return res;
   }
-  getAllowChangeFile() {
+  isAddFile() {
     return this.previewImg.querySelectorAll('.tmpFile').length <
       this.fileCountLimit
       ? true
       : false;
   }
-  toggleFileField() {
+  toggleUploader() {
+    this.fileField.disabled = this.isAddFile() ? false : true;
+  }
+  resetFileField() {
     this.fileField.value = '';
     this.fileField.disabled = this.isAllowChangeFile ? false : true;
   }
@@ -442,6 +458,14 @@ class Form {
     });
     const res = await response.json();
     return res;
+  }
+  toggleLoading(status) {
+    // console.log(newStatus);
+    if (status === 'off') {
+      document.body.classList.remove('is-loading');
+    } else {
+      document.body.classList.add('is-loading');
+    }
   }
   loadFile(file) {
     return new Promise((resolve) => {
