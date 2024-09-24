@@ -5,7 +5,7 @@
  * ファイルアップロードクラス
  *
  * @category 	Application of AZLINK.CMS
- * @final 		2024.09.23
+ * @final 		2024.09.24
  * @author 		Norio Murata <nori@azlink.jp>
  * @copyright 	2010- AZLINK. <https://azlink.jp>
  * ==============================================================
@@ -394,7 +394,7 @@ class FileUpload {
 			}
 		}
 
-		return $files;
+		return array_filter($files);
 	}
 	/**
 	 * 実ファイル→tempコピーのループ処理

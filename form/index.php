@@ -194,13 +194,6 @@ switch ($entryPg) {
     // $thisDate = MyWP::getNow();
     $thisDate = Utilities::getDate('Y/m/d H:i:s');
 
-    $exDate = implode(', ', $entryDate);
-    $a = [];
-    foreach ($entryFile1 as $file) {
-      $a[] = config\UPLOADS_DIR_VIEW . $file;
-    }
-    $exFiles = implode(' ', $a);
-
     $sendMail = new SendMail;
     // var_dump($sendMail);
     $sendMail->smtpUse  = config\SMTP_USE;
@@ -214,6 +207,52 @@ switch ($entryPg) {
     $sendMail->mailEncording    = 'base64';
     $sendMail->smtpSecure = config\SMTP_SCRE;
 
+    // 添付ファイル
+    $exDate = implode(', ', $entryDate);
+    $a = [];
+    foreach ($entryFile1 as $file) {
+      $a[] = config\UPLOADS_DIR_VIEW . 'contact/' . $file;
+    }
+    $exFiles = implode(' ', $a);
+
+    if (isset($entryFileArr) && is_countable($entryFileArr) && count($entryFileArr)) {
+      foreach ($entryFileArr as $file) {
+        if (is_array($file)) {
+          foreach ($file as $a) {
+            $sendMail->attachfiles[] = config\UPLOADS_DIR . 'contact/' . $a;
+          }
+        } else {
+          $sendMail->attachfiles[] = config\UPLOADS_DIR . 'contact/' . $file;
+        }
+      }
+    }
+    // ZIP圧縮
+    if (isset($entryFileArr) && is_countable($entryFileArr) && count($entryFileArr)) {
+      $zipPath = config\UPLOADS_DIR . 'contact/' . time() . '.zip';
+      $zip = new ZipArchive;
+      $zip->open($zipPath, ZipArchive::CREATE|ZipArchive::OVERWRITE);
+      foreach ($entryFileArr as $file) {
+        if (is_array($file)) {
+          foreach ($file as $a) {
+            $path = config\UPLOADS_DIR . 'contact/' . $a;
+            if ($path) {
+              $zip->addFile($path, basename($path));
+            }
+          }
+        } else {
+          $path = config\UPLOADS_DIR . 'contact/' . $file;
+          if ($path) {
+            $zip->addFile($path, basename($path));
+          }
+        }
+      }
+      $zip->close();
+      $sendMail->attachfiles[] = $zipPath;
+      $zipURL = config\UPLOADS_DIR_VIEW . 'contact/' . basename($zipPath);
+    } else {
+      $zipURL = '';
+    }
+
     $sendMailAddresses = explode(',', config\SEND_MAIL_ADDRESS);
     $newAddresses = [];
     foreach ($sendMailAddresses as $value) {
@@ -225,11 +264,13 @@ switch ($entryPg) {
 
     $sendMail->mailTo           = $newAddresses;
     // $sendMail->mailFrom = get_field("contact_from_mail");
-    $sendMail->mailFrom         = config\FROM_MAIL_ADDRESS;
-    $sendMail->mailFromName     = $escSiteName;
-    $sendMail->mailReplyTo      = $sendMail->mailFrom;
-    $sendMail->mailReturnPath   = $sendMail->mailFrom;
-    $sendMail->mailSubject      = '【' . $escSiteName . '】' . $escPageName;
+    $sendMail->mailFrom           = config\FROM_MAIL_ADDRESS;
+    $sendMail->mailFromName       = $escSiteName;
+    $sendMail->mailReplyTo        = config\REPLY_MAIL_ADDRESS;
+    $sendMail->mailReplyToMessage = '有限会社AZLINK.';
+    $sendMail->mailReturnPath     = config\REPLY_MAIL_ADDRESS;
+    $sendMail->mailSendar         = config\REPLY_MAIL_ADDRESS;
+    $sendMail->mailSubject        = '【' . $escSiteName . '】' . $escPageName;
     ob_start();
     include 'templates/admin.tpl';
     $mailTemplate = ob_get_contents();
@@ -249,6 +290,7 @@ switch ($entryPg) {
       '{{phone}}',
       '{{contact}}',
       '{{file}}',
+      '{{zipPath}}',
       '{{note}}',
       '{{userInfo}}',
       '{{siteUrl}}'
@@ -267,6 +309,7 @@ switch ($entryPg) {
       $entryPhone,
       $entryContact,
       $exFiles,
+      $zipURL,
       $entryNote,
       $userInfo,
       $escSiteUrl
@@ -290,6 +333,10 @@ switch ($entryPg) {
       $sendMail->mailReplyTo      = $sendMail->mailFrom;
       $sendMail->mailReturnPath   = $sendMail->mailFrom;
       $sendMail->mailSubject      = '【' . $escSiteName . '】' . $escPageName . '控え';
+
+      // 添付ファイル
+      $sendMail->attachfiles = [];
+
       ob_start();
       include 'templates/user.tpl';
       $mailTemplate = ob_get_contents();

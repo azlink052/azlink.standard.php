@@ -6,7 +6,7 @@
  * 添付ファイルにも対応
  *
  * @category 	Application of AZLINK.CMS
- * @final 		2023.08.17
+ * @final 		2024.09.24
  * @author 		Norio Murata <nori@azlink.jp>
  * @copyright 	2010- AZLINK. <https://azlink.jp>
  *
@@ -32,6 +32,7 @@ class SendMail {
 	public string $mailReplyTo = FROM_MAIL_ADDRESS; // 返信先
 	public string $mailReplyToMessage = 'Reply to email'; // 返信用メッセージ
 	public string $mailReturnPath = FROM_MAIL_ADDRESS; // 返送先
+	public string $mailSendar = FROM_MAIL_ADDRESS; // 返送先
 	public int $mailWordWrap = 0; // wordwrapサイズ
 	public string|array $mailCC = []; // CC
 	public string|array $mailBCC = []; // BCC
@@ -212,7 +213,7 @@ class SendMail {
 		$mail->Body 	= mb_convert_encoding($this->mailMessage, $mail->CharSet, PROG_ENCTYPE);
 		$mail->AddReplyTo($this->mailReplyTo, $this->mailReplyToMessage);
 		$mail->AddCustomHeader('Return-path: ' . $this->mailReturnPath);
-		$mail->Sender = $mail->From;
+		$mail->Sender = $this->mailSendar;
 		$mail->WordWrap = $this->mailWordWrap;
 
 		if (count($this->attachfiles) && is_array($this->attachfiles)) {

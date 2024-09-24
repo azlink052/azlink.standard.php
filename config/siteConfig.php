@@ -63,6 +63,7 @@ const CSV_ENCTYPE   = 'SJIS-win';
 const ADMIN_MAIL_ADDRESS  = 'nori@azlink.jp'; // 管理者メールアドレス
 const SEND_MAIL_ADDRESS   = 'nori@azlink.jp'; // 送信先メールアドレス
 const FROM_MAIL_ADDRESS   = 'no-reply@azlink.jp'; // 送信元メールアドレス
+const REPLY_MAIL_ADDRESS  = 'info@azlink.jp'; // 返信先メールアドレス
 /**
  * その他サイト設定
  */
