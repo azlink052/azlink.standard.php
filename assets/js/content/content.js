@@ -336,8 +336,7 @@ class Form {
             const res = await this.deleteTempFile(formData);
             e.target.closest('.tmpFile').remove();
             this.entryFileField
-              .querySelector(`input[value="${e.target.dataset.file}"]`)
-              .remove();
+              .querySelector(`input[value="${e.target.dataset.file}"]`)?.remove();
             this.isAllowChangeFile = true;
             this.resetFileField();
             this.toggleUploader();
@@ -360,7 +359,7 @@ class Form {
         event,
         (e) => {
           e.preventDefault();
-          console.log(this.isAddFile());
+          // console.log(this.isAddFile());
           if (!this.isAllowChangeFile) return;
           if (!this.isAddFile()) return;
           this.isAllowChangeFile = false;
@@ -370,7 +369,6 @@ class Form {
           if (files.length) {
             document.body.classList.add('is-loading');
 
-            let i = 0;
             (async () => {
               for (const file of files) {
                 // 指定件数超過
@@ -386,7 +384,6 @@ class Form {
                     );
                   } else {
                     const formData = new FormData();
-                    formData.append('entryIndex', i);
                     formData.append('entryFile', file);
                     formData.append('uploadDir', 'contact');
                     const res = await this.uploadTemp(formData);
@@ -397,18 +394,17 @@ class Form {
                     this.previewImg.insertAdjacentHTML(
                       'beforeend',
                       `<div class="tmpFile">
-                          <figure>
-                            <button type="button" class="deleteTempFile" data-file="${res.body.contents}" data-name="entryFile${i}">削除する</button>
-                            <a href="${HOME_DIR}uploads/tmp/${res.body.contents}" class="viewFile" target="_blank">${thumb}</a>
-                          </figure>
-                        </div>`
+                        <figure>
+                          <button type="button" class="deleteTempFile" data-file="${res.body.contents}">削除する</button>
+                          <a href="${HOME_DIR}uploads/tmp/${res.body.contents}" class="viewFile" target="_blank">${thumb}</a>
+                        </figure>
+                      </div>`
                     );
-                    // 　form へ追加
+                    // form へ追加
                     this.entryFileField.insertAdjacentHTML(
                       'beforeend',
-                      `<input type="hidden" name="entryFile1[]" class="entryFile" value="${res.body.contents}" id="entryFile${i}">`
+                      `<input type="hidden" name="entryFile1[]" class="entryFile" value="${res.body.contents}">`
                     );
-                    i++;
                   }
                 }
               }

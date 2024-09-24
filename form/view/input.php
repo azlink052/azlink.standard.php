@@ -12,9 +12,9 @@ defined(config\ACCESS_CHECK_NAME) or die('Restricted access');
     <input name="p-country-name" type="hidden" value="Japan" class="p-country-name">
   </fieldset>
   <fieldset id="js-entryFileField">
-    <?php for ($i = 0; $i < count($entryFile1); $i++) : ?>
-      <input type="hidden" name="entryFile1[]" class="entryFile" value="<?php echo isset($file) ? Transform::sanitizer($file) : ''; ?>" id="entryFile<?php echo $i; ?>">
-    <?php endfor; ?>
+    <?php foreach ($entryFile1 as $file) : ?>
+      <input type="hidden" name="entryFile1[]" class="entryFile" value="<?php echo isset($file) ? Transform::sanitizer($file) : ''; ?>">
+    <?php endforeach; ?>
   </fieldset>
   <div class="formItemWrap">
     <dl class="formItem required">
@@ -128,8 +128,8 @@ defined(config\ACCESS_CHECK_NAME) or die('Restricted access');
       <dd>
         <div class="uploaderField">
           <div class="tmpFileVox" id="js-previewImg">
-            <?php foreach ($entryFile1 as $file) : ?>
-              <?php if (file_exists(config\TEMP_DIR . $file)) : ?>
+            <?php for ($i = 0; $i <= count($entryFile1); $i++) : ?>
+              <?php if (isset($entryFile1[$i]) && file_exists(config\TEMP_DIR . $entryFile1[$i])) : ?>
                 <?php
                 $thumb = (function($file) {
                   if (file_exists(config\TEMP_DIR . 'thm_' . $file)) {
@@ -137,18 +137,18 @@ defined(config\ACCESS_CHECK_NAME) or die('Restricted access');
                   } else {
                     return '<img src="' .  config\ASSETS . 'images/content/content/ico_file.svg' . '" class="noimg">';
                   }
-                })($file);
+                })($entryFile1[$i]);
                 ?>
                 <div class="tmpFile">
                   <figure>
-                    <a href="javascript:void(0)" class="deleteTempFile" data-file="<?php echo $file; ?>" data-name="entryFile1">削除する</a>
-                    <a href="<?php echo config\TEMP_DIR_VIEW . $file; ?>" class="viewFile" target="_blank"><?php echo $thumb; ?></a>
+                    <button type="button" class="deleteTempFile" data-file="<?php echo $entryFile1[$i]; ?>">削除する</button>
+                    <a href="<?php echo config\TEMP_DIR_VIEW . $entryFile1[$i]; ?>" class="viewFile" target="_blank"><?php echo $thumb; ?></a>
                   </figure>
                 </div>
               <?php endif; ?>
-            <?php endforeach; ?>
+            <?php endfor; ?>
           </div>
-          <fieldset id="toggleFileField_entryFile1" class="uploadArea">
+          <fieldset class="uploadArea">
             <label for="entryFile1Uploader" class="directUploaderLabel">ファイルを登録してください。</label>
             <input type="file" name="entryFile1" accept=".xls, .xlsx, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, .gif, image/gif, .jpg, .jpeg, image/jpeg, .png, image/png, .pdf, application/pdf, .ai, application/postscript" id="js-uploadFile" class="directUploader" multiple>
           </fieldset>

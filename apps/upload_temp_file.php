@@ -10,9 +10,7 @@ header('Access-Control-Allow-Origin: ' . config\ALLOW_ORIGIN);
  * 値の受け取り
  */
 $entryFile = isset($_FILES['entryFile']) ? $_FILES['entryFile'] : NULL;
-$entryIndex = isset($_POST['entryIndex']) ? $_POST['entryIndex'] : NULL;
 $uploadDir 	= isset($_POST['uploadDir']) ? $_POST['uploadDir'] : NULL;
-// var_dump($entryFile, $entryIndex, $uploadDir);exit;
 /**
  * POSTのみ許可
  */
