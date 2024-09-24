@@ -97,8 +97,8 @@ class Utilities {
 			while ($strFile = readdir($strDir)) {
 				if ($strFile != '.' && $strFile != '..' && $strFile !== '.svn') { //ディレクトリでない場合のみ
 					$time = filemtime($path . $strFile);
-					//echo $time."<br />";
-					//echo (time() - 1440)."<br />";
+					// echo $time."<br />";
+					// echo (time() - 1440)."<br />";
 					if ($time <= (time() - TEMP_FILE_LIVETIME)) {
 						unlink($path . '/' . $strFile);
 					}
@@ -203,5 +203,15 @@ class Utilities {
 		// $setTime 	= strtotime($start);
 
 		return $thisTime >= $setTime ? TRUE : FALSE;
+	}
+	/**
+	 * 指定タイムゾーンの時間を取得
+	 * @param string フォーマット
+	 * @param string タイムゾーン
+	 * @return string
+	 */
+	static function getDate(string $format = 'Y/m/d H:i:s', string $tz = 'Asia/Tokyo') {
+		$time = new \DateTime('', new \DateTimeZone($tz));
+		return (string) $time->format($format);
 	}
 }

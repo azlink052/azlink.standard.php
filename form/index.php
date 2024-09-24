@@ -17,6 +17,7 @@ use azlink\workspace\classes\common\RequiredCheck;
 use azlink\workspace\classes\common\GenerateRandomString;
 use azlink\workspace\classes\common\Log;
 use azlink\workspace\classes\common\SendMail;
+use azlink\workspace\classes\common\Utilities;
 
 $pageName = 'contact';
 /**
@@ -191,7 +192,7 @@ switch ($entryPg) {
     // 表示整形
     $userInfo = $_SERVER['REMOTE_ADDR'] . ' | ' . gethostbyaddr($_SERVER['REMOTE_ADDR']) . ' | ' . $_SERVER['HTTP_USER_AGENT'];
     // $thisDate = MyWP::getNow();
-    $thisDate = date('Y/m/d H:i:s');
+    $thisDate = Utilities::getDate('Y/m/d H:i:s');
 
     $exDate = implode(', ', $entryDate);
     $a = [];

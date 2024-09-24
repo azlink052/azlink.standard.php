@@ -431,39 +431,91 @@ class FileUpload {
 		//echo $imgWidth . ',' . $imgHeight . '<br>';
 		if (!$imgWidth) return;
 
-		$newImage = new common\Image($url);
-		$newImage->quality(100);
-
-		if ($imgHeight) {
-			if ($newImage->image_width < $newImage->image_height) {
-				// echo 1;
-				$newImage->width($imgWidth);
-				$newImage->save();
-				$newImage->height($imgHeight);
-				$newImage->crop();
-				$newImage->save();
-			} else {
-				if ($imgWidth < $imgHeight) {
-					// echo 3;
-					$newImage->width($imgWidth);
-					$newImage->save();
-					$newImage->height($imgHeight);
-					$newImage->crop();
-					$newImage->save();
-				} else {
-					// echo 4;
-					$newImage->height($imgHeight);
-					$newImage->save();
-					$newImage->width($imgWidth);
-					$newImage->crop();
-					$newImage->save();
-				}
+		$im = (function($url, $ext) {
+			switch ($ext) {
+				case '.jpg':
+					return imagecreatefromjpeg($url);
+					break;
+				case '.gif':
+					return imagecreatefromgif($url);
+					break;
+				case '.png':
+					return imagecreatefrompng($url);
+					break;
 			}
-		} else {
-			// echo 2;
-			$newImage->width($imgWidth);
-			$newImage->save();
+		})($url, $ext);
+		$size = min(imagesx($im), imagesy($im));
+		$im2 = imagecrop($im, [
+			'x' => 0, 
+			'y' => 0, 
+			'width' => $size, 
+			'height' => $size
+		]);
+		if ($im2 !== FALSE) {
+			switch ($ext) {
+				case '.jpg':
+					imagejpeg($im2, $url);
+					break;
+				case '.gif':
+					imagegif($im2, $url);
+					break;
+				case '.png':
+					imagepng($im2, $url);
+					break;
+			}
+			list($width, $height) = getimagesize($url); 
+			$im3 = imagecreatetruecolor($imgWidth, $imgHeight);
+			imagecopyresampled($im3, $im2, 0, 0, 0, 0, $imgWidth, $imgHeight, $width, $height);
+			switch ($ext) {
+				case '.jpg':
+					imagejpeg($im3, $url);
+					break;
+				case '.gif':
+					imagegif($im3, $url);
+					break;
+				case '.png':
+					imagepng($im3, $url);
+					break;
+			}
+			imagedestroy($im2);
+			imagedestroy($im3);
 		}
+
+		imagedestroy($im);
+
+		// $newImage = new common\Image($url);
+		// $newImage->quality(100);
+
+		// if ($imgHeight) {
+		// 	if ($newImage->image_width < $newImage->image_height) {
+		// 		// echo 1;
+		// 		$newImage->width($imgWidth);
+		// 		$newImage->save();
+		// 		$newImage->height($imgHeight);
+		// 		$newImage->crop();
+		// 		$newImage->save();
+		// 	} else {
+		// 		if ($imgWidth < $imgHeight) {
+		// 			// echo 3;
+		// 			$newImage->width($imgWidth);
+		// 			$newImage->save();
+		// 			$newImage->height($imgHeight);
+		// 			$newImage->crop();
+		// 			$newImage->save();
+		// 		} else {
+		// 			// echo 4;
+		// 			$newImage->height($imgHeight);
+		// 			$newImage->save();
+		// 			$newImage->width($imgWidth);
+		// 			$newImage->crop();
+		// 			$newImage->save();
+		// 		}
+		// 	}
+		// } else {
+		// 	// echo 2;
+		// 	$newImage->width($imgWidth);
+		// 	$newImage->save();
+		// }
 		// if ($imgHeight) {
 			// $newImage->width($imgWidth);
 			// $newImage->save();

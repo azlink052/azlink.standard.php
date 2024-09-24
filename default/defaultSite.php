@@ -11,6 +11,7 @@
 use azlink\workspace\config as config;
 use azlink\workspace\classes\GlobalError;
 use azlink\workspace\classes\common\Log;
+use azlink\workspace\classes\common\Utilities;
 use const azlink\workspace\config\UPLOADS_DIR;
 use const azlink\workspace\config\TEMP_DIR;
 /**
@@ -51,7 +52,7 @@ $thisURL = (empty($_SERVER['HTTPS']) ? 'http://' : 'https://') . (isset($_SERVER
 /**
  * tmpディレクトリ最適化
  */
-$myHour = date('H');
+$myHour = Utilities::getDate('H');
 if ($myHour % 2 === 0) Utilities::checkDirFile(TEMP_DIR);
 /**
  * 30日過ぎたファイルを削除
