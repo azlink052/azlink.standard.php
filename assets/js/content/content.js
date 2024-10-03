@@ -336,7 +336,8 @@ class Form {
             const res = await this.deleteTempFile(formData);
             e.target.closest('.tmpFile').remove();
             this.entryFileField
-              .querySelector(`input[value="${e.target.dataset.file}"]`)?.remove();
+              .querySelector(`input[value="${e.target.dataset.file}"]`)
+              ?.remove();
             this.isAllowChangeFile = true;
             this.resetFileField();
             this.toggleUploader();
@@ -387,24 +388,30 @@ class Form {
                     formData.append('entryFile', file);
                     formData.append('uploadDir', 'contact');
                     const res = await this.uploadTemp(formData);
-                    // プレビューに追加
-                    const thumb = res.body.thumb
-                      ? `<img src="${HOME_DIR}uploads/tmp/${res.body.thumb}">`
-                      : `<img src="${ASSETS_DIR}images/content/content/ico_file.svg" class="noimg">`;
-                    this.previewImg.insertAdjacentHTML(
-                      'beforeend',
-                      `<div class="tmpFile">
-                        <figure>
-                          <button type="button" class="deleteTempFile" data-file="${res.body.contents}">削除する</button>
-                          <a href="${HOME_DIR}uploads/tmp/${res.body.contents}" class="viewFile" target="_blank">${thumb}</a>
-                        </figure>
-                      </div>`
-                    );
-                    // form へ追加
-                    this.entryFileField.insertAdjacentHTML(
-                      'beforeend',
-                      `<input type="hidden" name="entryFile1[]" class="entryFile" value="${res.body.contents}">`
-                    );
+                    console.log(res);
+                    if (res.status === 'successed') {
+                      // プレビューに追加
+                      const thumb = res.body.thumb
+                        ? `<img src="${HOME_DIR}uploads/tmp/${res.body.thumb}">`
+                        : `<img src="${ASSETS_DIR}images/content/content/ico_file.svg" class="noimg">`;
+                      this.previewImg.insertAdjacentHTML(
+                        'beforeend',
+                        `<div class="tmpFile">
+                          <figure>
+                            <button type="button" class="deleteTempFile" data-file="${res.body.contents}">削除する</button>
+                            <a href="${HOME_DIR}uploads/tmp/${res.body.contents}" class="viewFile" target="_blank">${thumb}</a>
+                          </figure>
+                        </div>`
+                      );
+                      // form へ追加
+                      this.entryFileField.insertAdjacentHTML(
+                        'beforeend',
+                        `<input type="hidden" name="entryFile1[]" class="entryFile" value="${res.body.contents}">`
+                      );
+                    } else {
+                      if (res.body.contents === 'imgExtErr')
+                        alert('許可されていない拡張子です');
+                    }
                   }
                 }
               }

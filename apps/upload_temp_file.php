@@ -28,14 +28,43 @@ $mimetype = $entryFile['type'];
 $fileUpload = new FileUpload;
 $fileUpload->dir = $uploadDir;
 $fileUpload->fileGroup = EntryHelper::isMimetypeOfImages($mimetype) ? 'image' : 'file';
-$allowSimpleExts = [
+$fileUpload->allowSimpleExts = [
   // .xls, .xlsx, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, .gif, image/gif, .jpg, .jpeg, image/jpeg, .png, image/png, .pdf, application/pdf, .ai, application/postscript
 	'gif', 'png', 'jpeg', 'jpg', 'GIF', 'PNG', 'JPG',
-	'tif', 'eps', 'ai',
-	'pdf',
-	'lzh', 'zip',
-	'xls', 'xlsx'
+	// 'tif', 'eps', 'ai',
+	// 'pdf',
+	// 'lzh', 'zip',
+	// 'xls', 'xlsx'
 ];
+$fileUpload->allowExts = [
+  'image/gif', 'image/png', 'image/jpeg', 'image/pjpeg',
+  // 'application/excel', 'application/msexcel', 'application/x-excel', 'application/x-msexcel', 'application/vnd.ms-excel',
+  // 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  // 'text/comma-separated-values', 'text/csv',
+  // 'application/mspowerpoint', 'application/vnd.ms-powerpoint',
+  // 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  // 'application/msword',
+  // 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  // 'application/pdf',
+  // 'application/lha',
+  // 'application/x-zip-compressed',
+  // 'application/zip'
+];
+if ($fileUpload->checkExtSimple($entryFile['name']) === 1) {
+  $a = [
+    'status' => 'failed',
+    'code' => 500,
+    'body' => [
+      'contents' => config\ERR_FIL_EXT_ERROR,
+      'ext' => $mimetype,
+      'name' => $entryFile['name'],
+      'thumb' => FALSE
+    ]
+  ];
+  Log::user(config\ERR_FIL_EXT_ERROR);
+  echo json_encode($a);
+	exit;
+}
 $fileUpload->thumbnails = [
   [
     'prefix' 	=> 'thm_',
