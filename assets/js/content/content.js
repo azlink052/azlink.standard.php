@@ -289,6 +289,12 @@ class Form {
     this.fileField;
     this.previewImg;
     this.entryFileField;
+    this.allowMimetype = [
+      'image/gif',
+      'image/png',
+      'image/jpeg',
+      'image/pjpeg',
+    ];
   }
   init() {
     document.querySelectorAll('.submitItem').forEach((v, i) => {
@@ -377,42 +383,47 @@ class Form {
                   this.toggleUploader();
                   break;
                 }
-                if (file.size) {
-                  // 容量制限
-                  if (file.size > this.fileSizeLimit) {
-                    alert(
-                      `ファイルサイズが${this.fileSizeLimit}バイトを超えているものがあります`
-                    );
-                  } else {
-                    const formData = new FormData();
-                    formData.append('entryFile', file);
-                    formData.append('uploadDir', 'contact');
-                    const res = await this.uploadTemp(formData);
-                    console.log(res);
-                    if (res.status === 'successed') {
-                      // プレビューに追加
-                      const thumb = res.body.thumb
-                        ? `<img src="${HOME_DIR}uploads/tmp/${res.body.thumb}">`
-                        : `<img src="${ASSETS_DIR}images/content/content/ico_file.svg" class="noimg">`;
-                      this.previewImg.insertAdjacentHTML(
-                        'beforeend',
-                        `<div class="tmpFile">
-                          <figure>
-                            <button type="button" class="deleteTempFile" data-file="${res.body.contents}">削除する</button>
-                            <a href="${HOME_DIR}uploads/tmp/${res.body.contents}" class="viewFile" target="_blank">${thumb}</a>
-                          </figure>
-                        </div>`
-                      );
-                      // form へ追加
-                      this.entryFileField.insertAdjacentHTML(
-                        'beforeend',
-                        `<input type="hidden" name="entryFile1[]" class="entryFile" value="${res.body.contents}">`
-                      );
-                    } else {
-                      if (res.body.contents === 'imgExtErr')
-                        alert('許可されていない拡張子です');
-                    }
-                  }
+                console.log(file);
+                if (!file.size) continue;
+                // 容量制限
+                if (file.size > this.fileSizeLimit) {
+                  alert(
+                    `ファイルサイズが${this.fileSizeLimit}バイトを超えているものがあります`
+                  );
+                  continue;
+                }
+                // 拡張子チェック
+                if (!this.allowMimetype.includes(file.type)) {
+                  alert(`許可されていない拡張子のものがあります`);
+                  continue;
+                }
+                const formData = new FormData();
+                formData.append('entryFile', file);
+                formData.append('uploadDir', 'contact');
+                const res = await this.uploadTemp(formData);
+                // console.log(res);
+                if (res.status === 'successed') {
+                  // プレビューに追加
+                  const thumb = res.body.thumb
+                    ? `<img src="${HOME_DIR}uploads/tmp/${res.body.thumb}">`
+                    : `<img src="${ASSETS_DIR}images/content/content/ico_file.svg" class="noimg">`;
+                  this.previewImg.insertAdjacentHTML(
+                    'beforeend',
+                    `<div class="tmpFile">
+                        <figure>
+                          <button type="button" class="deleteTempFile" data-file="${res.body.contents}">削除する</button>
+                          <a href="${HOME_DIR}uploads/tmp/${res.body.contents}" class="viewFile" target="_blank">${thumb}</a>
+                        </figure>
+                      </div>`
+                  );
+                  // form へ追加
+                  this.entryFileField.insertAdjacentHTML(
+                    'beforeend',
+                    `<input type="hidden" name="entryFile1[]" class="entryFile" value="${res.body.contents}">`
+                  );
+                } else {
+                  if (res.body.contents === 'imgExtErr')
+                    alert('許可されていない拡張子です');
                 }
               }
               this.isAllowChangeFile = true;
