@@ -6,7 +6,7 @@
  * 添付ファイルにも対応
  *
  * @category 	Application of AZLINK.CMS
- * @final 		2024.09.24
+ * @final 		2024.10.12
  * @author 		Norio Murata <nori@azlink.jp>
  * @copyright 	2010- AZLINK. <https://azlink.jp>
  *
@@ -53,6 +53,7 @@ class SendMail {
 		'ja',
 		__DIR__ . '/../lib/PHPMailer/language/'
 	]; // 言語指定
+	public bool|int $smtpDebug = FALSE;
 	/**
 	 * コンストラクタ
 	 */
@@ -171,6 +172,8 @@ class SendMail {
 			$mail->Port 		= $this->smtpPort;
 			$mail->Username 	= $this->smtpUser;
 			$mail->Password 	= $this->smtpPass;
+			// debug
+			if ($this->smtpDebug) $mail->SMTPDebug = $this->smtpDebug;
 		}
 
 		if (is_array($this->mailTo)) {

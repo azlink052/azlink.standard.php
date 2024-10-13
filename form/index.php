@@ -21,10 +21,6 @@ use azlink\workspace\classes\common\Utilities;
 
 $pageName = 'contact';
 /**
- * debug判定
- */
-$isDebug = TRUE;
-/**
  * オブジェクト作成
  */
 $theme = new Theme;
