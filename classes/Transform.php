@@ -34,7 +34,7 @@ class Transform {
 				$val[$key] = Transform::sanitizer($value);
 			}
 		} else {
-			$val = htmlspecialchars($val, ENT_QUOTES);
+			$val = htmlspecialchars((string) $val, ENT_QUOTES);
 		}
 
 		return $val;
