@@ -94,7 +94,7 @@ defined(config\ACCESS_CHECK_NAME) or die('Restricted access');
     </dl>
     <dl class="formItem">
       <dt>お問い合わせ内容</dt>
-      <dd><?php echo nl2br($entryNote); ?></dd>
+      <dd><?php echo nl2br((string) $entryNote); ?></dd>
     </dl>
   </div>
   <div class="submitVox">

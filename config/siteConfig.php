@@ -50,7 +50,7 @@ const TEMP_DIR_VIEW       = HOME . 'uploads/' . TEMP_DIR_NAME . '/';
 const LOG_DIR             = __DIR__  . '/../logs/';
 const USER_ERROR_FILE     = LOG_DIR . 'userErrors.log';
 const GENERAL_ERROR_FILE  = LOG_DIR . 'generalErrors.log';
-//const EXECUTE_RESULT_FILE', LOG_DIR . 'executeResult.log';
+const EXECUTE_RESULT_FILE = LOG_DIR . 'executeResult.log';
 /**
  * エンコード定義
  */
