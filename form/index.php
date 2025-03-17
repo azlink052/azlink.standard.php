@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ==============================================================
  *
@@ -7,6 +8,7 @@
  * ==============================================================
  */
 require_once __DIR__ . '/../default/default.php';
+
 use azlink\workspace\config as config;
 use azlink\workspace\classes\Theme;
 use azlink\workspace\classes\GlobalError;
@@ -89,9 +91,9 @@ $entryContact = isset($_POST['entryContact']) ? Transform::convert($_POST['entry
 $entryNote    = isset($_POST['entryNote']) ? Transform::convert($_POST['entryNote'], 'aKV') : NULL;
 $entryDate = [];
 if (isset($_POST['entryDate']) && is_array($_POST['entryDate'])) {
-	foreach ($_POST['entryDate'] as $key => $value) {
-		$entryDate[$key] = Transform::convert($value, 'aKV');
-	}
+  foreach ($_POST['entryDate'] as $key => $value) {
+    $entryDate[$key] = Transform::convert($value, 'aKV');
+  }
 }
 // アップロードファイル
 // 配列で扱うアップロードファイルは空であったら空の配列を設定(初期化)
@@ -99,7 +101,7 @@ $entryFile1 = isset($_POST['entryFile1']) && !empty($_POST['entryFile1']) ? $_PO
 // ファイルの存在数
 $file1Count = 0;
 foreach ($entryFile1 as $file) {
-	if (file_exists(config\TEMP_DIR . $file)) $file1Count++;
+  if (file_exists(config\TEMP_DIR . $file)) $file1Count++;
 }
 /**
  * 登録キーの発行と確認
@@ -151,7 +153,7 @@ switch ($entryPg) {
       $entryPg = 'checked';
     }
 
-  break;
+    break;
   //confirm
   case 'confirm':
     /**
@@ -226,7 +228,7 @@ switch ($entryPg) {
     if (isset($entryFileArr) && is_countable($entryFileArr) && count($entryFileArr)) {
       $zipPath = config\UPLOADS_DIR . 'contact/' . time() . '.zip';
       $zip = new ZipArchive;
-      $zip->open($zipPath, ZipArchive::CREATE|ZipArchive::OVERWRITE);
+      $zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
       foreach ($entryFileArr as $file) {
         if (is_array($file)) {
           foreach ($file as $a) {
@@ -314,7 +316,7 @@ switch ($entryPg) {
 
     $result = $sendMail->sendPHPMailer();
     if ($result['status'] !== 'success') {
-      error_log( $escSiteName . 'メールの送信に失敗しました。' . $result['info'] . '内容: ' . $sendMail->mailMessage, 1, config\ADMIN_MAIL_ADDRESS, 'From: ' . config\ADMIN_MAIL_ADDRESS);
+      error_log($escSiteName . 'メールの送信に失敗しました。' . $result['info'] . '内容: ' . $sendMail->mailMessage, 1, config\ADMIN_MAIL_ADDRESS, 'From: ' . config\ADMIN_MAIL_ADDRESS);
       // echo(E018_OUTPUT . $result['info']);
       $isMailSend = FALSE;
     }
@@ -372,7 +374,7 @@ switch ($entryPg) {
 
       $result = $sendMail->sendPHPMailer();
       if ($result['status'] !== 'success') {
-        error_log($escSiteName .'控えメールの送信に失敗しました。' . $result['info'] . '内容: ' . $sendMail->mailMessage, 1, config\ADMIN_MAIL_ADDRESS);
+        error_log($escSiteName . '控えメールの送信に失敗しました。' . $result['info'] . '内容: ' . $sendMail->mailMessage, 1, config\ADMIN_MAIL_ADDRESS);
         // echo(E018_OUTPUT . $result['info']);
         $isReMailSend = FALSE;
       }
@@ -384,9 +386,9 @@ switch ($entryPg) {
     }
     $entryPg = 'finish';
 
-  break;
+    break;
   default:
-    // 
+    $entryPg = '';
 }
 $theme->bodyClass[] = $entryPg;
 
@@ -452,20 +454,20 @@ define(config\ACCESS_CHECK_NAME, 1);
         </div>
       </div>
 
-      <?php switch ($entryPg) :
-        case 'checked' : ?>
-        <!-- ここから分岐処理 bodyclassと比較 -->
-        <?php include __DIR__ . '/view/confirm.php'; ?>
+      <?php switch ($entryPg):
+        case 'checked': ?>
+          <!-- ここから分岐処理 bodyclassと比較 -->
+          <?php include __DIR__ . '/view/confirm.php'; ?>
 
         <?php break;
-        case 'finish' : ?>
+        case 'finish': ?>
 
-        <?php include __DIR__ . '/view/finish.php'; ?>
+          <?php include __DIR__ . '/view/finish.php'; ?>
 
         <?php break;
-        default : ?>
+        default: ?>
 
-        <?php include __DIR__ . '/view/input.php'; ?>
+          <?php include __DIR__ . '/view/input.php'; ?>
 
       <?php endswitch; ?>
     </div>
